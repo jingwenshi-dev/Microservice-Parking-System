@@ -1,0 +1,18 @@
+# Ignore all the following files and directories related to IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Ignore project-specific files
+out/
+target/
+
+# Ignore logs and temp files
+*.log
+*.tmp
+*.swp
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
