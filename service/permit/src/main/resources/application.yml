@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: permit
+
+  rabbitmq:
+    username: user
+    password: password

@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: gate
+
+  rabbitmq:
+    username: user
+    password: password
