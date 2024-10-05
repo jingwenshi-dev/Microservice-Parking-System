@@ -11,8 +11,18 @@ services:
       RABBITMQ_DEFAULT_USER: user
       RABBITMQ_DEFAULT_PASS: password
 
-  cassandra:
-    image: cassandra:5.0.1
-    container_name: cassandra
-    ports:
-      - "9042:9042"
+  gate:
+    container_name: gate
+    build:
+      context: ./services/gate
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  permit:
+    container_name: permit
+    build:
+      context: ./services/permit
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
