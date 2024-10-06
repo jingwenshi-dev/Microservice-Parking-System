@@ -17,6 +17,6 @@ public class AMQPGateController implements GateController {
 
     @Override
     public void gateControl(boolean open) {
-        rabbitTemplate.convertAndSend("", "gate.ctrl", open);
+        rabbitTemplate.convertAndSend("", "gate.ctrl", String.valueOf(open));
     }
 }

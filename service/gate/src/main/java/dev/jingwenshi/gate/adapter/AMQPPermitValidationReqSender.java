@@ -1,27 +1,26 @@
 package dev.jingwenshi.gate.adapter;
 
-import dev.jingwenshi.gate.port.PermitValidator;
+import dev.jingwenshi.gate.port.PermitValidationReqSender;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AMQPPermitValidator implements PermitValidator {
+public class AMQPPermitValidationReqSender implements PermitValidationReqSender {
 
     private final RabbitTemplate rabbitTemplate;
 
     @Autowired
-    public AMQPPermitValidator(RabbitTemplate rabbitTemplate) {
+    public AMQPPermitValidationReqSender(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
     }
 
     @Override
-    public boolean validatePermit(String transponderId) {
-        Boolean result = (Boolean) rabbitTemplate.convertSendAndReceive(
+    public void validatePermit(String transponderId) {
+        rabbitTemplate.convertAndSend(
                 "",
                 "permit.validation.queue",
                 transponderId
         );
-        return result != null && result;
     }
 }
