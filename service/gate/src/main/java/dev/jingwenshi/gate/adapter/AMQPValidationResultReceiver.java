@@ -17,7 +17,9 @@ public class AMQPValidationResultReceiver {
     }
 
     @RabbitListener(queuesToDeclare = @Queue("permit.validation.result.queue"))
-    public void receiveValidationResult(boolean isValid) {
-        permitValidationResultReceiver.receiveValidationResult(isValid);
+    public void receiveValidationResult(String isValid) {
+        boolean open = isValid.equals("valid");
+
+        permitValidationResultReceiver.receiveValidationResult(open);
     }
 }

@@ -17,10 +17,13 @@ public class AMQPValidationResultSender implements PermitValidationResultSender 
 
     @Override
     public void sendValidationResult(boolean isValid) {
+
+        String result = isValid ? "valid" : "invalid";
+
         rabbitTemplate.convertAndSend(
             "",
             "permit.validation.result.queue",
-            isValid
+                result
         );
     }
 }

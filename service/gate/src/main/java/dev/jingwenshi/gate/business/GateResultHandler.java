@@ -15,6 +15,7 @@ public class GateResultHandler implements PermitValidationResultReceiver {
 
     @Override
     public void receiveValidationResult(boolean open) {
+        System.out.println("GateResultHandler: " + open);
         gateController.gateControl(open);
     }
 
