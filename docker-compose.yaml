@@ -13,22 +13,22 @@ services:
     healthcheck:
       test: rabbitmq-diagnostics -q ping
       start_period: 5s
-      interval: 1s
-      timeout: 1s
-      retries: 10
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
-#  gate:
-#    container_name: gate
-#    build:
-#      context: ./service/gate
-#    depends_on:
-#      rabbitmq:
-#        condition: service_healthy
-#
-#  permit:
-#    container_name: permit
-#    build:
-#      context: ./service/permit
-#    depends_on:
-#      rabbitmq:
-#        condition: service_healthy
+  gate:
+    container_name: gate
+    build:
+      context: ./service/gate
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  permit:
+    container_name: permit
+    build:
+      context: ./service/permit
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
