@@ -4,4 +4,4 @@ mvn clean package
 cd ../permit || exit
 mvn clean package
 
-docker-compose up --build
+docker compose up

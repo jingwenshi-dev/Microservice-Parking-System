@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   rabbitmq:
     image: rabbitmq:4.0.2-management
@@ -7,12 +5,13 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    command: "/bin/bash -c \"rabbitmq-plugins enable --offline rabbitmq_mqtt; rabbitmq-server\""
     environment:
       RABBITMQ_DEFAULT_USER: root
       RABBITMQ_DEFAULT_PASS: root
     healthcheck:
       test: rabbitmq-diagnostics -q ping
-      start_period: 5s
+      start_period: 10s
       interval: 5s
       timeout: 5s
       retries: 5
