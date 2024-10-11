@@ -14,7 +14,7 @@ download_rabbitmqadmin() {
 print_note() {
     echo ""
     echo "Note: Transponder 1 is the only valid transponder in database."
-    echo "The returned msg should either be ${GREEN}true${NC} or ${RED}false${NC}, which indicating the gate will be open or close."
+    echo -e "The returned msg should either be ${GREEN}true${NC} or ${RED}false${NC}, which indicating the gate will be open or close."
     echo ""
 }
 

@@ -1,0 +1,9 @@
+flowchart
+    GateService([fa:fa-cogs Gate Service])
+    RabbitMQ([fa:fa-server RabbitMQ ])
+
+    PermitService([fa:fa-cogs Permit Service])
+    Cassandra([fa:fa-database Cassandra])
+
+    GateService --> RabbitMQ --> GateService
+    PermitService --> RabbitMQ --> PermitService <--> Cassandra

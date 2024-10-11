@@ -6,12 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AMQPPermitValidationReqSender implements PermitValidationReqSender {
+public class AMQPValidationReqSender implements PermitValidationReqSender {
 
     private final RabbitTemplate rabbitTemplate;
 
     @Autowired
-    public AMQPPermitValidationReqSender(RabbitTemplate rabbitTemplate) {
+    public AMQPValidationReqSender(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
     }
 

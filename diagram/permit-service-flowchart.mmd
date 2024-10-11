@@ -1,0 +1,20 @@
+flowchart
+
+    AMQPValidationReqListener([fa:fa-circle-right AMQP fa:fa-envelope<br> Validation Req Listener])
+    AMQPValidationResultSender([fa:fa-circle-right AMQP fa:fa-envelope<br> Validation Result Sender])
+    CassandraAccessor([fa:fa-circle-right CQL fa:fa-database<br> Cassandra Accessor])
+
+    subgraph "<< Permit Service >>"
+        PermitValidator("<< InputPort >><br> Permit Validator")
+        PermitValidationResultSender("<< OutputPort >><br> Validation Result Sender")
+        PermitDBAccessor("<< Bidirectional Port >><br> DB Accessor")
+        PERMIT_SERVICE{{"Permit <br> Service"}}
+    end
+
+    AMQPValidationReqListener --> PermitValidator
+    PermitValidationResultSender --> AMQPValidationResultSender
+    PermitDBAccessor <--> CassandraAccessor
+
+    PermitValidator -. offered .-> PERMIT_SERVICE
+    PERMIT_SERVICE -. required .-> PermitValidationResultSender
+    PERMIT_SERVICE -. required .-> PermitDBAccessor
