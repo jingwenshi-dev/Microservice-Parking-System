@@ -32,7 +32,7 @@ There are two business models in the Gate Service, which are **Gate Request Hand
 
 [![](https://mermaid.ink/img/pako:eNqllE1vozAQhv_KyIdVK4X2HiGk5uOAlGjTpOphl1U1gSFYIja1TVarKP99bfORJiXdw3IBhnmfmXmxfWSpzIiNWV7K32mBysBinYhEgL2els-rVyx5hoZLsab3BdeGBKm7nzmOcwxSrtKSAsV3hfHZ0MRJHKiUFYVbFcGZABYBHePX_XARXZdmQyL7nyqOAQ2kKzNFrVFkCp_SlLSWw_Tp86KFWxZuUTfwXgyd2mEbsK63O4VVAQkLQ1iR2nNXWx14ShBFCWvS3NV8bDu1HXhFLKrarKQ1Pop8sRbRpyXs_gbi2i_P-16bK-AtawbAs0lvj4dNeMYVpU6LJXyEzia9F5ec-XoZv7xt5uvXeDo_HhPWzuNVrS8JO50aiW3kn6sNggBeFApdSdc2xDMbia7dbCBf-eM4_stjLA7u7jG3199H4tkYCD-38w0mUpaEwhM_LbVuwquOIXgAmeekKIMHN9CFda3kIuYUit5r3ku-GHcQEA4TzuMlgo3Y3gaRZ_ZYODpKwkxBe_vXxvYxoxxtDbeuTzYVayM3f0TKxkbVNGJK1ruC2R1UavtWV7YvmnG0W2TfRynjdvxlc_D482fEKhQ_pOxyTn8Bde6MAQ?type=png)](https://mermaid.live/edit#pako:eNqllE1vozAQhv_KyIdVK4X2HiGk5uOAlGjTpOphl1U1gSFYIja1TVarKP99bfORJiXdw3IBhnmfmXmxfWSpzIiNWV7K32mBysBinYhEgL2els-rVyx5hoZLsab3BdeGBKm7nzmOcwxSrtKSAsV3hfHZ0MRJHKiUFYVbFcGZABYBHePX_XARXZdmQyL7nyqOAQ2kKzNFrVFkCp_SlLSWw_Tp86KFWxZuUTfwXgyd2mEbsK63O4VVAQkLQ1iR2nNXWx14ShBFCWvS3NV8bDu1HXhFLKrarKQ1Pop8sRbRpyXs_gbi2i_P-16bK-AtawbAs0lvj4dNeMYVpU6LJXyEzia9F5ec-XoZv7xt5uvXeDo_HhPWzuNVrS8JO50aiW3kn6sNggBeFApdSdc2xDMbia7dbCBf-eM4_stjLA7u7jG3199H4tkYCD-38w0mUpaEwhM_LbVuwquOIXgAmeekKIMHN9CFda3kIuYUit5r3ku-GHcQEA4TzuMlgo3Y3gaRZ_ZYODpKwkxBe_vXxvYxoxxtDbeuTzYVayM3f0TKxkbVNGJK1ruC2R1UavtWV7YvmnG0W2TfRynjdvxlc_D482fEKhQ_pOxyTn8Bde6MAQ)
 
-### Design
+### Choice of Design
 
 #### Hexagonal Architecture
 
@@ -60,6 +60,16 @@ In this way, the Gate Service has two different pipelines that can decouple and 
 
 Even though DTO can provide layer separation and improve data privacy and performance, the data transfers between the message broker and services are all simple strings with only one word. Therefore, DTO can lead to unnecessary overhead in this MVP and increase code complexity without a clear benefit.
 
+
+
+
+
+
+
+
+
+
+
 ## 3. System Advantages
 
 #### Scalability (Horizontal)
@@ -83,6 +93,3 @@ RabbitMQ and Docker built-in load balancer ensure the traffic will be automatica
 Cassandra guarantees data durability with replication through consistent hashing and virtual nodes. In short, Cassandra will always have backup data available on different virtual nodes and can minimize data migration progress and evenly distribute data across the cluster with consistent hashing.
 
 When services are not available, the messages still queue in the RabbitMQ and can keep processing once the services are online. If all RabbitMQ nodes fail, the persistent messages and durable queues can ensure the messages are written to the disk. Also, the acknowledge mechanism ensures that the message will not be popped until it has received an ACK from the service.
-
-
-
