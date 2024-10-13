@@ -1,4 +1,4 @@
-flowchart
+flowchart LR
 
     AMQPValidationReqListener([fa:fa-circle-right AMQP fa:fa-envelope<br> Validation Req Listener])
     AMQPValidationResultSender([fa:fa-circle-right AMQP fa:fa-envelope<br> Validation Result Sender])
@@ -11,10 +11,10 @@ flowchart
         PERMIT_SERVICE{{"Permit <br> Service"}}
     end
 
-    AMQPValidationReqListener --> PermitValidator
-    PermitValidationResultSender --> AMQPValidationResultSender
-    PermitDBAccessor <--> CassandraAccessor
+    AMQPValidationReqListener -- Transponder ID --> PermitValidator
+    PermitValidationResultSender -- Valid/Invalid --> AMQPValidationResultSender
+    PermitDBAccessor <-- Transponder ID & Boolean --> CassandraAccessor
 
     PermitValidator -. offered .-> PERMIT_SERVICE
     PERMIT_SERVICE -. required .-> PermitValidationResultSender
-    PERMIT_SERVICE -. required .-> PermitDBAccessor
+    PERMIT_SERVICE <-. required .-> PermitDBAccessor
