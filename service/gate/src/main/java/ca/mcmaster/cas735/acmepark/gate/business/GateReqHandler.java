@@ -1,5 +1,6 @@
 package ca.mcmaster.cas735.acmepark.gate.business;
 
+import ca.mcmaster.cas735.acmepark.gate.dto.TransponderDTO;
 import ca.mcmaster.cas735.acmepark.gate.port.PermitValidationReqSender;
 import ca.mcmaster.cas735.acmepark.gate.port.TransponderReader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ public class GateReqHandler implements TransponderReader {
     }
 
     @Override
-    public void readTransponder(String transponderId) {
-        permitValidationReqSender.validatePermit(transponderId);
+    public void readTransponder(TransponderDTO transponder) {
+        permitValidationReqSender.validatePermit(transponder);
     }
 }
