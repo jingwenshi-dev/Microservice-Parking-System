@@ -1,5 +1,6 @@
 package ca.mcmaster.cas735.acmepark.gate.business;
 
+import ca.mcmaster.cas735.acmepark.gate.dto.GateCtrlDTO;
 import ca.mcmaster.cas735.acmepark.gate.port.GateController;
 import ca.mcmaster.cas735.acmepark.gate.port.PermitValidationResultReceiver;
 import org.springframework.stereotype.Service;
@@ -14,9 +15,9 @@ public class GateResultHandler implements PermitValidationResultReceiver {
     }
 
     @Override
-    public void receiveValidationResult(boolean open) {
-        System.out.println("GateResultHandler: " + open);
-        gateController.gateControl(open);
+    public void receiveValidationResult(GateCtrlDTO gateCtrl) {
+        System.out.println("GateResultHandler: " + gateCtrl.getIsValid());
+        gateController.gateControl(gateCtrl);
     }
 
 }

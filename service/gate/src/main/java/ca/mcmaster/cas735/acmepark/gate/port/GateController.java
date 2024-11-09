@@ -1,5 +1,7 @@
 package ca.mcmaster.cas735.acmepark.gate.port;
 
+import ca.mcmaster.cas735.acmepark.gate.dto.GateCtrlDTO;
+
 public interface GateController {
-    void gateControl(boolean open);
+    void gateControl(GateCtrlDTO gateCtrl);
 }

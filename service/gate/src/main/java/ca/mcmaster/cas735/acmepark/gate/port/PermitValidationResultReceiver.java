@@ -1,5 +1,7 @@
 package ca.mcmaster.cas735.acmepark.gate.port;
 
+import ca.mcmaster.cas735.acmepark.gate.dto.GateCtrlDTO;
+
 public interface PermitValidationResultReceiver {
-    void receiveValidationResult(boolean isValid);
+    void receiveValidationResult(GateCtrlDTO gateCtrl);
 }
