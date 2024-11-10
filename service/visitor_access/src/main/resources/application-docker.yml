@@ -1,0 +1,17 @@
+spring:
+  rabbitmq:
+    host: rabbitmq # Docker 容器内部的 RabbitMQ 服务
+
+app:
+  custom:
+    mqtt:
+      host: rabbitmq
+
+info:
+  application:
+    name: '@project.name@ (docker deployment)'
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://service-registry:8761/eureka/
