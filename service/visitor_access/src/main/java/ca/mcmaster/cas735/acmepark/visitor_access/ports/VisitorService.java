@@ -3,13 +3,13 @@ package ca.mcmaster.cas735.acmepark.visitor_access.ports;
 import ca.mcmaster.cas735.acmepark.visitor_access.domain.PaymentRequest;
 
 public interface VisitorService {
-    void handleVisitorEntry(String qrCode);
+    void handleVisitorEntry(String licensePlate);
 
-    void handleVisitorExit(String qrCode);
+    void handleVisitorExit(String licensePlate);
 
-    void processVisitorPayment(String qrCode, boolean paymentStatus);
+    void handleGateEntryResponse(String data);
 
-    String translate(String raw);
+    void handleGateExitResponse(String data);
 
-    PaymentRequest translatePayment(String raw);
+    String translate(String licensePlate, boolean entry);
 }
