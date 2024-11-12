@@ -1,6 +1,5 @@
 package ca.mcmaster.cas735.acmepark.visitor_access.adapter;
 
-import ca.mcmaster.cas735.acmepark.visitor_access.domain.PaymentRequest;
 
 import ca.mcmaster.cas735.acmepark.visitor_access.ports.VisitorService;
 import lombok.extern.slf4j.Slf4j;
@@ -11,14 +10,6 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ca.mcmaster.cas735.acmepark.visitor_access.ports.VisitorService;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.rabbit.annotation.Exchange;
-import org.springframework.amqp.rabbit.annotation.Queue;
-import org.springframework.amqp.rabbit.annotation.QueueBinding;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j

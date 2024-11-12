@@ -1,6 +1,7 @@
 package ca.mcmaster.cas735.acmepark.visitor_access.business;
 
-import ca.mcmaster.cas735.acmepark.visitor_access.dto.VisitorRequest;
+import ca.mcmaster.cas735.acmepark.visitor_access.dto.GateAccessRequest;
+
 import ca.mcmaster.cas735.acmepark.visitor_access.ports.VisitorSender;
 import ca.mcmaster.cas735.acmepark.visitor_access.ports.QRCodeService;
 import ca.mcmaster.cas735.acmepark.visitor_access.ports.VisitorService;
@@ -26,9 +27,9 @@ public class VisitorServiceImpl implements VisitorService {
 
     // 处理访客进入逻辑
     @Override
-    public void handleVisitorEntry(String licensePlate) {
+    public void handleVisitorEntry(String data) {
         try {
-            VisitorRequest data = new VisitorRequest(licensePlate, true);
+
             visitorSender.sendOpenGateEntryRequest(data); // 通过 VisitorSender 发送进入请求
         } catch (Exception e) {
             log.error("handle visitor entry error:", e);
@@ -37,9 +38,8 @@ public class VisitorServiceImpl implements VisitorService {
 
     // 处理访客退出逻辑
     @Override
-    public void handleVisitorExit(String licensePlate) {
+    public void handleVisitorExit(String data) {
         try {
-            VisitorRequest data = new VisitorRequest(licensePlate, false);
             visitorSender.sendOpenGateExitRequest(data); // 通过 VisitorSender 发送离开请求
         } catch (Exception e) {
             log.error("handle visitor exit error:", e);
@@ -51,6 +51,9 @@ public class VisitorServiceImpl implements VisitorService {
     public void handleGateEntryResponse(String data) {
         // 处理进入请求的 Gate 响应逻辑
         log.info("Handling gate entry response: {}", data);
+        GateAccessRequest gateAccessRequest = translate(data);
+        addQRCode(gateAccessRequest);
+        visitorSender.sendGateEntryResponseToVisitor(gateAccessRequest);
     }
 
     // 处理 Gate 服务的离开响应
@@ -58,21 +61,34 @@ public class VisitorServiceImpl implements VisitorService {
     public void handleGateExitResponse(String data) {
         // 处理离开请求的 Gate 响应逻辑
         log.info("Handling gate exit response: {}", data);
+        GateAccessRequest gateAccessRequest = translate(data);
+        visitorSender.sendGateExitResponseToVisitor(gateAccessRequest);
     }
 
 
     // 将原始 JSON 数据转换为 QR 码字符串
-    @Override
-    public String translate(String licensePlate, boolean entry) {
+    private void addQRCode(GateAccessRequest gateAccessRequest) {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            if (entry && StringUtils.hasLength(licensePlate)) {
-                String qrCode = qrCodeService.generateQRCode(licensePlate);
-                return mapper.readValue(qrCode, String.class);
+            if (gateAccessRequest != null
+                    && gateAccessRequest.isValid()
+                    && StringUtils.hasLength(gateAccessRequest.getLicensePlate())) {
+                String qrCode = qrCodeService.generateQRCode(gateAccessRequest.getLicensePlate());
+                gateAccessRequest.setQrCode(qrCode);
             }
         } catch (Exception e) {
             log.error("some error in translate:", e);
         }
-        return "";
     }
+
+    private GateAccessRequest translate(String raw) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.readValue(raw, GateAccessRequest.class);
+        } catch (Exception e) {
+            log.error("translate data error:", e);
+            throw new RuntimeException(e);
+        }
+    }
+
 }

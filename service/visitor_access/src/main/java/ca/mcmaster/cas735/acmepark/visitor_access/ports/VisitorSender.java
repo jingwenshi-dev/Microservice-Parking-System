@@ -1,14 +1,15 @@
 package ca.mcmaster.cas735.acmepark.visitor_access.ports;
 
-import ca.mcmaster.cas735.acmepark.visitor_access.dto.VisitorRequest;
+
+import ca.mcmaster.cas735.acmepark.visitor_access.dto.GateAccessRequest;
 
 public interface VisitorSender {
 
-    void sendOpenGateEntryRequest(VisitorRequest visitorRequest);
+    void sendOpenGateEntryRequest(String visitorRequest);
 
-    void sendOpenGateExitRequest(VisitorRequest exitRequest);
+    void sendOpenGateExitRequest(String exitRequest);
 
-    void sendGateEntryResponseToVisitor(String sessionId, boolean gateOpened, String qrCode);
+    void sendGateEntryResponseToVisitor(GateAccessRequest gateAccessRequest);
 
-    void sendGateExitResponseToVisitor(String sessionId, boolean gateOpened, String qrCode);
+    void sendGateExitResponseToVisitor(GateAccessRequest gateAccessRequest);
 }

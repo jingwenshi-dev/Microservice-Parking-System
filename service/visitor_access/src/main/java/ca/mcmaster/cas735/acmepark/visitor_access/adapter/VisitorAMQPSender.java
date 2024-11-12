@@ -1,6 +1,6 @@
 package ca.mcmaster.cas735.acmepark.visitor_access.adapter;
 
-import ca.mcmaster.cas735.acmepark.visitor_access.dto.VisitorRequest;
+import ca.mcmaster.cas735.acmepark.visitor_access.dto.GateAccessRequest;
 import ca.mcmaster.cas735.acmepark.visitor_access.ports.VisitorSender;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -32,34 +32,34 @@ public class VisitorAMQPSender implements VisitorSender {
     @Value("${app.custom.messaging.visitor-exit-response-exchange}")
     private String exitResponseExchange;
 
-    // 发送进入请求到 RabbitMQ
+    // 发送进入请求给gate service
+    // 从监听访客请求到该方法，数据均为改变，相当于直接透传服务
     @Override
-    public void sendOpenGateEntryRequest(VisitorRequest visitorRequest) {
+    public void sendOpenGateEntryRequest(String visitorRequest) {
         log.debug("Sending entry request message to {}: {}", entryRequestExchange, visitorRequest);
-        rabbitTemplate.convertAndSend(entryRequestExchange, "*", translate(visitorRequest));
+        rabbitTemplate.convertAndSend(entryRequestExchange, "*", visitorRequest);
     }
 
-    // 发送离开请求到 RabbitMQ
+    // 发送离开请求给gate service
+    // 从监听访客请求到该方法，数据均为改变，相当于直接透传服务
     @Override
-    public void sendOpenGateExitRequest(VisitorRequest exitRequest) {
+    public void sendOpenGateExitRequest(String exitRequest) {
         log.debug("Sending exit request message to {}: {}", exitRequestExchange, exitRequest);
-        rabbitTemplate.convertAndSend(exitRequestExchange, "*", translate(exitRequest));
+        rabbitTemplate.convertAndSend(exitRequestExchange, "*", exitRequest);
     }
 
     // 发送进入响应给访客
     @Override
-    public void sendGateEntryResponseToVisitor(String sessionId, boolean gateOpened, String qrCode) {
-//        GateResponse response = new GateResponse(sessionId, gateOpened, qrCode);
-//        log.debug("Sending gate entry response message to {}: {}", entryResponseExchange, response);
-//        rabbitTemplate.convertAndSend(entryResponseExchange, "*", translate(response));
+    public void sendGateEntryResponseToVisitor(GateAccessRequest gateAccessRequest) {
+        log.debug("Sending gate entry response message to {}: {}", entryResponseExchange, gateAccessRequest);
+        rabbitTemplate.convertAndSend(entryResponseExchange, "*", translate(gateAccessRequest));
     }
 
     // 发送离开响应给访客
     @Override
-    public void sendGateExitResponseToVisitor(String sessionId, boolean gateOpened, String qrCode) {
-//        GateResponse response = new GateResponse(sessionId, gateOpened, qrCode);
-//        log.debug("Sending gate exit response message to {}: {}", exitResponseExchange, response);
-//        rabbitTemplate.convertAndSend(exitResponseExchange, "*", translate(response));
+    public void sendGateExitResponseToVisitor(GateAccessRequest gateAccessRequest) {
+        log.debug("Sending gate exit response message to {}: {}", exitResponseExchange, gateAccessRequest);
+        rabbitTemplate.convertAndSend(exitResponseExchange, "*", translate(gateAccessRequest));
     }
 
     private String translate(Object obj) {
