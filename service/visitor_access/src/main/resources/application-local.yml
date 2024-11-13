@@ -7,7 +7,6 @@ app:
   custom:
     mqtt:
       host: localhost
-
 info:
   application:
     name: '@project.name@ (local deployment)'

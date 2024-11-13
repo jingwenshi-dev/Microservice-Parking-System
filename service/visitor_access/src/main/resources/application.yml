@@ -3,15 +3,17 @@ spring:
     name: visitor_access # 应用程序名称为 visitor_access
 
   rabbitmq:
-    username: admin # RabbitMQ 的用户名
-    password: root # RabbitMQ 的密码
+    host: rabbitmq
+    port: 5672
+    username: root
+    password: root
 
 # 日志级别配置
 logging:
   level:
     ca.mcmaster.cas735.acmepark.visitor_access:
-      adapter: INFO # 适配器层的日志级别为 INFO，可以设置为 DEBUG 以获得更细粒度的日志跟踪
-      application: INFO # 应用层的日志级别为 INFO，可以设置为 DEBUG 以便调试
+      adapter: DEBUG # 适配器层的日志级别为 INFO，可以设置为 DEBUG 以获得更细粒度的日志跟踪
+      application: DEBUG # 应用层的日志级别为 INFO，可以设置为 DEBUG 以便调试
 
 # 服务器配置
 server:
