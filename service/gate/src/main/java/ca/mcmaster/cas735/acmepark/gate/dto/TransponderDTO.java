@@ -10,6 +10,6 @@ public class TransponderDTO {
     private String transponderId;
     private String licensePlate;
     private String gateId;
-    private boolean entry;
+    private boolean isEntry;
     private ZonedDateTime timestamp;
 }

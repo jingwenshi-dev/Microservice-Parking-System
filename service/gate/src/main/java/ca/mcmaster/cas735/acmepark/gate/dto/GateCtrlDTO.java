@@ -7,5 +7,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GateCtrlDTO {
     private String gateId;
-    private String isValid;    // Prohibited using boolean since it is not supported by RabbitMQ
+    private Boolean isValid;
 }
