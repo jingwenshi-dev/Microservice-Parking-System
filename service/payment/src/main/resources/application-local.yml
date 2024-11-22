@@ -1,0 +1,11 @@
+spring:
+  ## Data repository configuration
+  datasource:
+    url: jdbc:h2:mem:mydb # in memory database when used locally
+  h2.console:
+    enabled: true # expose database web UI for debugging purposes
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
