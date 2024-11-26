@@ -1,4 +1,4 @@
-package ca.mcmaster.cas735.acmepark.payment.business.paymentCalculator;
+package ca.mcmaster.cas735.acmepark.payment.business.calculator;
 
 
 import ca.mcmaster.cas735.acmepark.payment.dto.PaymentRequest;

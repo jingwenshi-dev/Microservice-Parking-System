@@ -1,7 +1,8 @@
-package ca.mcmaster.cas735.acmepark.payment.business.paymentCalculator;
+package ca.mcmaster.cas735.acmepark.payment.business.calculator;
 
 import ca.mcmaster.cas735.acmepark.payment.dto.PaymentRequest;
 import ca.mcmaster.cas735.acmepark.payment.ports.provided.PaymentCalculatorPort;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
