@@ -18,6 +18,7 @@ public class AMQPValidationResultReceiver {
         this.validationResultReceiver = validationResultReceiver;
     }
 
+    // TODO: Listen to an exchange of permit and visitor validation results
     @RabbitListener(queuesToDeclare = @Queue("permit.validation.result.queue"))
     public void receiveValidationResult(String raw) {
         GateCtrlDTO gateCtrl = translate(raw);
