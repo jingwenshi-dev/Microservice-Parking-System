@@ -9,9 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-
+/**
+ * 本方法：构造支付请求
+ * 查数据库-> 构造支付请求 -> 请求支付
+ */
 @Service
 @Slf4j
 public class PaymentRequestBuilder implements PaymentRequestProvider {
@@ -24,34 +25,31 @@ public class PaymentRequestBuilder implements PaymentRequestProvider {
     }
 
     @Override
-    public PaymentRequest buildPaymentRequest(String transponderNumber, LocalDateTime entryTime, LocalDateTime exitTime, BigDecimal hourlyRate) throws NotFoundException {
+    public PaymentRequest buildPaymentRequest(String transponderNumber) throws NotFoundException {
 
         // 从数据库获取 ParkingPermits 信息
-        ParkingPermits permit = permitsRepository.findByTransponderNumber(transponderNumber).orElseThrow(() -> new NotFoundException("ParkingPermit", transponderNumber, "transponderNumber"));
+        ParkingPermits permit = permitsRepository.findByTransponderNumber(transponderNumber)
+                .orElseThrow(() -> new NotFoundException("ParkingPermit", transponderNumber, "transponderNumber"));
 
         // 构造 PaymentRequest
-        PaymentRequest paymentRequest = new PaymentRequest();
-        paymentRequest.setLicensePlate(permit.getLicensePlate());
-        paymentRequest.setPaymentMethod(permit.getPaymentMethod());
-        paymentRequest.setEntryTime(entryTime);
-        paymentRequest.setExitTime(exitTime);
-        paymentRequest.setHourlyRate(hourlyRate);
-        return paymentRequest;
+        PaymentRequest paymentRequest = builtRequest(permit);
 
+        return paymentRequest;
     }
 
     private PaymentRequest builtRequest(ParkingPermits permit) {
         try {
             PaymentRequest paymentRequest = new PaymentRequest();
-            paymentRequest.setLicensePlate(permit.getLicensePlate());
-            paymentRequest.setPaymentMethod(permit.getPaymentMethod());
-            paymentRequest.setEntryTime(entryTime);
-            paymentRequest.setExitTime(exitTime);
-            paymentRequest.setHourlyRate(hourlyRate);
+            paymentRequest.builder()
+                    .transponderNumber(permit.getTransponderNumber())
+                    .validFrom(permit.getValidFrom())
+                    .validUntil(permit.getValidUntil())
+                    .paymentMethod(permit.getPaymentMethod())
+                    .payrollNum(permit.getPayrollNum());
             return paymentRequest;
         } catch (Exception ex) {
             log.error("build payment request error:", ex);
         }
-
+        return null;
     }
 }

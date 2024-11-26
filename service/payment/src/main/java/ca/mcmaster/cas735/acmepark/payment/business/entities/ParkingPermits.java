@@ -22,6 +22,6 @@ public class ParkingPermits {
 
     private String paymentMethod;
 
-    private Integer payrollNum;
+    private String payrollNum;
 
 }

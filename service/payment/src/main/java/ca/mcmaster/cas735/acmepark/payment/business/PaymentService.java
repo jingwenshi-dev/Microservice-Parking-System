@@ -1,6 +1,8 @@
 package ca.mcmaster.cas735.acmepark.payment.business;
 
+import ca.mcmaster.cas735.acmepark.payment.ports.provided.PaymentCalculatorPort;
 import ca.mcmaster.cas735.acmepark.payment.dto.PaymentRequest;
+import ca.mcmaster.cas735.acmepark.payment.factory.PaymentCalculatorFactory;
 import ca.mcmaster.cas735.acmepark.payment.factory.PaymentStrategyFactory;
 import ca.mcmaster.cas735.acmepark.payment.ports.provided.PaymentStrategy;
 import ca.mcmaster.cas735.acmepark.payment.ports.provided.PaymentServicePort;
@@ -18,25 +20,28 @@ import java.math.BigDecimal;
 public class PaymentService implements PaymentServicePort {
 
     private final PaymentStrategyFactory paymentStrategyFactory;
-    private final VisitorPaymentCalculator visitorPaymentCalculator;
+    private final PaymentCalculatorFactory paymentCalculatorFactory;
 
     @Autowired
-    public PaymentService(PaymentStrategyFactory paymentStrategyFactory, VisitorPaymentCalculator visitorPaymentCalculator) {
+    public PaymentService(PaymentStrategyFactory paymentStrategyFactory, PaymentCalculatorFactory paymentCalculatorFactory) {
         this.paymentStrategyFactory = paymentStrategyFactory;
-        this.visitorPaymentCalculator = visitorPaymentCalculator;
+        this.paymentCalculatorFactory = paymentCalculatorFactory;
     }
 
     @Override
     public boolean processPayment(PaymentRequest paymentRequest) {
         try {
-            // 根据支付方式选择支付策略
-            PaymentStrategy paymentStrategy = paymentStrategyFactory.getPaymentStrategy(paymentRequest.getPaymentMethod());
+            // 根据用户类型选择支付计算器
+            PaymentCalculatorPort paymentCalculator = paymentCalculatorFactory.getPaymentCalculator(paymentRequest.getUserType());
 
             // 计算费用
-            BigDecimal amount = visitorPaymentCalculator.calculateParkingFee(paymentRequest.getEntryTime(), paymentRequest.getExitTime(), paymentRequest.getHourlyRate());
+            BigDecimal amount = paymentCalculator.calculateParkingFee(paymentRequest);
 
             // 设置计算后的费用
             paymentRequest.setAmount(amount);
+
+            // 根据支付方式选择支付策略
+            PaymentStrategy paymentStrategy = paymentStrategyFactory.getPaymentStrategy(paymentRequest.getPaymentMethod());
 
             // 执行支付
             boolean paymentSuccess = paymentStrategy.pay(amount);

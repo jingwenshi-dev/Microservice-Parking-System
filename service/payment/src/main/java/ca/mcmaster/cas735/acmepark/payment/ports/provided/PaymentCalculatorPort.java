@@ -1,8 +1,9 @@
 package ca.mcmaster.cas735.acmepark.payment.ports.provided;
 
+import ca.mcmaster.cas735.acmepark.payment.dto.PaymentRequest;
+
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 public interface PaymentCalculatorPort {
-    BigDecimal calculateParkingFee(LocalDateTime entryTime, LocalDateTime exitTime, BigDecimal hourlyRate);
+    BigDecimal calculateParkingFee(PaymentRequest paymentRequest);
 }
