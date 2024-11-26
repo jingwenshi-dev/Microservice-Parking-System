@@ -19,11 +19,20 @@ public class AMQPValidationReqSender implements PermitValidationReqSender {
 
     @Override
     public void validatePermit(TransponderDTO transponder) {
-        rabbitTemplate.convertAndSend(
-                "",
-                "permit.validation.queue",
-                translate(transponder)
-        );
+        if (transponder.getTransponderId() == null) {
+            rabbitTemplate.convertAndSend(
+                    "",
+                    "visitor.validation.queue",
+                    translate(transponder)
+            );
+        }
+        else {
+            rabbitTemplate.convertAndSend(
+                    "",
+                    "permit.validation.queue",
+                    translate(transponder)
+            );
+        }
     }
 
     private String translate(TransponderDTO transponder) {
