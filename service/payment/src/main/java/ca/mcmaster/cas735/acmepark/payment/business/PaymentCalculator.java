@@ -1,16 +1,14 @@
 package ca.mcmaster.cas735.acmepark.payment.business;
 
-import ca.mcmaster.cas735.acmepark.payment.ports.PaymentCalculatorPort;
-import org.springframework.stereotype.Service;
 
+import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-@Service
-public class PaymentCalculator implements PaymentCalculatorPort {
+@Component
+public class PaymentCalculator {
 
-    @Override
     public BigDecimal calculateParkingFee(LocalDateTime entryTime, LocalDateTime exitTime, BigDecimal hourlyRate) {
         Duration duration = Duration.between(entryTime, exitTime);
         long hours = duration.toHours();
