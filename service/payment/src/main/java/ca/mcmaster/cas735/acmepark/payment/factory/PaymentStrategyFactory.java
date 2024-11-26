@@ -1,6 +1,6 @@
 package ca.mcmaster.cas735.acmepark.payment.factory;
 
-import ca.mcmaster.cas735.acmepark.payment.ports.PaymentStrategy;
+import ca.mcmaster.cas735.acmepark.payment.ports.provided.PaymentStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -8,8 +8,7 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-public class PaymentRequestDto {
-    private String userId;
+public class PaymentRequest {
     private String userType;
     private String licensePlate;
     private LocalDateTime entryTime;

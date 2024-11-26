@@ -1,6 +1,6 @@
-package ca.mcmaster.cas735.acmepark.payment.business;
+package ca.mcmaster.cas735.acmepark.payment.business.paymentStrategy;
 
-import ca.mcmaster.cas735.acmepark.payment.ports.PaymentStrategy;
+import ca.mcmaster.cas735.acmepark.payment.ports.provided.PaymentStrategy;
 import org.springframework.stereotype.Component;
 import lombok.extern.slf4j.Slf4j;
 
