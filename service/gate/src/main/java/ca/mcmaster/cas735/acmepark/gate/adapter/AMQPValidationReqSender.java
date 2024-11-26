@@ -1,14 +1,14 @@
 package ca.mcmaster.cas735.acmepark.gate.adapter;
 
 import ca.mcmaster.cas735.acmepark.gate.dto.TransponderDTO;
-import ca.mcmaster.cas735.acmepark.gate.port.PermitValidationReqSender;
+import ca.mcmaster.cas735.acmepark.gate.port.EntryReqSender;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AMQPValidationReqSender implements PermitValidationReqSender {
+public class AMQPValidationReqSender implements EntryReqSender {
 
     private final RabbitTemplate rabbitTemplate;
 
@@ -18,7 +18,7 @@ public class AMQPValidationReqSender implements PermitValidationReqSender {
     }
 
     @Override
-    public void validatePermit(TransponderDTO transponder) {
+    public void validateEntryReq(TransponderDTO transponder) {
         if (transponder.getTransponderId() == null) {
             rabbitTemplate.convertAndSend(
                     "",
