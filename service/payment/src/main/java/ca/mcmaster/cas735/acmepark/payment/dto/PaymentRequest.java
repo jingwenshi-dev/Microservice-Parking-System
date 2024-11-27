@@ -35,4 +35,7 @@ public class PaymentRequest {
 
     private BigDecimal hourlyRate;
 
+    //支付结果
+    private boolean result;
+
 }

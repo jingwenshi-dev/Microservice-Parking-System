@@ -15,8 +15,16 @@ spring:
 ## 日志级别配置
 logging.level:
   ca.mcmaster.cas735.tmt.customers:
-    adapter:  DEBUG # 适配器层的日志级别为 DEBUG，可以设置为 INFO 以减少日志输出
+    adapter: DEBUG # 适配器层的日志级别为 DEBUG，可以设置为 INFO 以减少日志输出
     business: DEBUG # 业务层的日志级别为 DEBUG，可以设置为 INFO 以减少日志输出
+
+# 自定义应用配置
+app:
+  custom:
+    messaging:
+      payment-request-exchange: paymentRequestExchange #payment 监听的接口
+      payment-response-permit-exchange: paymentResultPermitExchange #返回payment result 给permit
+      payment-response-visitor-exchange: paymentResultVisitorExchange #返回payment result visitor
 
 # 服务器配置
 server:
