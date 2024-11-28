@@ -1,16 +1,19 @@
 package ca.mcmaster.cas735.acmepark.payment.business;
 
+import ca.mcmaster.cas735.acmepark.payment.business.entities.ParkingViolation;
 import ca.mcmaster.cas735.acmepark.payment.ports.provided.PaymentCalculatorPort;
 import ca.mcmaster.cas735.acmepark.payment.dto.PaymentRequest;
 import ca.mcmaster.cas735.acmepark.payment.factory.PaymentCalculatorFactory;
 import ca.mcmaster.cas735.acmepark.payment.factory.PaymentStrategyFactory;
 import ca.mcmaster.cas735.acmepark.payment.ports.provided.PaymentStrategy;
 import ca.mcmaster.cas735.acmepark.payment.ports.provided.PaymentServicePort;
+import ca.mcmaster.cas735.acmepark.payment.ports.required.ParkingViolationsRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 扣费程序入口，用processPayment进行扣费
@@ -21,11 +24,15 @@ public class PaymentService implements PaymentServicePort {
 
     private final PaymentStrategyFactory paymentStrategyFactory;
     private final PaymentCalculatorFactory paymentCalculatorFactory;
+    private final ParkingViolationsRepository violationsRepository;
 
     @Autowired
-    public PaymentService(PaymentStrategyFactory paymentStrategyFactory, PaymentCalculatorFactory paymentCalculatorFactory) {
+    public PaymentService(PaymentStrategyFactory paymentStrategyFactory,
+                          PaymentCalculatorFactory paymentCalculatorFactory,
+                          ParkingViolationsRepository violationsRepository) {
         this.paymentStrategyFactory = paymentStrategyFactory;
         this.paymentCalculatorFactory = paymentCalculatorFactory;
+        this.violationsRepository = violationsRepository;
     }
 
     @Override
@@ -34,11 +41,18 @@ public class PaymentService implements PaymentServicePort {
             // 根据用户类型选择支付计算器
             PaymentCalculatorPort paymentCalculator = paymentCalculatorFactory.getPaymentCalculator(paymentRequest.getUserType());
 
-            // 计算费用
+            // 计算停车费用
             BigDecimal amount = paymentCalculator.calculateParkingFee(paymentRequest);
 
-            // 设置计算后的费用
-            paymentRequest.setAmount(amount);
+            // 查询未支付的罚单金额
+            List<ParkingViolation> unpaidViolations = violationsRepository.findByLicensePlateAndIsPaidFalse(paymentRequest.getLicensePlate());
+            BigDecimal totalFines = unpaidViolations.stream()
+                    .map(ParkingViolation::getFineAmount)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            // 计算总费用
+            BigDecimal totalAmount = paymentRequest.getAmount().add(totalFines);
+            paymentRequest.setAmount(totalAmount);
 
             // 根据支付方式选择支付策略
             PaymentStrategy paymentStrategy = paymentStrategyFactory.getPaymentStrategy(paymentRequest.getPaymentMethod());
