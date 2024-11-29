@@ -28,7 +28,7 @@ public class TicketDTO {
     @NotNull(message = "Lot ID is required")
     private long lotId;
 
-    private LocalDateTime timestamp = LocalDateTime.now();
+    private LocalDateTime violationTime = LocalDateTime.now();
 
     public ParkingViolation asParkingViolation() {
         ParkingViolation violation = new ParkingViolation();
@@ -36,7 +36,7 @@ public class TicketDTO {
         violation.setFineAmount(fineAmount);
         violation.setOfficerId(officerId);
         violation.setLotId(lotId);
-        violation.setViolationTime(timestamp);
+        violation.setViolationTime(violationTime);
         return violation;
     }
 
@@ -46,7 +46,7 @@ public class TicketDTO {
         this.fineAmount = violation.getFineAmount();
         this.officerId = violation.getOfficerId();
         this.lotId = violation.getLotId();
-        this.timestamp = violation.getViolationTime();
+        this.violationTime = violation.getViolationTime();
     }
 
 }
