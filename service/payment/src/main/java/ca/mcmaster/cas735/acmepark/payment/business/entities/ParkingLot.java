@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 @Table(name = "PARKING_LOTS")
 public class ParkingLot {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private Long lotId;
 
     private String lotName;

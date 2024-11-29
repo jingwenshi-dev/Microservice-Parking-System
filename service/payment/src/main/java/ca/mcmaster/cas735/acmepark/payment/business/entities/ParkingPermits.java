@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -12,7 +13,7 @@ public class ParkingPermits {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String transponderNumber;
+    private UUID transponderNumber;
 
     private LocalDate validFrom;
     private LocalDate validUntil;
