@@ -1,8 +1,7 @@
 package ca.mcmaster.cas735.acmepark.violation.adapter.rest;
 
+import ca.mcmaster.cas735.acmepark.violation.business.errors.NotFoundException;
 import ca.mcmaster.cas735.acmepark.violation.dto.TicketDTO;
-import ca.mcmaster.cas735.acmepark.violation.dto.TicketLookupDTO;
-import ca.mcmaster.cas735.acmepark.violation.dto.TicketPaymentDTO;
 import ca.mcmaster.cas735.acmepark.violation.port.provided.TicketManager;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,14 +23,8 @@ public class TicketManagement3 {
 
     @GetMapping(value = "/lookup")
     @Operation(description = "Lookup for tickets with a given ticket id and license plate")
-    public TicketDTO lookup(@Valid @RequestBody TicketLookupDTO ticket) {
-        return manager.lookupTicket(ticket);
-    }
-
-    @PutMapping(value = "/pay")
-    @Operation(description = "Pay for a ticket")
-    public String pay(@Valid @RequestBody TicketPaymentDTO ticket) {
-        return manager.payTicket(ticket);
+    public TicketDTO lookup(@RequestParam long ticketNum, @RequestParam String licensePlate) throws NotFoundException {
+        return manager.lookupTicket(ticketNum, licensePlate);
     }
 
     @PostMapping(value = "/issue")
