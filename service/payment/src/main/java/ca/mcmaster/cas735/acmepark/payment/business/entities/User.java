@@ -1,8 +1,6 @@
 package ca.mcmaster.cas735.acmepark.payment.business.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import java.math.BigDecimal;
 
@@ -10,7 +8,9 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "USERS")
 public class User {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private Long userId;
 
     private String firstName;
