@@ -6,6 +6,7 @@ import ca.mcmaster.cas735.acmepark.violation.dto.TicketPaymentDTO;
 import ca.mcmaster.cas735.acmepark.violation.port.provided.TicketManager;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,19 +24,19 @@ public class TicketManagement3 {
 
     @GetMapping(value = "/lookup")
     @Operation(description = "Lookup for tickets with a given ticket id and license plate")
-    public TicketDTO lookup(@RequestBody TicketLookupDTO ticket) {
+    public TicketDTO lookup(@Valid @RequestBody TicketLookupDTO ticket) {
         return manager.lookupTicket(ticket);
     }
 
     @PutMapping(value = "/pay")
     @Operation(description = "Pay for a ticket")
-    public String pay(@RequestBody TicketPaymentDTO ticket) {
+    public String pay(@Valid @RequestBody TicketPaymentDTO ticket) {
         return manager.payTicket(ticket);
     }
 
     @PostMapping(value = "/issue")
     @Operation(description = "Issue a ticket")
-    public String issue(@RequestBody TicketDTO ticket) {
+    public String issue(@Valid @RequestBody TicketDTO ticket) {
         return manager.issueTicket(ticket);
     }
 
