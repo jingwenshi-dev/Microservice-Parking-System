@@ -25,13 +25,13 @@ public class TicketManagement3 {
 
     @GetMapping(value = "/lookup")
     @Operation(description = "Lookup for tickets with a given ticket id and license plate")
-    public TicketDTO lookup(@RequestParam long ticketNum, @RequestParam String licensePlate) throws NotFoundException {
+    public TicketDTO lookup(@RequestParam UUID ticketNum, @RequestParam String licensePlate) throws NotFoundException {
         return manager.lookupTicket(ticketNum, licensePlate);
     }
 
     @PostMapping(value = "/issue")
     @Operation(description = "Issue a ticket")
-    public ResponseEntity<String> issue(@Valid @RequestBody TicketDTO ticket) {
+    public ResponseEntity<String> issue(@Valid @RequestBody TicketDTO ticket) throws NotFoundException{
         UUID uuid = manager.issueTicket(ticket);
         return ResponseEntity.ok(String.format("Ticket issued successfully with ID: %s", uuid));
     }

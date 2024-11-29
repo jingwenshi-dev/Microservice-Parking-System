@@ -6,6 +6,6 @@ import java.util.UUID;
 
 
 public interface TicketManager {
-    TicketDTO lookupTicket(long ticketNum, String licensePlate) throws NotFoundException;
-    UUID issueTicket(TicketDTO ticket);
+    TicketDTO lookupTicket(UUID ticketNum, String licensePlate) throws NotFoundException;
+    UUID issueTicket(TicketDTO ticket) throws NotFoundException;
 }
