@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public class PaymentAMQPSender implements PaymentSender {
+public class AMQPPaymentSender implements PaymentSender {
 
     private final RabbitTemplate rabbitTemplate;
 
@@ -22,7 +22,7 @@ public class PaymentAMQPSender implements PaymentSender {
     private String paymentResultVisitorExchange;
 
     @Autowired
-    public PaymentAMQPSender(RabbitTemplate rabbitTemplate) {
+    public AMQPPaymentSender(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
     }
 

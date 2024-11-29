@@ -23,6 +23,7 @@ public class DefaultPaymentProcessor implements PaymentProcessor {
 
     @Override
     public void processPayment(PaymentRequest paymentRequest) {
+        // 进行扣费获取支付结果
         boolean result = paymentService.processPayment(paymentRequest);
         paymentRequest.setResult(result);
 

@@ -1,5 +1,7 @@
 package ca.mcmaster.cas735.acmepark.payment.adapter;
 
+import ca.mcmaster.cas735.acmepark.payment.business.entities.ParkingViolation;
+import ca.mcmaster.cas735.acmepark.payment.ports.required.ParkingViolationsRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
@@ -22,13 +24,12 @@ public class EnforcementListener {
         this.repository = repository;
     }
 
-    @RabbitListener(bindings = @QueueBinding(
-            value = @Queue(value = "enforcement.violation.queue", durable = "true"),
-            exchange = @Exchange(value = "${app.custom.messaging.enforcement-exchange}", ignoreDeclarationExceptions = "true", type = "topic"),
-            key = "*"))
+    @RabbitListener(bindings = @QueueBinding(value = @Queue(value = "enforcement.violation.queue", durable = "true"),
+            exchange = @Exchange(value = "${app.custom.messaging.add-parking-violation-data}",
+                    ignoreDeclarationExceptions = "true", type = "topic"), key = "*"))
     public void listen(String data) {
         log.debug("Received violation report: {}", data);
-        ParkingViolationRequest request = translate(data);
+        ParkingViolation request = translate(data);
 
         // 根据请求中的信息创建 ParkingViolation 实体
         ParkingViolation violation = new ParkingViolation();
@@ -43,10 +44,10 @@ public class EnforcementListener {
         repository.save(violation);
     }
 
-    private ParkingViolationRequest translate(String raw) {
+    private ParkingViolation translate(String raw) {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            return mapper.readValue(raw, ParkingViolationRequest.class);
+            return mapper.readValue(raw, ParkingViolation.class);
         } catch (Exception e) {
             log.error("Failed to parse violation request: {}", e.getMessage());
             throw new RuntimeException(e);

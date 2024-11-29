@@ -38,6 +38,7 @@ public class PaymentService implements PaymentServicePort {
     @Override
     public boolean processPayment(PaymentRequest paymentRequest) {
         try {
+            // TODO:确认是否需要port and adapter
             // 根据用户类型选择支付计算器
             PaymentCalculatorPort paymentCalculator = paymentCalculatorFactory.getPaymentCalculator(paymentRequest.getUserType());
 
@@ -53,6 +54,8 @@ public class PaymentService implements PaymentServicePort {
             // 计算总费用
             BigDecimal totalAmount = paymentRequest.getAmount().add(totalFines);
             paymentRequest.setAmount(totalAmount);
+            // TODO：支付成功，删除之前的罚款
+            // TODO: 测试需要单独创建一个吗，还是直接在项目里面，老师怎么验证所有的逻辑
 
             // 根据支付方式选择支付策略
             PaymentStrategy paymentStrategy = paymentStrategyFactory.getPaymentStrategy(paymentRequest.getPaymentMethod());

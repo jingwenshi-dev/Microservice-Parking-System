@@ -7,7 +7,6 @@ spring:
     username: root # 数据库用户名，H2 数据库默认用户为 "sa"
     password: root # 数据库密码，H2 数据库默认没有密码
     driverClassName: org.h2.Driver # 数据源的驱动程序类名称，用于连接 H2 数据库
-
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect # 指定 H2 数据库所需的 Hibernate 方言
     defer-datasource-initialization: true # 延迟数据源初始化，确保数据库在 JPA 初始化之前已经设置好
@@ -25,7 +24,7 @@ app:
       payment-request-exchange: paymentRequestExchange #payment 监听的接口
       payment-response-permit-exchange: paymentResultPermitExchange #返回payment result 给permit
       payment-response-visitor-exchange: paymentResultVisitorExchange #返回payment result visitor
-
+      add-parking-violation-data: addParkingViolationData # 添加罚单
 # 服务器配置
 server:
   port: 9090 # 服务器监听的端口号为 9090

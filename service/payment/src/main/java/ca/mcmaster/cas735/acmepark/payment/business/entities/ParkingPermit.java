@@ -7,21 +7,16 @@ import lombok.Data;
 
 import java.time.LocalDate;
 
-@Entity
 @Data
+@Entity
 @Table(name = "PARKING_PERMITS")
-public class ParkingPermits {
+public class ParkingPermit {
     @Id
     private String transponderNumber;
 
     private LocalDate validFrom;
-
     private LocalDate validUntil;
-
     private String licensePlate;
-
     private String paymentMethod;
-
     private String payrollNum;
-
 }
