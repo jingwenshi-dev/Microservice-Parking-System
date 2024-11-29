@@ -1,8 +1,6 @@
 package ca.mcmaster.cas735.acmepark.payment.business.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -12,6 +10,7 @@ import java.math.BigDecimal;
 @Table(name = "PARKING_LOTS")
 public class ParkingLot {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private Long lotId;
 
     private String lotName;

@@ -1,12 +1,11 @@
 package ca.mcmaster.cas735.acmepark.payment.business.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -14,7 +13,8 @@ import java.time.LocalDateTime;
 public class ParkingViolation {
 
     @Id
-    private Long violationId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID violationId;
 
     private LocalDateTime violationTime;
 
