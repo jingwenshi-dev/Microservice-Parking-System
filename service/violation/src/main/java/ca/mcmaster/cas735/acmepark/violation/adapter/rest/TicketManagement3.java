@@ -2,6 +2,7 @@ package ca.mcmaster.cas735.acmepark.violation.adapter.rest;
 
 import ca.mcmaster.cas735.acmepark.violation.dto.TicketDTO;
 import ca.mcmaster.cas735.acmepark.violation.dto.TicketLookupDTO;
+import ca.mcmaster.cas735.acmepark.violation.dto.TicketPaymentDTO;
 import ca.mcmaster.cas735.acmepark.violation.port.provided.TicketManager;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,8 +29,8 @@ public class TicketManagement3 {
 
     @PutMapping(value = "/pay")
     @Operation(description = "Pay for a ticket")
-    public String pay(@RequestParam String ticketId, @RequestParam String licensePlate) {
-        return manager.payTicket(ticketId, licensePlate);
+    public String pay(@RequestBody TicketPaymentDTO ticket) {
+        return manager.payTicket(ticket);
     }
 
     @PostMapping(value = "/issue")
