@@ -11,5 +11,5 @@ public class TransponderDTO {
     private String licensePlate;
     private String gateId;
     private boolean isEntry;
-    private ZonedDateTime timestamp;
+    private ZonedDateTime timestamp = ZonedDateTime.now();
 }
