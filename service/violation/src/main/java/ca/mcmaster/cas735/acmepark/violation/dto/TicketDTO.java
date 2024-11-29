@@ -8,12 +8,13 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 public class TicketDTO {
 
-    private long ticketNum;
+    private UUID ticketNum;
 
     @NotBlank(message = "License plate is required")
     private String licensePlate;
@@ -28,6 +29,16 @@ public class TicketDTO {
     private long lotId;
 
     private LocalDateTime timestamp = LocalDateTime.now();
+
+    public ParkingViolation asParkingViolation() {
+        ParkingViolation violation = new ParkingViolation();
+        violation.setLicensePlate(licensePlate);
+        violation.setFineAmount(fineAmount);
+        violation.setOfficerId(officerId);
+        violation.setLotId(lotId);
+        violation.setViolationTime(timestamp);
+        return violation;
+    }
 
     public TicketDTO(ParkingViolation violation) {
         this.ticketNum = violation.getViolationId();

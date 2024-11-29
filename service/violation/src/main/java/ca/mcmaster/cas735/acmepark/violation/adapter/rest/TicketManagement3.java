@@ -7,7 +7,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.UUID;
 
 @RestController
 @Tag(name = "Pay tickets")
@@ -29,8 +31,9 @@ public class TicketManagement3 {
 
     @PostMapping(value = "/issue")
     @Operation(description = "Issue a ticket")
-    public String issue(@Valid @RequestBody TicketDTO ticket) {
-        return manager.issueTicket(ticket);
+    public ResponseEntity<String> issue(@Valid @RequestBody TicketDTO ticket) {
+        UUID uuid = manager.issueTicket(ticket);
+        return ResponseEntity.ok(String.format("Ticket issued successfully with ID: %s", uuid));
     }
 
 }
