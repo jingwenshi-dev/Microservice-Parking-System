@@ -11,6 +11,7 @@
         <module>service/permit</module>
         <module>service/violation</module>
         <module>service/payment</module>
+        <module>service/visitor_access</module>
     </modules>
 
 </project>

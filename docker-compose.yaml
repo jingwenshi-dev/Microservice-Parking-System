@@ -31,3 +31,15 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+
+  visitor:
+    container_name: visitor
+    build:
+      context: ./service/visitor_access
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      gate:
+        condition: service_started
+      permit:
+        condition: service_started

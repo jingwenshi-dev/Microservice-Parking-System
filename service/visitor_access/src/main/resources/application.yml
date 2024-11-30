@@ -1,0 +1,55 @@
+spring:
+  application:
+    name: visitor_access # 应用程序名称为 visitor_access
+
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: root
+    password: root
+
+# 日志级别配置
+logging:
+  level:
+    ca.mcmaster.cas735.acmepark.visitor_access:
+      adapter: DEBUG # 适配器层的日志级别为 INFO，可以设置为 DEBUG 以获得更细粒度的日志跟踪
+      application: DEBUG # 应用层的日志级别为 INFO，可以设置为 DEBUG 以便调试
+
+# 服务器配置
+server:
+  port: 9080 # 服务器监听的端口号为 9080
+
+# 自定义应用配置
+app:
+  custom:
+    messaging:
+      visitor-entry-request-exchange: visitorEntryRequestExchange # 定义 RabbitMQ 的交换机用于处理访客进入请求
+      visitor-entry-response-exchange: visitorEntryResponseExchange # 定义 RabbitMQ 的交换机用于处理访客进入后的响应
+      visitor-exit-request-exchange: visitorExitRequestExchange # 定义 RabbitMQ 的交换机用于处理访客离开请求
+      visitor-exit-response-exchange: visitorExitResponseExchange # 定义 RabbitMQ 的交换机用于处理访客离开后的响应
+      visitor-to-gate-entry-request-exchange: visitorToGateEntryRequestExchange # 定义 RabbitMQ 的交换机用于处理访客进入时发送给 Gate 服务的请求
+      visitor-to-gate-entry-response-exchange: visitorToGateEntryResponseExchange # 定义 RabbitMQ 的交换机用于处理 Gate 服务对访客进入请求的响应
+      visitor-to-gate-exit-request-exchange: visitorToGateExitRequestExchange # 定义 RabbitMQ 的交换机用于处理访客离开时发送给 Gate 服务的请求
+      visitor-to-gate-exit-response-exchange: visitorToGateExitResponseExchange # 定义 RabbitMQ 的交换机用于处理 Gate 服务对访客离开请求的响应
+
+# 管理端点配置，用于暴露服务的管理信息
+management:
+  info:
+    env:
+      enabled: true # 启用环境信息管理端点，以便查看应用程序的环境信息
+  endpoints:
+    web:
+      exposure:
+        include: info, health # 启用 "info" 和 "health" 端点，用于查看应用程序的基本信息和健康状况
+      base-path: /actuator # 管理端点的基础路径为 "/actuator"，例如 "/actuator/health" 查看健康状况
+
+# 应用程序信息配置，用于提供项目描述和版本
+info:
+  application:
+    description: '@project.description@' # 项目描述，通常从项目的构建工具（如 Maven）中注入
+    version: '@project.version@' # 项目版本，同样从项目构建工具中注入
+
+eureka:
+  client:
+    healthcheck:
+      enabled: true # 启用健康检查
