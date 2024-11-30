@@ -17,7 +17,6 @@ public class AMQPTransponderReader {
         this.transponderReader = transponderReader;
     }
 
-    // TODO: Listen to an exchange of different gates.
     @RabbitListener(queuesToDeclare = @Queue("transponder.queue"))
     public void listen(String raw) {
         transponderReader.readTransponder(translate(raw));
