@@ -1,6 +1,6 @@
 package ca.mcmaster.cas735.acmepark.violation.dto;
 
-import ca.mcmaster.cas735.acmepark.violation.business.entities.ParkingViolation;
+import ca.mcmaster.cas735.acmepark.payment.business.entities.ParkingViolation;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

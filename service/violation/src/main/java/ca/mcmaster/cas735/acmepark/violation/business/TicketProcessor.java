@@ -1,6 +1,6 @@
 package ca.mcmaster.cas735.acmepark.violation.business;
 
-import ca.mcmaster.cas735.acmepark.violation.business.entities.ParkingViolation;
+import ca.mcmaster.cas735.acmepark.payment.business.entities.ParkingViolation;
 import ca.mcmaster.cas735.acmepark.violation.business.errors.NotFoundException;
 import ca.mcmaster.cas735.acmepark.violation.dto.TicketDTO;
 import ca.mcmaster.cas735.acmepark.violation.port.provided.TicketManager;
