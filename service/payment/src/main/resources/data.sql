@@ -1,10 +1,10 @@
 -- 用户表
 INSERT INTO USERS (USER_ID, FIRST_NAME, LAST_NAME, EMAIL, USER_TYPE, TOTAL_FINE)
 VALUES
-    -- 用户ID, 名, 姓, 邮箱, 用户类型（学生、员工、访客）, 总罚款金额
-    (1, 'John', 'Doe', 'john.doe@example.com', 'student', 0),
-    (2, 'Jane', 'Smith', 'jane.smith@example.com', 'staff', 15),
-    (3, 'Alice', 'Johnson', 'alice.johnson@example.com', 'visitor', 0);
+    ('e8b5e4f1-8f3d-4e1b-9fa4-90fbd2c35d10', 'John', 'Doe', 'john.doe@example.com', 'student', 0.0),
+    ('a1c2d3e4-5678-9101-1121-314151617181', 'Jane', 'Smith', 'jane.smith@example.com', 'staff', 15.0),
+    ('c9d8e7f6-5432-1098-7654-321098765432', 'Alice', 'Johnson', 'alice.johnson@example.com', 'visitor', 0.0);
+
 
 -- 停车场表
 INSERT INTO PARKING_LOTS (LOT_ID, LOT_NAME, TOTAL_SPOTS, VISITOR_ALLOWED, HOURLY_RATE, LOCATION)
@@ -25,10 +25,8 @@ VALUES
 -- 停车许可证表
 INSERT INTO PARKING_PERMITS (TRANSPONDER_NUMBER, VALID_FROM, VALID_UNTIL, LICENSE_PLATE, PAYMENT_METHOD, PAYROLL_NUM)
 VALUES
-    -- 转发器编号, 有效期起始时间, 有效期结束时间, 车牌号, 支付方式（直接支付/工资扣除）, 工资编号（可选）
-    ('TRN001', '2024-01-01', '2024-12-31', 'ABC123', 'direct', NULL),
-    ('TRN002', '2024-01-01', '2024-06-30', 'DEF456', 'payroll', 101);
-
+    ('550e8400-e29b-41d4-a716-446655440000', '2024-01-01', '2024-12-31', 'ABC123', 'direct', NULL),
+    ('123e4567-e89b-12d3-a456-426614174000', '2024-01-01', '2024-06-30', 'DEF456', 'payroll', '101');
 
 -- 凭证表
 INSERT INTO VOUCHER (VOUCHER, VALID_FROM, VALID_UNTIL)
@@ -40,9 +38,8 @@ VALUES
 -- 停车违规表
 INSERT INTO PARKING_VIOLATIONS (VIOLATION_ID, VIOLATION_TIME, LICENSE_PLATE, FINE_AMOUNT, IS_PAID, OFFICER_ID, LOT_ID)
 VALUES
-    -- 违规ID, 违规时间, 车牌号, 罚款金额, 是否支付, 执法人员ID, 停车场ID
-    (1, '2024-03-01 13:00:00', 'ABC123', 50.0, FALSE, 2, 1),
-    (2, '2024-03-02 10:00:00', 'XYZ789', 75.0, TRUE, 1, 3);
+    ('550e8400-e29b-41d4-a716-446655440000', '2024-03-01T13:00:00', 'ABC123', 50.0, FALSE, 2, 1),
+    ('123e4567-e89b-12d3-a456-426614174000', '2024-03-02T10:00:00', 'XYZ789', 75.0, TRUE, 1, 3);
 
 -- 停车场占用表
 INSERT INTO LOT_OCCUPANCY (ID, LOT_ID, TIMESTAMP, CURRENT_OCCUPANCY)
