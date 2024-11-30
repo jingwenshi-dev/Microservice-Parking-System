@@ -26,7 +26,7 @@ public class TicketProcessor implements TicketManager {
     @Override
     public TicketDTO lookupTicket(UUID ticketNum, String licensePlate) throws NotFoundException {
         return new TicketDTO(ticketDB.findByViolationIdAndLicensePlate(ticketNum, licensePlate)
-                .orElseThrow(() -> new NotFoundException(String.format("Ticket not found with number: %s and license plate: %s", ticketNum, licensePlate))));
+                .orElseThrow(() -> new NotFoundException("Ticket number or license plate not found.")));
     }
 
     @Override
@@ -37,7 +37,7 @@ public class TicketProcessor implements TicketManager {
             ticketDB.saveAndFlush(violation);
             return violation.getViolationId();
         } else {
-            throw new NotFoundException(String.format("Visitor or Parking Lot not found for license plate: %s and lot ID: %s", ticket.getLicensePlate(), ticket.getLotId()));
+            throw new NotFoundException("License plate or parking lot id not found.");
         }
     }
 }
