@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -19,7 +20,7 @@ public class PaymentRequest {
 
     private String licensePlate;
 
-    private String transponderNumber;
+    private UUID transponderNumber;
 
     private LocalDate validFrom;
 

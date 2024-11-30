@@ -2,7 +2,6 @@ package ca.mcmaster.cas735.acmepark.visitor_access.adapter;
 
 import ca.mcmaster.cas735.acmepark.gate.dto.GateCtrlDTO;
 import ca.mcmaster.cas735.acmepark.payment.dto.PaymentRequest;
-import ca.mcmaster.cas735.acmepark.visitor_access.dto.GateAccessRequest;
 import ca.mcmaster.cas735.acmepark.visitor_access.ports.provided.VisitorSender;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;

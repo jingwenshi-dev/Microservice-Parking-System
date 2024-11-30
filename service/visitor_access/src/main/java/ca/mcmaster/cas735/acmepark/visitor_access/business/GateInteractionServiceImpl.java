@@ -46,6 +46,7 @@ public class GateInteractionServiceImpl implements GateInteractionHandler {
         setVisitorToRepository(transponderDTO);
         GateCtrlDTO gateCtrlDTO = new GateCtrlDTO();
         gateCtrlDTO.setIsValid(true);
+        gateCtrlDTO.setGateId(transponderDTO.getGateId());
         // 添加QR数据
         addQRCode(transponderDTO, gateCtrlDTO);
         visitorSender.sendEntryResponseToGate(gateCtrlDTO);
@@ -58,7 +59,7 @@ public class GateInteractionServiceImpl implements GateInteractionHandler {
         log.info("Handling gate exit response: {}", data);
         TransponderDTO transponderDTO = translate(data);
         // 查数据库，然后获取进入的时间,组装成交易请求
-        PaymentRequest paymentRequest = getVisitorFromRepository(transponderDTO.getLicensePlate());
+        PaymentRequest paymentRequest = getVisitorFromRepository(transponderDTO);
         visitorSender.sendExitRequestToPayment(paymentRequest);
     }
 

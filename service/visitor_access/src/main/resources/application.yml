@@ -25,10 +25,6 @@ app:
     messaging:
       visitor-entry-request-exchange: visitorEntryRequestExchange # 用了  gate进入 -> visitor ，定义 RabbitMQ 的交换机用于处理访客进入请求
       visitor-entry-response-exchange: visitorEntryResponseExchange #用了 visitor确认进入开门 -> gate， 定义 RabbitMQ 的交换机用于处理访客进入后的响应
-      visitor-exit-request-exchange: visitorExitRequestExchange # 定义 RabbitMQ 的交换机用于处理访客离开请求
-      visitor-exit-response-exchange: visitorExitResponseExchange # 定义 RabbitMQ 的交换机用于处理访客离开后的响应
-      visitor-to-gate-entry-request-exchange: visitorToGateEntryRequestExchange # 定义 RabbitMQ 的交换机用于处理访客进入时发送给 Gate 服务的请求
-      visitor-to-gate-entry-response-exchange: visitorToGateEntryResponseExchange # 定义 RabbitMQ 的交换机用于处理 Gate 服务对访客进入请求的响应
       visitor-to-gate-exit-request-exchange: visitorToGateExitRequestExchange #用了visitor -> gate退出    定义 RabbitMQ 的交换机用于处理访客离开时发送给 Gate 服务的请求
       visitor-to-gate-exit-response-exchange: visitorToGateExitResponseExchange #用了  gate退出 -> visitor 定义 RabbitMQ 的交换机用于处理 Gate 服务对访客离开请求的响应
       payment-request-exchange: paymentRequestExchange #用了 visitor ->payment 退出，扣费 监听的接口

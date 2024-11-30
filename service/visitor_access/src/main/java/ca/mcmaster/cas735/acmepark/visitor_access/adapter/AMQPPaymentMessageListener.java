@@ -25,25 +25,6 @@ public class AMQPPaymentMessageListener {
         this.paymentInteractionService = paymentInteractionService;
     }
 
-//    // 监听访客进入的队列
-//    @RabbitListener(bindings = @QueueBinding(
-//            value = @Queue(value = "visitorEntryQueue", durable = "true"), // 定义队列名称为 visitorEntryQueue，并设置为持久化
-//            exchange = @Exchange(value = "${app.custom.messaging.visitor-entry-request-exchange}", ignoreDeclarationExceptions = "true", type = "topic"), // 绑定到交换机，使用配置中的名称，类型为 topic
-//            key = "*")) // 路由键设置为 "*"，表示匹配任意路由键
-//    public void listenForVisitorEntry(String data) {
-//        log.debug("接收到访客进入请求: {}", data);
-//        visitorService.handleVisitorEntry(data); // 调用业务逻辑处理访客进入
-//    }
-//
-//    // 监听访客退出的队列
-//    @RabbitListener(bindings = @QueueBinding(
-//            value = @Queue(value = "visitorExitQueue", durable = "true"), // 定义队列名称为 visitorExitQueue，并设置为持久化
-//            exchange = @Exchange(value = "${app.custom.messaging.visitor-exit-request-exchange}", ignoreDeclarationExceptions = "true", type = "topic"), // 绑定到交换机，使用配置中的名称，类型为 topic
-//            key = "*")) // 路由键设置为 "*"，表示匹配任意路由键
-//    public void listenForVisitorExit(String data) {
-//        log.debug("接收到访客退出请求: {}", data);
-//        visitorService.handlePaymentResult(data); // 调用业务逻辑处理访客退出
-//    }
 
     // 监听交易返回的数据
     @RabbitListener(bindings = @QueueBinding(
