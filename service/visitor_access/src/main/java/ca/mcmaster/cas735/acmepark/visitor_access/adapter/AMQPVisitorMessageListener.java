@@ -15,13 +15,13 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Slf4j
-public class VisitorMessageListener {
+public class AMQPVisitorMessageListener {
 
     // 注入 VisitorService 以处理业务逻辑
     private final VisitorRequestHandler visitorService;
 
     @Autowired
-    public VisitorMessageListener(VisitorRequestHandler visitorService) {
+    public AMQPVisitorMessageListener(VisitorRequestHandler visitorService) {
         this.visitorService = visitorService;
     }
 

@@ -14,13 +14,13 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Slf4j
-public class GateMessageListener {
+public class AMQPGateMessageListener {
 
     // 注入 VisitorService 以处理业务逻辑
     private final GateInteractionHandler gateInteractionServiceImpl;
 
     @Autowired
-    public GateMessageListener(GateInteractionHandler gateInteractionServiceImpl) {
+    public AMQPGateMessageListener(GateInteractionHandler gateInteractionServiceImpl) {
         this.gateInteractionServiceImpl = gateInteractionServiceImpl;
     }
 

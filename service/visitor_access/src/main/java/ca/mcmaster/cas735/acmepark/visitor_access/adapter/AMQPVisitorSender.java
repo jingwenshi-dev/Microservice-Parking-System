@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public class VisitorAMQPSender implements VisitorSender {
+public class AMQPVisitorSender implements VisitorSender {
 
     private final RabbitTemplate rabbitTemplate;
 
     @Autowired
-    public VisitorAMQPSender(RabbitTemplate rabbitTemplate) {
+    public AMQPVisitorSender(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
     }
 
