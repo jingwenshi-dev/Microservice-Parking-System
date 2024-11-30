@@ -38,4 +38,6 @@ public class PaymentRequest {
     //支付结果
     private boolean result;
 
+    private String gateId;
+
 }

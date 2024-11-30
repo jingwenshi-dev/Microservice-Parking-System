@@ -1,15 +1,16 @@
 package ca.mcmaster.cas735.acmepark.visitor_access.ports.provided;
 
 
-import ca.mcmaster.cas735.acmepark.visitor_access.dto.GateAccessRequest;
+import ca.mcmaster.cas735.acmepark.gate.dto.GateCtrlDTO;
+import ca.mcmaster.cas735.acmepark.payment.dto.PaymentRequest;
+
 
 public interface VisitorSender {
 
-    void sendOpenGateEntryRequest(String visitorRequest);
+    void sendEntryResponseToGate(GateCtrlDTO gateCtrlDTO);
 
-    void sendOpenGateExitRequest(String exitRequest);
+    void sendExitRequestToPayment(PaymentRequest paymentRequest);
 
-    void sendEntryResponseToGate(GateAccessRequest gateAccessRequest);
+    void sendExitRequestToGate(PaymentRequest paymentRequest);
 
-    void sendGateExitResponseToVisitor(GateAccessRequest gateAccessRequest);
 }

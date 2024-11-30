@@ -56,6 +56,24 @@
             <artifactId>javase</artifactId>
             <version>3.5.3</version>
         </dependency>
+        <dependency>
+            <groupId>ca.mcmaster.cas735.acmepark</groupId>
+            <artifactId>payment</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ca.mcmaster.cas735.acmepark</groupId>
+            <artifactId>gate</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ca.mcmaster.cas735.acmepark</groupId>
+            <artifactId>payment</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>

@@ -40,7 +40,7 @@ public class AMQPGateMessageListener {
             exchange = @Exchange(value = "${app.custom.messaging.visitor-to-gate-exit-response-exchange}",
                     ignoreDeclarationExceptions = "true", type = "topic"), // 绑定到交换机，使用配置中的名称，类型为 topic
             key = "*")) // 路由键设置为 "*"，表示匹配任意路由键
-    public void listenForGateExitResponse(String data) {
+    public void listenForGateExitRequest(String data) {
         log.debug("接收到 Gate 服务的离开响应: {}", data);
         // 调用 VisitorService 来处理 Gate 返回的结果
         gateInteractionServiceImpl.handleGateExitRequest(data);
