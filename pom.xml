@@ -9,6 +9,7 @@
     <modules>
         <module>service/gate</module>
         <module>service/permit</module>
+        <module>service/violation</module>
         <module>service/payment</module>
     </modules>
 

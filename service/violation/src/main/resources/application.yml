@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: violation
+
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: root
+    password: root
