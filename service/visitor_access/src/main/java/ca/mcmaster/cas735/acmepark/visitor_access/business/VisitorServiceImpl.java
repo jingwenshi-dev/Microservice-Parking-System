@@ -1,8 +1,8 @@
 package ca.mcmaster.cas735.acmepark.visitor_access.business;
 
 
-import ca.mcmaster.cas735.acmepark.visitor_access.ports.VisitorRequestHandler;
-import ca.mcmaster.cas735.acmepark.visitor_access.ports.VisitorSender;
+import ca.mcmaster.cas735.acmepark.visitor_access.ports.provided.VisitorRequestHandler;
+import ca.mcmaster.cas735.acmepark.visitor_access.ports.provided.VisitorSender;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

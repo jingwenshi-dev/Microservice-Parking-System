@@ -1,9 +1,9 @@
 package ca.mcmaster.cas735.acmepark.visitor_access.business;
 
 import ca.mcmaster.cas735.acmepark.visitor_access.dto.GateAccessRequest;
-import ca.mcmaster.cas735.acmepark.visitor_access.ports.GateInteractionHandler;
-import ca.mcmaster.cas735.acmepark.visitor_access.ports.QRCodeService;
-import ca.mcmaster.cas735.acmepark.visitor_access.ports.VisitorSender;
+import ca.mcmaster.cas735.acmepark.visitor_access.ports.provided.GateInteractionHandler;
+import ca.mcmaster.cas735.acmepark.visitor_access.ports.provided.QRCodeService;
+import ca.mcmaster.cas735.acmepark.visitor_access.ports.provided.VisitorSender;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,17 +25,18 @@ public class GateInteractionServiceImpl implements GateInteractionHandler {
 
     // 处理 Gate 服务的进入响应
     @Override
-    public void handleGateEntryResponse(String data) {
+    public void handleGateEntryRequest(String data) {
         // 处理进入请求的 Gate 响应逻辑
         log.info("Handling gate entry response: {}", data);
         GateAccessRequest gateAccessRequest = translate(data);
         addQRCode(gateAccessRequest);
+        //TODO: 写入数据库进入时间。
         visitorSender.sendEntryResponseToGate(gateAccessRequest);
     }
 
     // 处理 Gate 服务的离开响应
     @Override
-    public void handleGateExitResponse(String data) {
+    public void handleGateExitRequest(String data) {
         // 处理离开请求的 Gate 响应逻辑
         log.info("Handling gate exit response: {}", data);
         GateAccessRequest gateAccessRequest = translate(data);

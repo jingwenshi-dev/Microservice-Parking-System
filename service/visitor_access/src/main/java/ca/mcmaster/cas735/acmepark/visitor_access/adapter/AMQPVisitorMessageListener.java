@@ -1,7 +1,7 @@
 package ca.mcmaster.cas735.acmepark.visitor_access.adapter;
 
 
-import ca.mcmaster.cas735.acmepark.visitor_access.ports.VisitorRequestHandler;
+import ca.mcmaster.cas735.acmepark.visitor_access.ports.provided.VisitorRequestHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;

@@ -1,4 +1,4 @@
-package ca.mcmaster.cas735.acmepark.visitor_access.ports;
+package ca.mcmaster.cas735.acmepark.visitor_access.ports.provided;
 
 
 import ca.mcmaster.cas735.acmepark.visitor_access.dto.GateAccessRequest;

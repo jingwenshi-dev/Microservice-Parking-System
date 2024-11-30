@@ -1,6 +1,6 @@
 package ca.mcmaster.cas735.acmepark.visitor_access.adapter;
 
-import ca.mcmaster.cas735.acmepark.visitor_access.ports.QRCodeService;
+import ca.mcmaster.cas735.acmepark.visitor_access.ports.provided.QRCodeService;
 import com.google.zxing.*;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.BitMatrix;
