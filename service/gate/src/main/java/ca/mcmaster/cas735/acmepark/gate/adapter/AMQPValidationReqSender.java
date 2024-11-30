@@ -5,6 +5,7 @@ import ca.mcmaster.cas735.acmepark.gate.port.ValidationReqSender;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,19 +18,23 @@ public class AMQPValidationReqSender implements ValidationReqSender {
         this.rabbitTemplate = rabbitTemplate;
     }
 
+    @Value("${app.custom.messaging.visitor-entry-request-exchange}") private String visitorExchange;
+    // TODO: Update permit exchange.
+    @Value("${app.custom.messaging.visitor-entry-request-exchange}") private String permitExchange;
+
     @Override
     public void send(TransponderDTO transponder) {
         if (transponder.getTransponderId() == null) {
             rabbitTemplate.convertAndSend(
-                    "",
-                    "visitor.validation.queue",
+                    visitorExchange,
+                    "*",
                     translate(transponder)
             );
         }
         else {
             rabbitTemplate.convertAndSend(
-                    "",
-                    "permit.validation.queue",
+                    permitExchange,
+                    "*",
                     translate(transponder)
             );
         }

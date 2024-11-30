@@ -2,7 +2,9 @@ package ca.mcmaster.cas735.acmepark.gate.adapter;
 
 import ca.mcmaster.cas735.acmepark.gate.dto.TransponderDTO;
 import ca.mcmaster.cas735.acmepark.gate.port.TransponderReader;
+import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
+import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -17,8 +19,12 @@ public class AMQPTransponderReader {
         this.transponderReader = transponderReader;
     }
 
-    // TODO: Listen to an exchange of different gates.
-    @RabbitListener(queuesToDeclare = @Queue("transponder.queue"))
+    @RabbitListener(bindings = @QueueBinding(
+            value = @Queue(value = "#{T(java.util.UUID).randomUUID().toString()}", autoDelete = "true"),
+            exchange = @Exchange(value = "${app.custom.messaging.transponder}", type = "topic"),
+            key = "gate.*.transponder"
+    ))
+
     public void listen(String raw) {
         transponderReader.readTransponder(translate(raw));
     }

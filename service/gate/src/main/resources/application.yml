@@ -7,3 +7,10 @@ spring:
     port: 5672
     username: root
     password: root
+
+app:
+  custom:
+    messaging:
+      transponder: transponderReaderExchange
+      gate: gateOpenRequestExchange
+      visitor-entry-request-exchange: visitorEntryRequestExchange
