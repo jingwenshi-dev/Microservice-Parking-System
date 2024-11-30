@@ -11,6 +11,7 @@ spring:
 app:
   custom:
     messaging:
-      transponder: transponderReaderExchange
-      gate: gateOpenRequestExchange
+      gate:
+        routing-key: gate.%s.command
+        exchange: gateOpenRequestExchange
       visitor-entry-request-exchange: visitorEntryRequestExchange

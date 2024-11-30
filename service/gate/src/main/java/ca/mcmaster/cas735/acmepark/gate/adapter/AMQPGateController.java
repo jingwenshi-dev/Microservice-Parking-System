@@ -17,11 +17,12 @@ public class AMQPGateController implements GateController {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    @Value("${app.custom.messaging.gate}") private String gateExchange;
+    @Value("${app.custom.messaging.gate.exchange}") private String gateExchange;
+    @Value("${app.custom.messaging.gate.routing-key}") private String gateRoutingKey;
 
     @Override
     public void gateControl(GateCtrlDTO gateCtrl) {
-        String routingKey = String.format("gate.%s.command", gateCtrl.getGateId());
+        String routingKey = String.format(gateRoutingKey, gateCtrl.getGateId());
         rabbitTemplate.convertAndSend(gateExchange, routingKey, gateCtrl.getIsValid());
     }
 }
