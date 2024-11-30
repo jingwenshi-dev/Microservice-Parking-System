@@ -30,7 +30,7 @@ public class GateInteractionServiceImpl implements GateInteractionHandler {
         log.info("Handling gate entry response: {}", data);
         GateAccessRequest gateAccessRequest = translate(data);
         addQRCode(gateAccessRequest);
-        visitorSender.sendGateEntryResponseToVisitor(gateAccessRequest);
+        visitorSender.sendEntryResponseToGate(gateAccessRequest);
     }
 
     // 处理 Gate 服务的离开响应

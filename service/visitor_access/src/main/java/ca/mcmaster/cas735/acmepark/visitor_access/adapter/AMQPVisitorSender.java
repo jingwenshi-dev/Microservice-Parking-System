@@ -50,7 +50,7 @@ public class AMQPVisitorSender implements VisitorSender {
 
     // 发送进入响应给访客
     @Override
-    public void sendGateEntryResponseToVisitor(GateAccessRequest gateAccessRequest) {
+    public void sendEntryResponseToGate(GateAccessRequest gateAccessRequest) {
         log.debug("Sending gate entry response message to {}: {}", entryResponseExchange, gateAccessRequest);
         rabbitTemplate.convertAndSend(entryResponseExchange, "*", translate(gateAccessRequest));
     }

@@ -9,7 +9,7 @@ public interface VisitorSender {
 
     void sendOpenGateExitRequest(String exitRequest);
 
-    void sendGateEntryResponseToVisitor(GateAccessRequest gateAccessRequest);
+    void sendEntryResponseToGate(GateAccessRequest gateAccessRequest);
 
     void sendGateExitResponseToVisitor(GateAccessRequest gateAccessRequest);
 }
