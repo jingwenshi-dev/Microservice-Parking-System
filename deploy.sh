@@ -9,7 +9,7 @@ cd ../permit || exit
 mvn clean package -DskipTests
 docker build -t permit .
 
-cd ../service/payment || exit
+cd ../payment || exit
 mvn clean package -DskipTests
 docker build -t payment .
 
