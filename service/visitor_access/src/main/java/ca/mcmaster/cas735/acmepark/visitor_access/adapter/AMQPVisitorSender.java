@@ -21,52 +21,27 @@ public class AMQPVisitorSender implements VisitorSender {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-//    @Value("${app.custom.messaging.visitor-to-gate-entry-request-exchange}")
-//    private String entryRequestExchange;
-
-    @Value("${app.custom.messaging.visitor-to-gate-exit-request-exchange}")
-    private String exitRequestExchange;
-
-    @Value("${app.custom.messaging.visitor-entry-response-exchange}")
-    private String entryResponseExchange;
-
-//    @Value("${app.custom.messaging.visitor-exit-response-exchange}")
-//    private String exitResponseExchange;
+    @Value("${app.custom.messaging.visitor-to-gate-exchangee}")
+    private String visitorToGateExchange;
 
     @Value("${app.custom.messaging.payment-request-exchange}")
     private String paymentRequestExchange;
 
-//    // 发送进入请求给gate service
-//    // 从监听访客请求到该方法，数据均为改变，相当于直接透传服务
-//    @Override
-//    public void sendOpenGateEntryRequest(String visitorRequest) {
-//        log.debug("Sending entry request message to {}: {}", entryRequestExchange, visitorRequest);
-//        rabbitTemplate.convertAndSend(entryRequestExchange, "*", visitorRequest);
-//    }
+
+    // 发送进入
+    @Override
+    public void sendEntryResponseToGate(GateCtrlDTO gateCtrlDTO) {
+        log.debug("Sending gate entry response message to {}: {}", visitorToGateExchange, gateCtrlDTO);
+        rabbitTemplate.convertAndSend(visitorToGateExchange, "*", translate(gateCtrlDTO));
+    }
 
     // 发送离开请求给gate service
     // 从监听访客请求到该方法，数据均为改变，相当于直接透传服务
     @Override
     public void sendExitRequestToGate(PaymentRequest paymentRequest) {
-
-        log.debug("Sending exit request message to {}: {}", exitRequestExchange, paymentRequest);
-        rabbitTemplate.convertAndSend(exitRequestExchange, "*", paymentRequest);
+        log.debug("Sending exit request message to {}: {}", visitorToGateExchange, paymentRequest);
+        rabbitTemplate.convertAndSend(visitorToGateExchange, "*", paymentRequest);
     }
-
-
-    // 发送进入响应给访客
-    @Override
-    public void sendEntryResponseToGate(GateCtrlDTO gateCtrlDTO) {
-        log.debug("Sending gate entry response message to {}: {}", entryResponseExchange, gateCtrlDTO);
-        rabbitTemplate.convertAndSend(entryResponseExchange, "*", translate(gateCtrlDTO));
-    }
-
-//    // 发送离开响应给访客
-//    @Override
-//    public void sendGateExitResponseToVisitor(GateCtrlDTO gateCtrlDTO) {
-//        log.debug("Sending gate exit response message to {}: {}", exitResponseExchange, gateCtrlDTO);
-//        rabbitTemplate.convertAndSend(exitResponseExchange, "*", translate(gateCtrlDTO));
-//    }
 
     // 请求交易，进行扣费
     @Override
@@ -74,7 +49,6 @@ public class AMQPVisitorSender implements VisitorSender {
         log.debug("Sending exit  response message to {}: {}", paymentRequestExchange, paymentRequest);
         rabbitTemplate.convertAndSend(paymentRequestExchange, "*", translate(paymentRequest));
     }
-
 
     private String translate(Object obj) {
         ObjectMapper mapper = new ObjectMapper();

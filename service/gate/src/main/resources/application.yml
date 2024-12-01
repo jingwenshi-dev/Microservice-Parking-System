@@ -16,5 +16,9 @@ app:
         exchange: gateOpenRequestExchange
       visitor:
         exchange:
-          entry-request: visitorEntryRequestExchange
-          entry-response: visitorEntryResponseExchange
+          request: gateToVisitorExchange
+      permit:
+        exchange:
+          request: gateToPermitExchange
+      response:
+        exchange: toGateResultExchange

@@ -22,7 +22,7 @@ public class AMQPValidationResultReceiver {
 
     @RabbitListener(
             bindings = @QueueBinding(value = @Queue(value = "validation.result.queue", durable = "false"),
-                    exchange = @Exchange(value = "${app.custom.messaging.visitor.exchange.entry-response}", ignoreDeclarationExceptions = "true", type = "topic"),
+                    exchange = @Exchange(value = "${app.custom.messaging.response.exchange}", ignoreDeclarationExceptions = "true", type = "topic"),
                     key = "*")
     )
     public void receiveValidationResult(String raw) {

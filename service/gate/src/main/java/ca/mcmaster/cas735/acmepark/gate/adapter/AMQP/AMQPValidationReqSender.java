@@ -25,9 +25,11 @@ public class AMQPValidationReqSender implements ValidationReqSender {
         this.monitor = monitor;
     }
 
-    @Value("${app.custom.messaging.visitor.exchange.entry-request}") private String visitorExchange;
-    // TODO: Update permit exchange.
-    @Value("${app.custom.messaging.visitor.exchange.entry-request}") private String permitExchange;
+    @Value("${app.custom.messaging.visitor.exchange.request}")
+    private String visitorExchange;
+
+    @Value("${app.custom.messaging.permit.exchange.request}")
+    private String permitExchange;
 
     @Override
     public void send(TransponderDTO transponder) {

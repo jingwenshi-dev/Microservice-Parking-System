@@ -38,7 +38,8 @@ server:
 app:
   custom:
     messaging:
-      visitor-entry-request-exchange: visitorEntryRequestExchange # 用了  gate进入 -> visitor ，定义 RabbitMQ 的交换机用于处理访客进入请求
+      gate-to-visitor-exchange: gateToVisitorExchange # gate -> visitor
+      visitor-to-gate-exchange: toGateResultExchange  # visitor -> gate
       visitor-entry-response-exchange: visitorEntryResponseExchange #用了 visitor确认进入开门 -> gate， 定义 RabbitMQ 的交换机用于处理访客进入后的响应
       visitor-to-gate-exit-request-exchange: visitorToGateExitRequestExchange #用了visitor -> gate退出    定义 RabbitMQ 的交换机用于处理访客离开时发送给 Gate 服务的请求
       visitor-to-gate-exit-response-exchange: visitorToGateExitResponseExchange #用了  gate退出 -> visitor 定义 RabbitMQ 的交换机用于处理 Gate 服务对访客离开请求的响应

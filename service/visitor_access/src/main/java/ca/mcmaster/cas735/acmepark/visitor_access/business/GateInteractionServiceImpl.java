@@ -37,10 +37,26 @@ public class GateInteractionServiceImpl implements GateInteractionHandler {
 
     // 处理 Gate 服务的进入响应
     @Override
-    public void handleGateEntryRequest(String data) {
+    public void handleGateRequest(String data) {
         // 处理进入请求的 Gate 响应逻辑
         log.info("Handling gate entry response: {}", data);
         TransponderDTO transponderDTO = translate(data);
+        if (transponderDTO.isEntry()) {
+            handleEntryRequest(transponderDTO);
+        } else {
+            handleExitRequest(transponderDTO);
+        }
+
+    }
+
+    // 处理 Gate 服务的离开响应
+    public void handleExitRequest(TransponderDTO transponderDTO) {
+        // 查数据库，然后获取进入的时间,组装成交易请求
+        PaymentRequest paymentRequest = getVisitorFromRepository(transponderDTO);
+        visitorSender.sendExitRequestToPayment(paymentRequest);
+    }
+
+    private void handleEntryRequest(TransponderDTO transponderDTO) {
         //写入数据库进入时间。
         setVisitorToRepository(transponderDTO);
         GateCtrlDTO gateCtrlDTO = new GateCtrlDTO();
@@ -49,17 +65,6 @@ public class GateInteractionServiceImpl implements GateInteractionHandler {
         // 添加QR数据
         addQRCode(transponderDTO, gateCtrlDTO);
         visitorSender.sendEntryResponseToGate(gateCtrlDTO);
-    }
-
-    // 处理 Gate 服务的离开响应
-    @Override
-    public void handleGateExitRequest(String data) {
-        // 处理离开请求的 Gate 响应逻辑
-        log.info("Handling gate exit response: {}", data);
-        TransponderDTO transponderDTO = translate(data);
-        // 查数据库，然后获取进入的时间,组装成交易请求
-        PaymentRequest paymentRequest = getVisitorFromRepository(transponderDTO);
-        visitorSender.sendExitRequestToPayment(paymentRequest);
     }
 
     // 将原始 JSON 数据转换为 QR 码字符串
