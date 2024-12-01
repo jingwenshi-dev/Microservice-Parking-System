@@ -18,9 +18,9 @@ public class AMQPValidationReqSender implements ValidationReqSender {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    @Value("${app.custom.messaging.visitor-entry-request-exchange}") private String visitorExchange;
+    @Value("${app.custom.messaging.visitor.exchange.entry-request}") private String visitorExchange;
     // TODO: Update permit exchange.
-    @Value("${app.custom.messaging.visitor-entry-request-exchange}") private String permitExchange;
+    @Value("${app.custom.messaging.visitor.exchange.entry-request}") private String permitExchange;
 
     @Override
     public void send(TransponderDTO transponder) {
