@@ -32,6 +32,14 @@ services:
       rabbitmq:
         condition: service_healthy
 
+  payment:
+    container_name: payment
+    build:
+      context: ./service/payment
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
   visitor:
     container_name: visitor
     build:
