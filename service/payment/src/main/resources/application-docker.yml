@@ -1,4 +1,14 @@
 spring:
+  rabbitmq:
+    host: rabbitmq # Docker 容器内部的 RabbitMQ 服务
+
+  app:
+    custom:
+      mqtt:
+        host: rabbitmq
+  info:
+    application:
+      name: '@project.name@ (docker deployment)'
   ## 数据库配置
   datasource:
     # 数据库 URL，使用 H2 数据库并将其存储为文件，路径为 /data/database-customer-service.h2

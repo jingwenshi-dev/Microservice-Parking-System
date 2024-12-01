@@ -3,6 +3,19 @@ spring:
     host: localhost
     port: 5672
 
+  datasource:
+    url: jdbc:h2:mem:visitordb # in memory database when used locally
+  h2.console:
+    enabled: true # expose database web UI for debugging purposes
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop # 数据库模式自动操作设置为 create-drop，每次启动时创建表并在关闭时删除
+  sql:
+    init:
+      mode: always # 设置 SQL 初始化模式为始终，无论何时启动应用程序都会执行 SQL 脚本进行初始化
+
+
 app:
   custom:
     mqtt:

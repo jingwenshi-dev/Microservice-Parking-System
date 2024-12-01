@@ -2,6 +2,12 @@ spring:
   application:
     name: payment # 应用程序的名称为 payment
 
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: root
+    password: root
+
   ## 数据源配置
   datasource:
     username: root # 数据库用户名，H2 数据库默认用户为 "sa"

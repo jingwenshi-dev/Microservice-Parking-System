@@ -1,4 +1,8 @@
 spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+
   ## Data repository configuration
   datasource:
     url: jdbc:h2:mem:mydb # in memory database when used locally
@@ -11,6 +15,14 @@ spring:
   sql:
     init:
       mode: always # 设置 SQL 初始化模式为始终，无论何时启动应用程序都会执行 SQL 脚本进行初始化
+
+app:
+  custom:
+    mqtt:
+      host: localhost
+info:
+  application:
+    name: '@project.name@ (local deployment)'
 
 eureka:
   client:
