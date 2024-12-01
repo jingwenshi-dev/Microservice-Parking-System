@@ -2,7 +2,7 @@ package ca.mcmaster.cas735.acmepark.permit.business;
 
 import ca.mcmaster.cas735.acmepark.permit.DTO.PermitCreatedDTO;
 import ca.mcmaster.cas735.acmepark.permit.DTO.PermitRenewalDTO;
-import ca.mcmaster.cas735.acmepark.permit.adapter.AMQPPaymentQueueListener;
+import ca.mcmaster.cas735.acmepark.permit.adapter.AMQPPaymentServiceListener;
 import ca.mcmaster.cas735.acmepark.permit.business.entity.Permit;
 import ca.mcmaster.cas735.acmepark.permit.business.entity.User;
 import ca.mcmaster.cas735.acmepark.permit.port.PaymentServicePort;
@@ -17,14 +17,14 @@ import org.springframework.stereotype.Service;
 public class PermitApplicationService{
     private final PaymentServicePort paymentServicePort;
     private final PermitRepository permitRepository;
-    private final AMQPPaymentQueueListener amqpPaymentQueueListener;
+    private final AMQPPaymentServiceListener amqpPaymentQueueListener;
     private final UserRepository userRepository;
 
     @Autowired
     public PermitApplicationService(PaymentServicePort paymentServicePort,
                                     PermitRepository permitRepository,
                                     UserRepository userRepository,
-                                    AMQPPaymentQueueListener amqpPaymentQueueListener) {
+                                    AMQPPaymentServiceListener amqpPaymentQueueListener) {
         this.paymentServicePort = paymentServicePort;
         this.permitRepository = permitRepository;
         this.amqpPaymentQueueListener = amqpPaymentQueueListener;
