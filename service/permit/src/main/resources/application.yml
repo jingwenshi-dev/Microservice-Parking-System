@@ -2,8 +2,27 @@ spring:
   application:
     name: permit
 
+
   rabbitmq:
     host: rabbitmq
     port: 5672
     username: root
     password: root
+
+  sql:
+    init:
+      data-locations: classpath:data.sql
+
+  datasource:
+    username: root
+    password: root
+    driverClassName: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
+
+  app:
+    custom:
+      messaging:
+        inbound-exchange-topic: permit-inbound-exchange
+        outbound-exchange-topic: permit-outbound-exchange
