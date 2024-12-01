@@ -8,5 +8,6 @@ import lombok.NoArgsConstructor;
 public class GateCtrlDTO {
     private String gateId;
     private Boolean isValid;
+    private Boolean isEntry;
     private String qrCode;
 }
