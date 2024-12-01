@@ -1,14 +1,17 @@
-package ca.mcmaster.cas735.acmepark.gate.dto;
+package ca.mcmaster.cas735.acmepark.gate.business.entities;
 
+import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Data
-@NoArgsConstructor
-public class ParkingLotDTO {
+@Entity
+@Table(name = "PARKING_LOTS")
+public class ParkingLot {
+    @Id
     private Long lotId;
+
     private String lotName;
     private int totalSpots;
     private boolean visitorAllowed;

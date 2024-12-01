@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GateCtrlDTO {
     private String gateId;
+    private Long lotId;
     private Boolean isValid;
     private Boolean isEntry;
     private String qrCode;

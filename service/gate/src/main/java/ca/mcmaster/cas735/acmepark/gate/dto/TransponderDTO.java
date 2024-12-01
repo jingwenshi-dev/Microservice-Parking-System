@@ -12,6 +12,7 @@ public class TransponderDTO {
     private String transponderId;
     private String licensePlate;
     private String gateId;
+    private Long lotId;
     private boolean isEntry;
     private String timestamp = LocalDateTime.now()
             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));

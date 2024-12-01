@@ -1,5 +1,7 @@
 package ca.mcmaster.cas735.acmepark.gate.adapter.REST;
 
+import ca.mcmaster.cas735.acmepark.gate.business.errors.NotFoundException;
+import ca.mcmaster.cas735.acmepark.gate.dto.LotOccupancyDTO;
 import ca.mcmaster.cas735.acmepark.gate.port.provided.Monitor;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +24,10 @@ public class Monitor3 {
         this.monitor = monitor;
     }
 
+    //TODO: Track occupancy rates, peak usage times, and permit sales
     @GetMapping(value = "/lookup")
     @Operation(description = "Lookup for tickets with a given ticket id and license plate")
-    public void lookup(@RequestParam Long logId) {
-        monitor.getParkingLotStatus(logId);
+    public LotOccupancyDTO lookup(@RequestParam Long logId) throws NotFoundException {
+        return monitor.getParkingLotStatus(logId);
     }
 }
