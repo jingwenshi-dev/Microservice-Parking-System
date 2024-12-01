@@ -8,6 +8,10 @@ spring:
     username: root
     password: root
 
+  sql:
+    init:
+      data-locations: classpath:data.sql
+
   ## 数据源配置
   datasource:
     username: root # 数据库用户名，H2 数据库默认用户为 "sa"
@@ -24,6 +28,7 @@ logging:
     ca.mcmaster.cas735.acmepark.visitor_access:
       adapter: DEBUG # 适配器层的日志级别为 INFO，可以设置为 DEBUG 以获得更细粒度的日志跟踪
       application: DEBUG # 应用层的日志级别为 INFO，可以设置为 DEBUG 以便调试
+      org.springframework.boot.sql.init: DEBUG
 
 # 服务器配置
 server:
@@ -57,7 +62,7 @@ info:
     description: '@project.description@' # 项目描述，通常从项目的构建工具（如 Maven）中注入
     version: '@project.version@' # 项目版本，同样从项目构建工具中注入
 
-eureka:
-  client:
-    healthcheck:
-      enabled: true # 启用健康检查
+#eureka:
+#  client:
+#    healthcheck:
+#      enabled: true # 启用健康检查

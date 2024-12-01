@@ -3,7 +3,6 @@ package ca.mcmaster.cas735.acmepark.payment.business.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Data
 @Entity
@@ -11,8 +10,8 @@ import java.util.UUID;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID userId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  // 自增主键
+    private Long userId;
 
     private String firstName;
     private String lastName;

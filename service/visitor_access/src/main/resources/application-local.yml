@@ -24,7 +24,7 @@ info:
   application:
     name: '@project.name@ (local deployment)'
 
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+#eureka:
+#  client:
+#    serviceUrl:
+#      defaultZone: http://localhost:8761/eureka/

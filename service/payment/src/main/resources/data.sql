@@ -1,9 +1,9 @@
 -- 用户表
-INSERT INTO USERS (USER_ID, FIRST_NAME, LAST_NAME, EMAIL, USER_TYPE, TOTAL_FINE)
+INSERT INTO USERS (FIRST_NAME, LAST_NAME, EMAIL, USER_TYPE, TOTAL_FINE)
 VALUES
-    ('e8b5e4f1-8f3d-4e1b-9fa4-90fbd2c35d10', 'John', 'Doe', 'john.doe@example.com', 'student', 0.0),
-    ('a1c2d3e4-5678-9101-1121-314151617181', 'Jane', 'Smith', 'jane.smith@example.com', 'staff', 15.0),
-    ('c9d8e7f6-5432-1098-7654-321098765432', 'Alice', 'Johnson', 'alice.johnson@example.com', 'visitor', 0.0);
+    ('John', 'Doe', 'john.doe@example.com', 'student', 0.0),
+    ('Jane', 'Smith', 'jane.smith@example.com', 'staff', 15.0),
+    ('Alice', 'Johnson', 'alice.johnson@example.com', 'visitor', 0.0);
 
 
 -- 停车场表
