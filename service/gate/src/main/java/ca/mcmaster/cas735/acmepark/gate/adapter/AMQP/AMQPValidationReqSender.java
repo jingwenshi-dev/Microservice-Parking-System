@@ -1,21 +1,28 @@
 package ca.mcmaster.cas735.acmepark.gate.adapter.AMQP;
 
+import ca.mcmaster.cas735.acmepark.gate.dto.ParkingLotDTO;
 import ca.mcmaster.cas735.acmepark.gate.dto.TransponderDTO;
+import ca.mcmaster.cas735.acmepark.gate.dto.ValidationDTO;
 import ca.mcmaster.cas735.acmepark.gate.port.ValidationReqSender;
+import ca.mcmaster.cas735.acmepark.gate.port.provided.Monitor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class AMQPValidationReqSender implements ValidationReqSender {
 
     private final RabbitTemplate rabbitTemplate;
+    private final Monitor monitor;
 
     @Autowired
-    public AMQPValidationReqSender(RabbitTemplate rabbitTemplate) {
+    public AMQPValidationReqSender(RabbitTemplate rabbitTemplate, Monitor monitor) {
         this.rabbitTemplate = rabbitTemplate;
+        this.monitor = monitor;
     }
 
     @Value("${app.custom.messaging.visitor.exchange.entry-request}") private String visitorExchange;
@@ -24,26 +31,37 @@ public class AMQPValidationReqSender implements ValidationReqSender {
 
     @Override
     public void send(TransponderDTO transponder) {
-        if (transponder.getTransponderId() == null) {
-            rabbitTemplate.convertAndSend(
-                    visitorExchange,
-                    "*",
-                    translate(transponder)
-            );
-        }
-        else {
-            rabbitTemplate.convertAndSend(
-                    permitExchange,
-                    "*",
-                    translate(transponder)
-            );
+
+        try {
+            // Get then warp parking lot info such as hourly rate, visitor allowed with transponder info into validationDTO.
+            ParkingLotDTO parkingLot = monitor.getParkingLotInfo(transponder.getLotId());
+            ValidationDTO validation = new ValidationDTO(transponder, parkingLot);
+
+            if (transponder.getTransponderId() == null) {
+                rabbitTemplate.convertAndSend(
+                        visitorExchange,
+                        "*",
+                        translate(validation)
+                );
+            }
+            else {
+                rabbitTemplate.convertAndSend(
+                        permitExchange,
+                        "*",
+                        translate(validation)
+                );
+            }
+
+        } catch (Exception e) {
+            // If parking lot not found, ignore the invalid request, which should never happen.
+            log.error("Build ValidationDTO Failed:",e);
         }
     }
 
-    private String translate(TransponderDTO transponder) {
+    private String translate(ValidationDTO validation) {
         ObjectMapper mapper= new ObjectMapper();
         try {
-            return mapper.writeValueAsString(transponder);
+            return mapper.writeValueAsString(validation);
         } catch (Exception e){
             throw new RuntimeException(e);
         }
