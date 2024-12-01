@@ -3,7 +3,9 @@ package ca.mcmaster.cas735.acmepark.gate.adapter.AMQP;
 import ca.mcmaster.cas735.acmepark.gate.dto.GateCtrlDTO;
 import ca.mcmaster.cas735.acmepark.gate.port.ValidationResultReceiver;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
+import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +20,11 @@ public class AMQPValidationResultReceiver {
         this.validationResultReceiver = validationResultReceiver;
     }
 
-    @RabbitListener(queuesToDeclare = @Queue("validation.result.queue"))
+    @RabbitListener(
+            bindings = @QueueBinding(value = @Queue(value = "validation.result.queue", durable = "false"),
+                    exchange = @Exchange(value = "${app.custom.messaging.visitor.exchange.entry-response}", ignoreDeclarationExceptions = "true", type = "topic"),
+                    key = "*")
+    )
     public void receiveValidationResult(String raw) {
         GateCtrlDTO gateCtrl = translate(raw);
         validationResultReceiver.receive(gateCtrl);
