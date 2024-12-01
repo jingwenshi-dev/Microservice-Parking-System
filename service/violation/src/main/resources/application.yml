@@ -2,8 +2,21 @@ spring:
   application:
     name: violation
 
+  datasource:
+    username: root
+    password: root
+    driverClassName: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
+
   rabbitmq:
     host: rabbitmq
     port: 5672
     username: root
     password: root
+
+#eureka:
+#  client:
+#    healthcheck:
+#      enabled: true
