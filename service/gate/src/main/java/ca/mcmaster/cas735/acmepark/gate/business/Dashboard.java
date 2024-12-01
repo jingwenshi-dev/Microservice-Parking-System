@@ -15,6 +15,6 @@ public class Dashboard implements Monitor {
 
     @Override
     public void getParkingLotStatus(Long lotId) {
-        LotOccupancyDB.findById(lotId);
+        LotOccupancyDB.findLotOccupancyByLotId(lotId);
     }
 }

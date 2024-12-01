@@ -1,22 +1,20 @@
 package ca.mcmaster.cas735.acmepark.gate.business.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
+import java.time.LocalDateTime;
 
-import java.math.BigDecimal;
 
 @Data
 @Entity
-@Table(name = "PARKING_LOTS")
+@Table(name = "LOT_OCCUPANCY")
 public class LotOccupancy {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  // 自增主键
+    private Long id;
+
     private Long lotId;
 
-    private String lotName;
-    private int totalSpots;
-    private boolean visitorAllowed;
-    private BigDecimal hourlyRate;
-    private String location;
+    private LocalDateTime timestamp;
+    private int currentOccupancy;
 }
