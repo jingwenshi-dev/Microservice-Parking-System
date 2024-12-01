@@ -1,4 +1,4 @@
-package ca.mcmaster.cas735.acmepark.violation.adapter.rest;
+package ca.mcmaster.cas735.acmepark.violation.adapter.REST;
 
 import ca.mcmaster.cas735.acmepark.violation.business.errors.NotFoundException;
 import ca.mcmaster.cas735.acmepark.violation.dto.TicketDTO;

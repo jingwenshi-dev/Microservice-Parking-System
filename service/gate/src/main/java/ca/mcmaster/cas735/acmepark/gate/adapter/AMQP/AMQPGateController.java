@@ -1,4 +1,4 @@
-package ca.mcmaster.cas735.acmepark.gate.adapter;
+package ca.mcmaster.cas735.acmepark.gate.adapter.AMQP;
 
 import ca.mcmaster.cas735.acmepark.gate.dto.GateCtrlDTO;
 import ca.mcmaster.cas735.acmepark.gate.port.GateController;
