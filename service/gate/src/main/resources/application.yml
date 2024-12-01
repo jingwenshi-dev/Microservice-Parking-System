@@ -8,6 +8,25 @@ spring:
     username: root
     password: root
 
+  ## 数据源配置
+  datasource:
+    username: root # 数据库用户名，H2 数据库默认用户为 "sa"
+    password: root # 数据库密码，H2 数据库默认没有密码
+    driverClassName: org.h2.Driver # 数据源的驱动程序类名称，用于连接 H2 数据库
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect # 指定 H2 数据库所需的 Hibernate 方言
+    defer-datasource-initialization: true # 延迟数据源初始化，确保数据库在 JPA 初始化之前已经设置好
+
+  sql:
+    init:
+      data-locations: classpath:data.sql
+
+  # 服务器端口
+server:
+  port: 9090 # 指定服务器启动时监听的端口为 9090
+
+
+
 app:
   custom:
     messaging:

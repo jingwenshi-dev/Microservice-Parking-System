@@ -1,5 +1,6 @@
 package ca.mcmaster.cas735.acmepark.gate.business;
 
+import ca.mcmaster.cas735.acmepark.gate.business.errors.NotFoundException;
 import ca.mcmaster.cas735.acmepark.gate.dto.GateCtrlDTO;
 import ca.mcmaster.cas735.acmepark.gate.port.GateController;
 import ca.mcmaster.cas735.acmepark.gate.port.ValidationResultReceiver;
@@ -18,7 +19,7 @@ public class GateResultHandler implements ValidationResultReceiver {
     }
 
     @Override
-    public void receive(GateCtrlDTO gateCtrl) {
+    public void receive(GateCtrlDTO gateCtrl) throws IllegalArgumentException, NotFoundException {
         gateController.gateControl(gateCtrl);
         monitor.recordOccupancy(gateCtrl.getLotId(), gateCtrl.getIsEntry());
     }

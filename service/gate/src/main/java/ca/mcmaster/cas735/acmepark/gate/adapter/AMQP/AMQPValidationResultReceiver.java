@@ -1,5 +1,6 @@
 package ca.mcmaster.cas735.acmepark.gate.adapter.AMQP;
 
+import ca.mcmaster.cas735.acmepark.gate.business.errors.NotFoundException;
 import ca.mcmaster.cas735.acmepark.gate.dto.GateCtrlDTO;
 import ca.mcmaster.cas735.acmepark.gate.port.ValidationResultReceiver;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,7 +26,7 @@ public class AMQPValidationResultReceiver {
                     exchange = @Exchange(value = "${app.custom.messaging.response.exchange}", ignoreDeclarationExceptions = "true", type = "topic"),
                     key = "*")
     )
-    public void receiveValidationResult(String raw) {
+    public void receiveValidationResult(String raw) throws NotFoundException, IllegalArgumentException {
         GateCtrlDTO gateCtrl = translate(raw);
         validationResultReceiver.receive(gateCtrl);
     }
