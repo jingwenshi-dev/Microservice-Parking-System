@@ -4,7 +4,6 @@ import ca.mcmaster.cas735.acmepark.gate.dto.GateCtrlDTO;
 import ca.mcmaster.cas735.acmepark.gate.dto.TransponderDTO;
 import ca.mcmaster.cas735.acmepark.payment.dto.PaymentRequest;
 import ca.mcmaster.cas735.acmepark.visitor_access.business.entities.Visitor;
-import ca.mcmaster.cas735.acmepark.visitor_access.dto.GateAccessRequest;
 import ca.mcmaster.cas735.acmepark.visitor_access.ports.provided.GateInteractionHandler;
 import ca.mcmaster.cas735.acmepark.visitor_access.ports.provided.QRCodeService;
 import ca.mcmaster.cas735.acmepark.visitor_access.ports.provided.VisitorSender;
