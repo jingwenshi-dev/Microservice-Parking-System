@@ -1,5 +1,9 @@
 package ca.mcmaster.cas735.acmepark.payment.adapter;
 
+import ca.mcmaster.cas735.acmepark.payment.business.errors.AlreadyExistingException;
+import ca.mcmaster.cas735.acmepark.payment.business.errors.InvalidDateException;
+import ca.mcmaster.cas735.acmepark.payment.business.errors.NotFoundException;
+import ca.mcmaster.cas735.acmepark.payment.business.errors.VoucherExpiredException;
 import ca.mcmaster.cas735.acmepark.payment.dto.ApplyVoucherDTO;
 import ca.mcmaster.cas735.acmepark.payment.dto.VoucherDTO;
 import ca.mcmaster.cas735.acmepark.payment.ports.provided.VoucherManager;
@@ -28,14 +32,14 @@ public class Voucher3 {
 
     @PostMapping(value = "/apply-voucher")
     @Operation(description = "Apply a visitor pass/voucher for your vehicle")
-    public ResponseEntity<String> apply(@Valid @RequestBody ApplyVoucherDTO voucher) {
+    public ResponseEntity<String> apply(@Valid @RequestBody ApplyVoucherDTO voucher) throws NotFoundException, VoucherExpiredException {
         String licencePlate = manager.applyVoucher(voucher);
         return ResponseEntity.ok(String.format("Voucher successfully applied to: %s", licencePlate));
     }
 
     @PostMapping(value = "/create")
     @Operation(description = "Create a voucher by Admin")
-    public ResponseEntity<String> issue(@Valid @RequestBody VoucherDTO voucher) {
+    public ResponseEntity<String> issue(@Valid @RequestBody VoucherDTO voucher) throws AlreadyExistingException, InvalidDateException {
         String voucherCode = manager.createVoucher(voucher);
         return ResponseEntity.ok(String.format("Voucher successfully created with code: %s", voucherCode));
     }
