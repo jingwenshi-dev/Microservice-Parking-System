@@ -1,20 +1,20 @@
 package ca.mcmaster.cas735.acmepark.gate.business;
 
 import ca.mcmaster.cas735.acmepark.gate.port.provided.Monitor;
-import ca.mcmaster.cas735.acmepark.gate.port.required.ParkingLotDataRepo;
+import ca.mcmaster.cas735.acmepark.gate.port.required.LotOccupancyDataRepo;
 import org.springframework.stereotype.Service;
 
 @Service
 public class Dashboard implements Monitor {
 
-    private final ParkingLotDataRepo parkingLotDB;
+    private final LotOccupancyDataRepo LotOccupancyDB;
 
-    public Dashboard(ParkingLotDataRepo parkingLotDB) {
-        this.parkingLotDB = parkingLotDB;
+    public Dashboard(LotOccupancyDataRepo parkingLotDB) {
+        this.LotOccupancyDB = parkingLotDB;
     }
 
     @Override
     public void getParkingLotStatus(Long lotId) {
-        parkingLotDB.findById(lotId);
+        LotOccupancyDB.findById(lotId);
     }
 }

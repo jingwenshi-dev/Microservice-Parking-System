@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Data
 @Entity
 @Table(name = "PARKING_LOTS")
-public class ParkingLot {
+public class LotOccupancy {
     @Id
     private Long lotId;
 
