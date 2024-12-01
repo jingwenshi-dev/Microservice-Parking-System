@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface LotOccupancyDataRepo extends JpaRepository<LotOccupancy, Long> {
-    Optional<LotOccupancy> findLotOccupancyByLotId(Long lotId);
+    Optional<LotOccupancy> findFirstByLotIdOrderByTimestampDesc(Long lotId);
 }
