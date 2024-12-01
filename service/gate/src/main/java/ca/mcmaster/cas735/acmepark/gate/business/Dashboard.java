@@ -1,5 +1,7 @@
 package ca.mcmaster.cas735.acmepark.gate.business;
 
+import ca.mcmaster.cas735.acmepark.gate.business.errors.NotFoundException;
+import ca.mcmaster.cas735.acmepark.gate.dto.LotOccupancyDTO;
 import ca.mcmaster.cas735.acmepark.gate.port.provided.Monitor;
 import ca.mcmaster.cas735.acmepark.gate.port.required.LotOccupancyDataRepo;
 import org.springframework.stereotype.Service;
@@ -14,7 +16,8 @@ public class Dashboard implements Monitor {
     }
 
     @Override
-    public void getParkingLotStatus(Long lotId) {
-        LotOccupancyDB.findLotOccupancyByLotId(lotId);
+    public LotOccupancyDTO getParkingLotStatus(Long lotId) throws NotFoundException {
+        return new LotOccupancyDTO(LotOccupancyDB.findLotOccupancyByLotId(lotId)
+                .orElseThrow(() -> new NotFoundException("Parking lot not found")));
     }
 }
