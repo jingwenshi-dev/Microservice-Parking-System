@@ -1,5 +1,6 @@
 package ca.mcmaster.cas735.acmepark.gate.dto;
 
+import java.time.format.DateTimeFormatter;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,5 +13,6 @@ public class TransponderDTO {
     private String licensePlate;
     private String gateId;
     private boolean isEntry;
-    private LocalDateTime timestamp = LocalDateTime.now();
+    private String timestamp = LocalDateTime.now()
+            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
 }

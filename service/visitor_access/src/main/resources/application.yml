@@ -46,15 +46,15 @@ app:
       payment-response-visitor-exchange: paymentResultVisitorExchange #用了 payment ->visitor 返回扣费结果
 
 # 管理端点配置，用于暴露服务的管理信息
-management:
-  info:
-    env:
-      enabled: true # 启用环境信息管理端点，以便查看应用程序的环境信息
-  endpoints:
-    web:
-      exposure:
-        include: info, health # 启用 "info" 和 "health" 端点，用于查看应用程序的基本信息和健康状况
-      base-path: /actuator # 管理端点的基础路径为 "/actuator"，例如 "/actuator/health" 查看健康状况
+#management:
+#  info:
+#    env:
+#      enabled: true # 启用环境信息管理端点，以便查看应用程序的环境信息
+#  endpoints:
+#    web:
+#      exposure:
+#        include: info, health # 启用 "info" 和 "health" 端点，用于查看应用程序的基本信息和健康状况
+#      base-path: /actuator # 管理端点的基础路径为 "/actuator"，例如 "/actuator/health" 查看健康状况
 
 # 应用程序信息配置，用于提供项目描述和版本
 info:
