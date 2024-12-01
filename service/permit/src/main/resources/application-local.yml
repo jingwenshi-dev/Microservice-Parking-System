@@ -1,0 +1,17 @@
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+  ## Data repository configuration
+  datasource:
+    url: jdbc:h2:mem:permitdb # in memory database when used locally
+  h2.console:
+    enabled: true # expose database web UI for debugging purposes
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  sql:
+    init:
+      mode: always
+
