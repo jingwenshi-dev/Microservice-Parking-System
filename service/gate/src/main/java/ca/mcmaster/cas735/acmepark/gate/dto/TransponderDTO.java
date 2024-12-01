@@ -11,6 +11,7 @@ public class TransponderDTO {
     private String transponderId;
     private String licensePlate;
     private String gateId;
+    private Long lotId;
     private boolean isEntry;
     private LocalDateTime timestamp = LocalDateTime.now();
 }

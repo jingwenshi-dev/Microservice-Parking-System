@@ -20,4 +20,9 @@ public class Dashboard implements Monitor {
         return new LotOccupancyDTO(LotOccupancyDB.findLotOccupancyByLotId(lotId)
                 .orElseThrow(() -> new NotFoundException("Parking lot not found")));
     }
+
+    @Override
+    public void recordOccupancy(Long lotId, Boolean isEntry) {
+
+    }
 }
