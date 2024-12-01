@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -15,10 +14,10 @@ public class VoucherDTO {
     private String voucher;
 
     @NotNull(message = "Valid from date is required")
-    private LocalDate validFrom;
+    private String validFrom;
 
     @NotNull(message = "Valid until date is required")
-    private LocalDate validUntil;
+    private String validUntil;
 
     public Voucher asVoucher() {
         Voucher voucher = new Voucher();

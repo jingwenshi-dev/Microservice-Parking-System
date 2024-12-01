@@ -6,8 +6,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 
-import java.time.LocalDate;
-
 
 @Data
 @Entity
@@ -16,6 +14,6 @@ public class Voucher {
     @Id
     private String voucher;
 
-    private LocalDate validFrom;
-    private LocalDate validUntil;
+    private String validFrom;
+    private String validUntil;
 }

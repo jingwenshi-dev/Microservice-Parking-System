@@ -13,7 +13,8 @@ import ca.mcmaster.cas735.acmepark.payment.ports.required.VoucherDataRepo;
 import ca.mcmaster.cas735.acmepark.payment.ports.required.VoucherRedemptionRepo;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.Optional;
 
 @Service
@@ -33,7 +34,17 @@ public class VoucherProcessor implements VoucherManager {
             throw new AlreadyExistingException("Voucher", voucherCode.getVoucher());
         }
 
-        if (voucherCode.getValidFrom().isAfter(voucherCode.getValidUntil())) {
+        LocalDateTime validFrom;
+        LocalDateTime validUntil;
+
+        try {
+            validFrom = LocalDateTime.parse(voucherCode.getValidFrom());
+            validUntil = LocalDateTime.parse(voucherCode.getValidUntil());
+        } catch (DateTimeParseException e) {
+            throw new InvalidDateException("Date format must be ISO-8601 (yyyy-MM-dd'T'HH:mm:ss). " + e.getMessage());
+        }
+
+        if (validFrom.isAfter(validUntil)) {
             throw new InvalidDateException("Voucher valid from date must be before valid until date");
         }
 
@@ -48,7 +59,10 @@ public class VoucherProcessor implements VoucherManager {
             throw new NotFoundException("Voucher", voucherCode.getVoucher());
         }
 
-        if (voucher.get().getValidUntil().isBefore(LocalDate.now())) {
+        // Should never raise DateTimeParseException as the voucher is already validated in the createVoucher method.
+        LocalDateTime validFrom = LocalDateTime.parse(voucher.get().getValidFrom());
+
+        if (validFrom.isBefore(LocalDateTime.now())) {
             throw new VoucherExpiredException("Voucher", voucherCode.getVoucher());
         }
 
