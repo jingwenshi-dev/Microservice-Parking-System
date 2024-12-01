@@ -2,7 +2,9 @@ package ca.mcmaster.cas735.acmepark.gate.adapter.AMQP;
 
 import ca.mcmaster.cas735.acmepark.gate.dto.TransponderDTO;
 import ca.mcmaster.cas735.acmepark.gate.port.TransponderReader;
+import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
+import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -17,7 +19,11 @@ public class AMQPTransponderReader {
         this.transponderReader = transponderReader;
     }
 
-    @RabbitListener(queuesToDeclare = @Queue("transponder.queue"))
+    @RabbitListener(
+            bindings = @QueueBinding(value = @Queue(value = "validation.result.queue", durable = "false"),
+            exchange = @Exchange(value = "${app.custom.messaging.visitor-entry-response-exchange}", ignoreDeclarationExceptions = "true", type = "topic"),
+            key = "*")
+    )
     public void listen(String raw) {
         transponderReader.readTransponder(translate(raw));
     }

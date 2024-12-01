@@ -15,3 +15,4 @@ app:
         routing-key: gate.%s.command
         exchange: gateOpenRequestExchange
       visitor-entry-request-exchange: visitorEntryRequestExchange
+      visitor-entry-response-exchange: visitorEntryResponseExchange
