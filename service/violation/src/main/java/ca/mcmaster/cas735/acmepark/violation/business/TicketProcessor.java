@@ -1,13 +1,15 @@
 package ca.mcmaster.cas735.acmepark.violation.business;
 
-import ca.mcmaster.cas735.acmepark.violation.adapter.AMQP.AMQPTicketInquiryResultSender;
 import ca.mcmaster.cas735.acmepark.violation.business.entities.ParkingViolation;
 import ca.mcmaster.cas735.acmepark.violation.business.errors.NotFoundException;
 import ca.mcmaster.cas735.acmepark.violation.dto.TicketDTO;
+import ca.mcmaster.cas735.acmepark.violation.port.TicketInquiryResultSender;
 import ca.mcmaster.cas735.acmepark.violation.port.provided.TicketManager;
 import ca.mcmaster.cas735.acmepark.violation.port.required.TicketDataRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -16,17 +18,25 @@ import java.util.UUID;
 public class TicketProcessor implements TicketManager {
 
     private final TicketDataRepo ticketDB;
-    private final AMQPTicketInquiryResultSender amqpTicketInquiryResultSender;
+    private final TicketInquiryResultSender ticketInquiryResultSender;
 
-    public TicketProcessor(TicketDataRepo ticketDB, AMQPTicketInquiryResultSender amqpTicketInquiryResultSender) {
+    @Autowired
+    public TicketProcessor(TicketDataRepo ticketDB, TicketInquiryResultSender ticketInquiryResultSender) {
         this.ticketDB = ticketDB;
-        this.amqpTicketInquiryResultSender = amqpTicketInquiryResultSender;
+        this.ticketInquiryResultSender = ticketInquiryResultSender;
     }
 
     @Override
     public void ticketsInquiry(String licensePlate) {
         Optional<List<ParkingViolation>> violations = ticketDB.findByLicensePlate(licensePlate);
-        amqpTicketInquiryResultSender.sendTicketInquiryResult(violations);
+        ticketInquiryResultSender.sendTicketInquiryResult(
+                violations.orElse(Collections.emptyList())
+        );
+    }
+
+    @Override
+    public void deleteTickets(String licensePLate) {
+        ticketDB.deleteAllByLicensePlate(licensePLate);
     }
 
     @Override

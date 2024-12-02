@@ -10,4 +10,5 @@ import java.util.UUID;
 public interface TicketDataRepo extends JpaRepository<ParkingViolation, UUID>{
     Optional<ParkingViolation> findByViolationIdAndLicensePlate(UUID violationId, String licensePlate);
     Optional<List<ParkingViolation>> findByLicensePlate(String licensePlate);
+    void deleteAllByLicensePlate(String licensePlate);
 }
