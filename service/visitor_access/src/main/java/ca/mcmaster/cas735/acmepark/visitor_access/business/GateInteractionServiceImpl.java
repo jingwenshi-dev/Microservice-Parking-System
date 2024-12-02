@@ -113,7 +113,8 @@ public class GateInteractionServiceImpl implements GateInteractionHandler {
         PaymentRequest paymentRequest = new PaymentRequest();
 
         // 根据 licensePlate 查找 Visitor
-        Optional<Visitor> visitorOpt = visitorDataRepository.findByLicensePlate(transponderDTO.getLicensePlate());
+        Optional<Visitor> visitorOpt = visitorDataRepository
+                .findFirstByLicensePlateOrderByEntryTimeDesc(transponderDTO.getLicensePlate());
 
         if (visitorOpt.isPresent()) {
             Visitor visitor = visitorOpt.get();

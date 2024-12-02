@@ -14,10 +14,7 @@ public class Visitor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 自增主键
     private Long id;
-
     private String licensePlate;
-
-    private String voucher;
     private LocalDateTime entryTime;
     private Long lotId;
 }

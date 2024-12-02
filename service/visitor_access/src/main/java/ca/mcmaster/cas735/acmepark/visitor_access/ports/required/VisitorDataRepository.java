@@ -11,6 +11,5 @@ public interface VisitorDataRepository extends JpaRepository<Visitor, Long> {
      * Source: https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html
      **/
 
-    // 根据车牌号查询 Visitor
-    Optional<Visitor> findByLicensePlate(String licensePlate);
-}
+    // 查询车牌号最近一次的停车数据
+    Optional<Visitor> findFirstByLicensePlateOrderByEntryTimeDesc(String licensePlate);}
