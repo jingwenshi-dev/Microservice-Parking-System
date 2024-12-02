@@ -22,9 +22,9 @@ public class PaymentRequest {
 
     private UUID transponderNumber;
 
-    private LocalDate validFrom;
+    private LocalDateTime validFrom;
 
-    private LocalDate validUntil;
+    private LocalDateTime validUntil;
 
     private String paymentMethod;
 
