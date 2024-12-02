@@ -22,8 +22,6 @@ public class ParkingViolation {
 
     private BigDecimal fineAmount;
 
-    private Boolean isPaid;
-
     private Long officerId;
 
     private Long lotId;
