@@ -53,7 +53,7 @@ public class PaymentService implements PaymentServicePort {
             }
 
             // 计算总费用
-            BigDecimal totalAmount = paymentRequest.getAmount().add(totalFines);
+            BigDecimal totalAmount = amount.add(totalFines);
             paymentRequest.setAmount(totalAmount);
 
             // 根据支付方式选择支付策略

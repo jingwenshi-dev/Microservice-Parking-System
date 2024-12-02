@@ -3,7 +3,9 @@ package ca.mcmaster.cas735.acmepark.payment.adapter;
 import ca.mcmaster.cas735.acmepark.payment.dto.PaymentRequest;
 import ca.mcmaster.cas735.acmepark.payment.ports.provided.PaymentProcessor;
 import ca.mcmaster.cas735.acmepark.payment.ports.provided.PaymentServicePort;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper; // 用于将 JSON 字符串与 Java 对象之间的转换
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j; // 使用 Lombok 提供的日志注解，简化日志记录
 import org.springframework.amqp.rabbit.annotation.Exchange; // 用于声明 RabbitMQ 交换机
 import org.springframework.amqp.rabbit.annotation.Queue; // 用于声明 RabbitMQ 队列
@@ -43,6 +45,10 @@ public class PermitPaymentListener {
     private PaymentRequest translate(String raw) {
         // 创建 Jackson 的 ObjectMapper 实例
         ObjectMapper mapper = new ObjectMapper();
+
+        // Register the JavaTimeModule to handle LocalDateTime
+        mapper.registerModule(new JavaTimeModule());
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         try {
             // 使用 ObjectMapper 将 JSON 字符串解析为 PaymentRequest 对象
             return mapper.readValue(raw, PaymentRequest.class);

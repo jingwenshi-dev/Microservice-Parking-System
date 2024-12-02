@@ -18,6 +18,9 @@ public class PaymentStrategyFactory {
 
     public PaymentStrategy getPaymentStrategy(String paymentMethod) {
         PaymentStrategy strategy = paymentStrategies.get(paymentMethod.toLowerCase() + "PaymentStrategy");
+
+        System.out.println("Selected Payment Strategy: " + strategy);
+
         if (strategy == null) {
             throw new IllegalArgumentException("Invalid payment method: " + paymentMethod);
         }
