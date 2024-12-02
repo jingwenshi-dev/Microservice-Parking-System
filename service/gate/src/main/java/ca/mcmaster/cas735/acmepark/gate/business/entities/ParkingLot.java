@@ -10,6 +10,9 @@ import java.math.BigDecimal;
 @Table(name = "PARKING_LOTS")
 public class ParkingLot {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private Long lotId;
 
     private String lotName;

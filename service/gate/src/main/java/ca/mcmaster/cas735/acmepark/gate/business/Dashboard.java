@@ -24,7 +24,7 @@ public class Dashboard implements Monitor {
 
     @Override
     public ParkingLotDTO getParkingLotInfo(Long lotId) throws NotFoundException {
-        return new ParkingLotDTO(parkingLotDB.findById(lotId)
+        return new ParkingLotDTO(parkingLotDB.findByLotId(lotId)
                 .orElseThrow(() -> new NotFoundException(lotId.toString())));
     }
 
