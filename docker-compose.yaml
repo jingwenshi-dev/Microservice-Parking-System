@@ -24,6 +24,14 @@ services:
       rabbitmq:
         condition: service_healthy
 
+  violation:
+    container_name: violation
+    build:
+      context: ./service/violation
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
   permit:
     container_name: permit
     build:
@@ -47,7 +55,3 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
-      gate:
-        condition: service_started
-      permit:
-        condition: service_started
