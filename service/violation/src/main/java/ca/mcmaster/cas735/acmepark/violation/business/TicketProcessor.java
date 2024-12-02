@@ -6,6 +6,7 @@ import ca.mcmaster.cas735.acmepark.violation.dto.TicketDTO;
 import ca.mcmaster.cas735.acmepark.violation.port.TicketInquiryResultSender;
 import ca.mcmaster.cas735.acmepark.violation.port.provided.TicketManager;
 import ca.mcmaster.cas735.acmepark.violation.port.required.TicketDataRepo;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +36,7 @@ public class TicketProcessor implements TicketManager {
     }
 
     @Override
+    @Transactional
     public void deleteTickets(String licensePLate) {
         ticketDB.deleteAllByLicensePlate(licensePLate);
     }
