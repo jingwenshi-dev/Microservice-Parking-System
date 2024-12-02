@@ -27,6 +27,9 @@ logging.level:
 app:
   custom:
     messaging:
+      HTTP:
+        violation:
+          lookup: http://violation:8080/
       payment-request-exchange: paymentRequestExchange #payment 监听的接口
       payment-response-permit-exchange: paymentResultPermitExchange #返回payment result 给permit
       payment-response-visitor-exchange: paymentResultVisitorExchange #返回payment result visitor
