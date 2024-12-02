@@ -45,8 +45,11 @@ public class PaymentService implements PaymentServicePort {
             // Send request for violation inquiry and calculate total fines
             List<TicketDTO> violations = violationInquirySender.sendInquiry(paymentRequest.getLicensePlate());
             BigDecimal totalFines = BigDecimal.ZERO;
-            for (TicketDTO violation : violations) {
-                totalFines = totalFines.add(violation.getFineAmount());
+
+            if (!violations.isEmpty()) {
+                for (TicketDTO violation : violations) {
+                    totalFines = totalFines.add(violation.getFineAmount());
+                }
             }
 
             // 计算总费用
