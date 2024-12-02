@@ -16,17 +16,20 @@ public class PermitCreatedDTO {
     private int userId;
     private int lotId;
     private boolean result;
-    private final String userType = "permit";
+    private String licensePlate;
+    private String userType;
     private String paymentMethod;
 
 
 
-    public PermitCreatedDTO(LocalDate validFrom, LocalDate validUntil, int userId, int lotId) {
+    public PermitCreatedDTO(LocalDate validFrom, LocalDate validUntil, int userId, String licensePlate, int lotId, String userType, String paymentMethod) {
         this.validFrom = validFrom;
         this.validUntil = validUntil;
         this.userId = userId;
         this.paymentMethod = paymentMethod;
+        this.licensePlate = licensePlate;
         this.lotId = lotId;
+        this.userType = userType;
     }
 
 }

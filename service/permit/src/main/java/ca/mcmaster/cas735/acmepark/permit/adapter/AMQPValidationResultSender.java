@@ -20,21 +20,21 @@ public class AMQPValidationResultSender implements PermitValidationResultSender 
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    @Value("${spring.rabbitmq.app.custom.messaging.outbound-exchange-topic}")
-    private String outboundExchange;
+    @Value("${app.custom.messaging.permit-to-gate-exchange}")
+    private String permitToGateExchange;
 
 
     @Override
     public void sendValidationResult(PermitValidationResponseDTO response) {
         logger.info("Sending validation result...");
-        logger.info("Transponder ID: {}", response.getTransponderId());
-        logger.info("Is Valid: {}", response.isValid());
+        logger.info("Transponder ID: {}", response.getGateId());
+        logger.info("Is Valid: {}", response.getIsValid());
 
 
 
         rabbitTemplate.convertAndSend(
-            outboundExchange,
-            "permit.validation.result.queue",
+                permitToGateExchange,
+            "*",
                 response
         );
     }

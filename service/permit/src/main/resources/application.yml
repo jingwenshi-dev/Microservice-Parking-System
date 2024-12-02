@@ -24,7 +24,7 @@ spring:
 app:
   custom:
     messaging:
-      inbound-exchange-topic: permit-inbound-exchange
-      outbound-exchange-topic: permit-outbound-exchange
+      gate-to-permit-exchange: gateToPermitExchange
+      permit-to-gate-exchange: toGateResultExchange
       payment-request-exchange: paymentRequestExchange
       payment-response-permit-exchange: paymentResultPermitExchange

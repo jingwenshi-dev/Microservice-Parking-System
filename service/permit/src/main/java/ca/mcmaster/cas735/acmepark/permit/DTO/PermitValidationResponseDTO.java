@@ -1,31 +1,16 @@
 package ca.mcmaster.cas735.acmepark.permit.DTO;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class PermitValidationResponseDTO {
-    private String transponderId;
-    private boolean isValid;
-
-    public PermitValidationResponseDTO() {}
-    public PermitValidationResponseDTO(String transponderId, boolean isValid) {
-        this.transponderId = transponderId;
-        this.isValid = isValid;
-    }
-
-    public String getTransponderId() {
-        return transponderId;
-    }
-
-    public void setTransponderId(String transponderId) {
-        this.transponderId = transponderId;
-    }
-
-    public boolean isValid() {
-        return isValid;
-    }
-
-    public void setValid(boolean valid) {
-        isValid = valid;
-    }
-
+    private String gateId;
+    private int lotId;
+    private Boolean isValid;
+    private Boolean isEntry;
 }

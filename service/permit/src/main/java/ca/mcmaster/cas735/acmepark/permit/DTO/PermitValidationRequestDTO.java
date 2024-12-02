@@ -1,20 +1,16 @@
 package ca.mcmaster.cas735.acmepark.permit.DTO;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class PermitValidationRequestDTO {
     private String transponderId;
-
-    // Default constructor for deserialization
-    public PermitValidationRequestDTO() {}
-
-    public PermitValidationRequestDTO(String transponderId) {
-        this.transponderId = transponderId;
-    }
-
-    public String getTransponderId() {
-        return transponderId;
-    }
-
-    public void setTransponderId(String transponderId) {
-        this.transponderId = transponderId;
-    }
+    private String gateId;
+    private int lotId;
+    private Boolean isEntry;
+    private String timestamp;
 }

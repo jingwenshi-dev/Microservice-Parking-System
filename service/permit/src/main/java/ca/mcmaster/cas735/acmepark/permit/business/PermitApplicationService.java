@@ -33,17 +33,23 @@ public class PermitApplicationService{
 
 
     public boolean applyForPermit(PermitCreatedDTO permitDTO) {
-        // Logic to create a permit and generate the permit ID and transponder number
+        // Logic to generate transponder number
         String transponderNumber = generateTransponderNumber();
-
         permitDTO.setTransponderNumber(transponderNumber);
+
+        // Fetch the user entity based on the userId from the PermitCreatedDTO
+        User user = userRepository.findById(permitDTO.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Set the userType based on the User entity
+        permitDTO.setUserType(user.getUserType().toString());
 
 
         // Send to payment service
         paymentServicePort.initiatePayment(permitDTO);
 
         // Wait for payment success event
-        boolean paymentSuccess = amqpPaymentQueueListener.waitForPaymentSuccess(permitDTO.getPermitId());
+        boolean paymentSuccess = amqpPaymentQueueListener.waitForPaymentSuccess(permitDTO.getLicensePlate());
         if (paymentSuccess) {
             storePermitData(permitDTO);  // Save permit to the database
             return true;
@@ -64,12 +70,13 @@ public class PermitApplicationService{
         paymentDTO.setValidUntil(renewalDTO.getValidUntil());
         paymentDTO.setUserId(permit.getUser().getUserId());
         paymentDTO.setLotId(permit.getLotId());
+        paymentDTO.setUserType(permit.getUser().getUserType().toString());
 
         //Send to payment service
         paymentServicePort.initiatePayment(paymentDTO);
 
         // Wait for payment success
-        boolean paymentSuccess = amqpPaymentQueueListener.waitForPaymentSuccess(permit.getPermitId());
+        boolean paymentSuccess = amqpPaymentQueueListener.waitForPaymentSuccess(permit.getLicensePlate());
         if (paymentSuccess) {
             //Update the permit validity dates
             permit.setValidFrom(renewalDTO.getValidFrom());
@@ -94,7 +101,8 @@ public class PermitApplicationService{
                 permitDTO.getValidFrom(),
                 permitDTO.getValidUntil(),
                 user,
-                permitDTO.getLotId());
+                permitDTO.getLotId(),
+                permitDTO.getLicensePlate());
         permitRepository.save(permit);
     }
 

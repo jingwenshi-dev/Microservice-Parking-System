@@ -23,14 +23,16 @@ public class Permit {
     private User user;
 
     private int lotId;
+    private String licensePlate;
 
 
-    public Permit(String transponderNumber, LocalDate validFrom, LocalDate validUntil,User user, int lotId) {
+    public Permit(String transponderNumber, LocalDate validFrom, LocalDate validUntil,User user, int lotId, String licensePlate) {
         this.transponderNumber = transponderNumber;
         this.validFrom = validFrom;
         this.validUntil = validUntil;
         this.user = user;
         this.lotId = lotId;
+        this.licensePlate = licensePlate;
     }
 
   // Default constructor for JPA
