@@ -1,7 +1,9 @@
 package ca.mcmaster.cas735.acmepark.gate.adapter.AMQP;
 
 import ca.mcmaster.cas735.acmepark.gate.dto.GateCtrlDTO;
+import ca.mcmaster.cas735.acmepark.gate.dto.ValidationDTO;
 import ca.mcmaster.cas735.acmepark.gate.port.GateController;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +25,14 @@ public class AMQPGateController implements GateController {
     @Override
     public void gateControl(GateCtrlDTO gateCtrl) {
         String routingKey = String.format(gateRoutingKey, gateCtrl.getGateId());
-        rabbitTemplate.convertAndSend(gateExchange, routingKey, Boolean.toString(gateCtrl.getIsValid()));
+        rabbitTemplate.convertAndSend(gateExchange, routingKey, translate(gateCtrl));
+    }
+    private String translate(GateCtrlDTO gateCtrl) {
+        ObjectMapper mapper= new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(gateCtrl);
+        } catch (Exception e){
+            throw new RuntimeException(e);
+        }
     }
 }
