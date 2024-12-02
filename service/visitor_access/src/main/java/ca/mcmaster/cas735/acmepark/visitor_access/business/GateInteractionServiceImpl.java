@@ -63,6 +63,7 @@ public class GateInteractionServiceImpl implements GateInteractionHandler {
             setVisitorToRepository(transponderDTO);
             gateCtrlDTO.setIsValid(true);
             gateCtrlDTO.setGateId(transponderDTO.getGateId());
+            gateCtrlDTO.setLotId(transponderDTO.getLotId());
             // 添加QR数据
             addQRCode(transponderDTO, gateCtrlDTO);
         } else {

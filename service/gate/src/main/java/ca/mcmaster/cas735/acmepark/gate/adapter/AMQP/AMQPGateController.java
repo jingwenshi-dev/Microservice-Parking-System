@@ -23,6 +23,6 @@ public class AMQPGateController implements GateController {
     @Override
     public void gateControl(GateCtrlDTO gateCtrl) {
         String routingKey = String.format(gateRoutingKey, gateCtrl.getGateId());
-        rabbitTemplate.convertAndSend(gateExchange, routingKey, gateCtrl.getIsValid());
+        rabbitTemplate.convertAndSend(gateExchange, routingKey, Boolean.toString(gateCtrl.getIsValid()));
     }
 }
