@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class TicketProcessor implements TicketManager {
@@ -29,7 +30,7 @@ public class TicketProcessor implements TicketManager {
 
     @Override
     public void ticketsInquiry(String licensePlate) {
-        Optional<List<ParkingViolation>> violations = ticketDB.findByLicensePlate(licensePlate);
+        Optional<List<ParkingViolation>> violations = ticketDB.findAllByLicensePlate(licensePlate);
         ticketInquiryResultSender.sendTicketInquiryResult(
                 violations.orElse(Collections.emptyList())
         );
@@ -42,9 +43,13 @@ public class TicketProcessor implements TicketManager {
     }
 
     @Override
-    public TicketDTO lookupTicket(UUID ticketNum, String licensePlate) throws NotFoundException {
-        return new TicketDTO(ticketDB.findByViolationIdAndLicensePlate(ticketNum, licensePlate)
-                .orElseThrow(() -> new NotFoundException("Ticket number or license plate not found.")));
+    public List<TicketDTO> lookupTicket(String licensePlate) throws NotFoundException {
+        List<ParkingViolation> violations = ticketDB.findAllByLicensePlate(licensePlate)
+                .orElseThrow(() -> new NotFoundException("Ticket number or license plate not found."));
+
+        return violations.stream()
+                .map(TicketDTO::new)
+                .collect(Collectors.toList());
     }
 
     @Override

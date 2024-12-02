@@ -9,6 +9,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -25,8 +27,8 @@ public class TicketManagement3 {
 
     @GetMapping(value = "/lookup")
     @Operation(description = "Lookup for tickets with a given ticket id and license plate")
-    public TicketDTO lookup(@RequestParam UUID ticketNum, @RequestParam String licensePlate) throws NotFoundException {
-        return manager.lookupTicket(ticketNum, licensePlate);
+    public List<TicketDTO> lookup(@RequestParam String licensePlate) throws NotFoundException {
+        return manager.lookupTicket(licensePlate);
     }
 
     @PostMapping(value = "/issue")
