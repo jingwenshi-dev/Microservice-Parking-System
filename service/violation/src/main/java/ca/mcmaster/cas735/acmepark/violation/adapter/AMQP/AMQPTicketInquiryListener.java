@@ -1,6 +1,7 @@
 package ca.mcmaster.cas735.acmepark.violation.adapter.AMQP;
 
 import ca.mcmaster.cas735.acmepark.violation.port.provided.TicketManager;
+import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ public class AMQPTicketInquiryListener {
         this.ticketManager = ticketManager;
     }
 
-    @RabbitListener(queues = "ticket-inquiry")
+    @RabbitListener(queuesToDeclare = @Queue("ticket.inquiry.queue"))
     public void receiveTicketInquiry(String licensePlate) {
         ticketManager.ticketsInquiry(licensePlate);
     }

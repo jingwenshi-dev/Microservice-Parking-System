@@ -3,6 +3,7 @@ package ca.mcmaster.cas735.acmepark.violation.adapter.AMQP;
 import ca.mcmaster.cas735.acmepark.payment.dto.PaymentRequest;
 import ca.mcmaster.cas735.acmepark.violation.port.provided.TicketManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class AMQPTicketDeleteListener {
         this.ticketManager = ticketManager;
     }
 
-    @RabbitListener(queues = "ticket-delete")
+    @RabbitListener(queuesToDeclare = @Queue("ticket.delete.queue"))
     public void receiveTicketDelete(String raw) {
         PaymentRequest paymentResult = translate(raw);
         ticketManager.deleteTickets(paymentResult.getLicensePlate());
