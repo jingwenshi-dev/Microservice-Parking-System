@@ -1,18 +1,21 @@
 package ca.mcmaster.cas735.acmepark.permit.DTO;
 
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
-@NoArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor
 public class PermitCreatedDTO {
-    private int permitId;
-    private String transponderNumber;
-    private LocalDate validFrom;  // Changed to LocalDate
-    private LocalDate validUntil;
+
+    private UUID transponderNumber;
+    private LocalDateTime validFrom;  // Changed to LocalDate
+    private LocalDateTime validUntil;
     private int userId;
     private int lotId;
     private boolean result;
@@ -21,15 +24,69 @@ public class PermitCreatedDTO {
     private String paymentMethod;
 
 
+    // No-argument constructor
+    public PermitCreatedDTO() {}
 
-    public PermitCreatedDTO(LocalDate validFrom, LocalDate validUntil, int userId, String licensePlate, int lotId, String userType, String paymentMethod) {
+    public PermitCreatedDTO(LocalDateTime validFrom, LocalDateTime validUntil, int userId, String licensePlate, int lotId, String paymentMethod) {
         this.validFrom = validFrom;
         this.validUntil = validUntil;
         this.userId = userId;
         this.paymentMethod = paymentMethod;
         this.licensePlate = licensePlate;
         this.lotId = lotId;
+    }
+    public String getLicensePlate() {
+        return this.licensePlate;
+    }
+    public boolean isResult() {
+        return this.result;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setTransponderNumber(UUID transponderNumber) {
+        this.transponderNumber = transponderNumber;
+    }
+
+    public void setUserType(String userType) {
         this.userType = userType;
     }
+
+
+
+    public void setValidFrom(LocalDateTime validFrom) {
+        this.validFrom = validFrom;
+    }
+
+    public void setValidUntil(LocalDateTime validUntil) {
+        this.validUntil = validUntil;
+    }
+
+    public void setLotId(int lotId) {
+        this.lotId = lotId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public UUID getTransponderNumber() {
+        return transponderNumber;
+    }
+
+    public LocalDateTime getValidFrom() {
+        return validFrom;
+    }
+
+    public LocalDateTime getValidUntil() {
+        return validUntil;
+    }
+
+    public int getLotId() {
+        return lotId;
+    }
+
 
 }

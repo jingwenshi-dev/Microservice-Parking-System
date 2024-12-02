@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -14,9 +16,9 @@ public class Permit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int permitId;
 
-    private String transponderNumber;
-    private LocalDate validFrom;
-    private LocalDate validUntil;
+    private UUID transponderNumber;
+    private LocalDateTime validFrom;
+    private LocalDateTime validUntil;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")  // Assuming the 'Users' table has 'user_id' as the PK
@@ -26,7 +28,7 @@ public class Permit {
     private String licensePlate;
 
 
-    public Permit(String transponderNumber, LocalDate validFrom, LocalDate validUntil,User user, int lotId, String licensePlate) {
+    public Permit(UUID transponderNumber, LocalDateTime validFrom, LocalDateTime validUntil,User user, int lotId, String licensePlate) {
         this.transponderNumber = transponderNumber;
         this.validFrom = validFrom;
         this.validUntil = validUntil;
@@ -40,4 +42,37 @@ public class Permit {
 
     }
 
+    public LocalDateTime getValidFrom() {
+        return validFrom;
+    }
+    public LocalDateTime getValidUntil() {
+        return validUntil;
+    }
+    public int getPermitId() {
+        return permitId;
+    }
+
+    public UUID getTransponderNumber() {
+        return transponderNumber;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public int getLotId() {
+        return lotId;
+    }
+
+    public String getLicensePlate() {
+        return licensePlate;
+    }
+
+    public void setValidFrom(LocalDateTime validFrom) {
+        this.validFrom = validFrom;
+    }
+
+    public void setValidUntil(LocalDateTime validUntil) {
+        this.validUntil = validUntil;
+    }
 }

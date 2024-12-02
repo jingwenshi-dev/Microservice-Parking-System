@@ -23,6 +23,7 @@ public class PermitController {
 
     @PostMapping("/apply")
     public ResponseEntity<String> applyForPermit(@RequestBody PermitCreatedDTO permitDTO) {
+        System.out.println("Received payload: " + permitDTO);
         //Apply for the permit
         boolean isPermitCreated = permitService.applyForPermit(permitDTO);
 

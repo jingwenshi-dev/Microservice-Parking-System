@@ -40,4 +40,11 @@ public class User {
         this.totalOutstandingAmount = totalOutstandingAmount;
     }
 
+    public UserType getUserType() {
+            return userType;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
 }

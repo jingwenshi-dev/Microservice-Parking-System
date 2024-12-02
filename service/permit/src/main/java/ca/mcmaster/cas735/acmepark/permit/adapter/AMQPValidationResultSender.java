@@ -28,7 +28,7 @@ public class AMQPValidationResultSender implements PermitValidationResultSender 
     public void sendValidationResult(PermitValidationResponseDTO response) {
         logger.info("Sending validation result...");
         logger.info("Transponder ID: {}", response.getGateId());
-        logger.info("Is Valid: {}", response.getIsValid());
+        logger.info("Is Valid: {}", response.getValid());
 
 
 

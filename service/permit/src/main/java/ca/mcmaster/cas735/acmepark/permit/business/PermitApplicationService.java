@@ -5,12 +5,14 @@ import ca.mcmaster.cas735.acmepark.permit.DTO.PermitRenewalDTO;
 import ca.mcmaster.cas735.acmepark.permit.adapter.AMQPPaymentServiceListener;
 import ca.mcmaster.cas735.acmepark.permit.business.entity.Permit;
 import ca.mcmaster.cas735.acmepark.permit.business.entity.User;
+import ca.mcmaster.cas735.acmepark.permit.business.errors.UserNotFoundException;
 import ca.mcmaster.cas735.acmepark.permit.port.PaymentServicePort;
 import ca.mcmaster.cas735.acmepark.permit.port.PermitRepository;
 import ca.mcmaster.cas735.acmepark.permit.port.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
 
 
 @Service
@@ -34,15 +36,17 @@ public class PermitApplicationService{
 
     public boolean applyForPermit(PermitCreatedDTO permitDTO) {
         // Logic to generate transponder number
-        String transponderNumber = generateTransponderNumber();
+        UUID transponderNumber = generateTransponderNumber();
         permitDTO.setTransponderNumber(transponderNumber);
 
         // Fetch the user entity based on the userId from the PermitCreatedDTO
-        User user = userRepository.findById(permitDTO.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByUserId(permitDTO.getUserId())
+                .orElseThrow(() -> new UserNotFoundException("User with ID " + permitDTO.getUserId() + " not found"));;
 
         // Set the userType based on the User entity
         permitDTO.setUserType(user.getUserType().toString());
+
+
 
 
         // Send to payment service
@@ -64,7 +68,6 @@ public class PermitApplicationService{
 
         // Prepare for payment
         PermitCreatedDTO paymentDTO = new PermitCreatedDTO();
-        paymentDTO.setPermitId(permit.getPermitId());// Use the existing permit ID
         paymentDTO.setTransponderNumber(permit.getTransponderNumber());
         paymentDTO.setValidFrom(renewalDTO.getValidFrom());
         paymentDTO.setValidUntil(renewalDTO.getValidUntil());
@@ -95,7 +98,7 @@ public class PermitApplicationService{
     //method to store permit data
     private void storePermitData(PermitCreatedDTO permitDTO) {
         User user = userRepository.findById(permitDTO.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() ->  new UserNotFoundException("User with ID " + permitDTO.getUserId() + " not found"));
         Permit permit = new Permit(
                 permitDTO.getTransponderNumber(),
                 permitDTO.getValidFrom(),
@@ -111,9 +114,9 @@ public class PermitApplicationService{
 
 
 
-    private String generateTransponderNumber() {
+    private UUID generateTransponderNumber() {
         // Logic to generate a transponder number
-        return "TN" + System.currentTimeMillis(); // Example transponder number
+        return UUID.randomUUID();// Example transponder number
     }
 
 }

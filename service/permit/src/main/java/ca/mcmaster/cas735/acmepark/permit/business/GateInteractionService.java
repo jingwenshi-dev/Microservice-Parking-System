@@ -41,7 +41,7 @@ public class GateInteractionService{
                 requestDTO.getGateId(),
                 requestDTO.getLotId(),
                 isValid,
-                requestDTO.getIsEntry()
+                requestDTO.getEntry()
         );
 
         permitValidationResultSender.sendValidationResult(responseDTO);
@@ -52,8 +52,8 @@ public class GateInteractionService{
         LocalDateTime currentTimestamp = LocalDateTime.parse(timestamp);
 
         // Convert validFrom and validUntil from LocalDate to LocalDateTime at the start of the day.
-        LocalDateTime validFromDateTime = permit.getValidFrom().atStartOfDay();
-        LocalDateTime validUntilDateTime = permit.getValidUntil().atStartOfDay();
+        LocalDateTime validFromDateTime = permit.getValidFrom();
+        LocalDateTime validUntilDateTime = permit.getValidUntil();
 
         // Check if the current timestamp is within the valid period.
         return !currentTimestamp.isBefore(validFromDateTime) && !currentTimestamp.isAfter(validUntilDateTime);
