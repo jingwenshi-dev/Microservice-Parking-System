@@ -21,7 +21,7 @@ public class AMQPVisitorSender implements VisitorSender {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    @Value("${app.custom.messaging.visitor-to-gate-exchangee}")
+    @Value("${app.custom.messaging.visitor-to-gate-exchange}")
     private String visitorToGateExchange;
 
     @Value("${app.custom.messaging.payment-request-exchange}")
