@@ -10,8 +10,17 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     defer-datasource-initialization: true
 
+  sql:
+    init:
+      data-locations: classpath:data.sql
+
   rabbitmq:
     host: rabbitmq
     port: 5672
     username: root
     password: root
+
+app:
+  custom:
+    messaging:
+      violation:
