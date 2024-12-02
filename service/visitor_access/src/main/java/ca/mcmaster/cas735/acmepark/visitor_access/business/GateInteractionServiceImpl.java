@@ -57,13 +57,17 @@ public class GateInteractionServiceImpl implements GateInteractionHandler {
     }
 
     private void handleEntryRequest(TransponderDTO transponderDTO) {
-        //写入数据库进入时间。
-        setVisitorToRepository(transponderDTO);
         GateCtrlDTO gateCtrlDTO = new GateCtrlDTO();
-        gateCtrlDTO.setIsValid(true);
-        gateCtrlDTO.setGateId(transponderDTO.getGateId());
-        // 添加QR数据
-        addQRCode(transponderDTO, gateCtrlDTO);
+        if (transponderDTO != null && transponderDTO.isVisitorAllowed()) {
+            //写入数据库进入时间。
+            setVisitorToRepository(transponderDTO);
+            gateCtrlDTO.setIsValid(true);
+            gateCtrlDTO.setGateId(transponderDTO.getGateId());
+            // 添加QR数据
+            addQRCode(transponderDTO, gateCtrlDTO);
+        } else {
+            gateCtrlDTO.setIsValid(false);
+        }
         visitorSender.sendEntryResponseToGate(gateCtrlDTO);
     }
 

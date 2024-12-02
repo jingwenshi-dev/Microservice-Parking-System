@@ -39,7 +39,7 @@ public class AMQPValidationReqSender implements ValidationReqSender {
             ParkingLotDTO parkingLot = monitor.getParkingLotInfo(transponder.getLotId());
             ValidationDTO validation = new ValidationDTO(transponder, parkingLot);
 
-            if (transponder.getTransponderId() == null) {
+            if (transponder.getTransponderId() == null || transponder.getTransponderId().isEmpty()) {
                 rabbitTemplate.convertAndSend(
                         visitorExchange,
                         "*",
