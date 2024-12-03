@@ -31,8 +31,11 @@ public class TicketProcessor implements TicketManager {
 
     @Override
     public List<TicketDTO> lookupTicket(String licensePlate) throws NotFoundException {
-        List<ParkingViolation> violations = ticketDB.findAllByLicensePlate(licensePlate)
-                .orElseThrow(() -> new NotFoundException("Ticket number or license plate not found."));
+        List<ParkingViolation> violations = ticketDB.findAllByLicensePlate(licensePlate);
+
+        if (violations.isEmpty()) {
+            throw new NotFoundException("Ticket number or license plate not found.");
+        }
 
         return violations.stream()
                 .map(TicketDTO::new)
