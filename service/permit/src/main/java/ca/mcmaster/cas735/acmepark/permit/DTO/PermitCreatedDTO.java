@@ -17,7 +17,7 @@ public class PermitCreatedDTO {
     private LocalDateTime validFrom;  // Changed to LocalDate
     private LocalDateTime validUntil;
     private int userId;
-    private int lotId;
+    private Long lotId;
     private boolean result;
     private String licensePlate;
     private String userType;
@@ -27,7 +27,7 @@ public class PermitCreatedDTO {
     // No-argument constructor
     public PermitCreatedDTO() {}
 
-    public PermitCreatedDTO(LocalDateTime validFrom, LocalDateTime validUntil, int userId, String licensePlate, int lotId, String paymentMethod) {
+    public PermitCreatedDTO(LocalDateTime validFrom, LocalDateTime validUntil, int userId, String licensePlate, Long lotId, String paymentMethod) {
         this.validFrom = validFrom;
         this.validUntil = validUntil;
         this.userId = userId;
@@ -64,7 +64,7 @@ public class PermitCreatedDTO {
         this.validUntil = validUntil;
     }
 
-    public void setLotId(int lotId) {
+    public void setLotId(Long lotId) {
         this.lotId = lotId;
     }
 
@@ -84,7 +84,7 @@ public class PermitCreatedDTO {
         return validUntil;
     }
 
-    public int getLotId() {
+    public Long getLotId() {
         return lotId;
     }
 

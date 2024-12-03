@@ -24,11 +24,11 @@ public class Permit {
     @JoinColumn(name = "user_id")  // Assuming the 'Users' table has 'user_id' as the PK
     private User user;
 
-    private int lotId;
+    private Long lotId;
     private String licensePlate;
 
 
-    public Permit(UUID transponderNumber, LocalDateTime validFrom, LocalDateTime validUntil,User user, int lotId, String licensePlate) {
+    public Permit(UUID transponderNumber, LocalDateTime validFrom, LocalDateTime validUntil,User user, Long lotId, String licensePlate) {
         this.transponderNumber = transponderNumber;
         this.validFrom = validFrom;
         this.validUntil = validUntil;
@@ -60,7 +60,7 @@ public class Permit {
         return user;
     }
 
-    public int getLotId() {
+    public Long getLotId() {
         return lotId;
     }
 

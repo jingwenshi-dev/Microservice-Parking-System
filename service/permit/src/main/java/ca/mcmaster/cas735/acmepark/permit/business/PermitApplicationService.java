@@ -71,6 +71,7 @@ public class PermitApplicationService  {
 
         //Send to payment service
         paymentSenderPort.initiatePayment(paymentDTO);
+        System.out.println("Permit application submitted and payment initiated for User ID: " + paymentDTO.getUserId());
 
     }
 
@@ -82,7 +83,7 @@ public class PermitApplicationService  {
             try {
                 // Proceed with storing the permit if payment is successful
                 storePermitData(event);
-                System.out.println("Permit created successfully for Transponder Number: " + event.getTransponderNumber());
+                System.out.println("Permit created successfully for License Plate: " + event.getLicensePlate());
             } catch (Exception e) {
                 System.err.println("Error while storing permit data: " + e.getMessage());
                 // Handle storage failure, e.g., retry or raise an alert
@@ -115,6 +116,7 @@ public class PermitApplicationService  {
                 permitDTO.getLotId(),
                 permitDTO.getLicensePlate());
         permitRepository.save(permit);
+        System.out.println("Permit save for Permit id: "+ permit.getPermitId());
     }
 
     private UUID generateTransponderNumber() {
