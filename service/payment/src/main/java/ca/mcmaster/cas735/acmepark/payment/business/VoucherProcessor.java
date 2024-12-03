@@ -29,6 +29,11 @@ public class VoucherProcessor implements VoucherManager {
     }
 
     @Override
+    public boolean hasValidActiveVoucher(String licencePlate) {
+        return voucherRedemptionRepo.findByLicensePlate(licencePlate).isPresent();
+    }
+
+    @Override
     public String createVoucher(VoucherDTO voucherCode) throws AlreadyExistingException, InvalidDateException {
         if (voucherDataRepo.findById(voucherCode.getVoucher()).isPresent()) {
             throw new AlreadyExistingException("Voucher", voucherCode.getVoucher());

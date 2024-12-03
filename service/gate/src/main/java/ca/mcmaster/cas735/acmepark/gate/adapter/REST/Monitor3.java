@@ -28,8 +28,8 @@ public class Monitor3 {
     //TODO: Track occupancy rates, peak usage times, and permit sales
     @GetMapping(value = "/lookup")
     @Operation(description = "Lookup for tickets with a given ticket id and license plate")
-    public EntityModel<LotOccupancyDTO> lookup(@RequestParam Long logId) throws NotFoundException {
-        return asEntity(monitor.getParkingLotStatus(logId));
+    public EntityModel<LotOccupancyDTO> lookup(@RequestParam Long lotId) throws NotFoundException {
+        return asEntity(monitor.getParkingLotStatus(lotId));
     }
 
     private EntityModel<LotOccupancyDTO> asEntity(LotOccupancyDTO data) {
