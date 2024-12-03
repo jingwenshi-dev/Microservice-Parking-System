@@ -16,5 +16,6 @@ public class LotOccupancy {
     private Long lotId;
 
     private LocalDateTime timestamp;
+
     private int currentOccupancy;
 }

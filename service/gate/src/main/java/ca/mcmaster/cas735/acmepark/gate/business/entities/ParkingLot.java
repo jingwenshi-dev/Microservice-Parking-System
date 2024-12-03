@@ -16,8 +16,12 @@ public class ParkingLot {
     private Long lotId;
 
     private String lotName;
+
     private int totalSpots;
+
     private boolean visitorAllowed;
+
     private BigDecimal hourlyRate;
+
     private String location;
 }

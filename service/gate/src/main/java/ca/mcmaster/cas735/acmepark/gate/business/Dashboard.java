@@ -46,24 +46,23 @@ public class Dashboard implements Monitor {
 
     @Override
     public void recordOccupancy(Long lotId, Boolean isEntry) throws IllegalArgumentException, NotFoundException {
-        // 查询当前 lotId 的最新记录
+        // Query the latest record of the current lotId
         LotOccupancy latestOccupancy = lotOccupancyDB.findFirstByLotIdOrderByTimestampDesc(lotId)
-                .orElseThrow(() -> new NotFoundException("Lot ID not found: " + lotId));
+                .orElseThrow(() -> new NotFoundException(lotId.toString()));
 
-        // 根据 isEntry 增加或减少 currentOccupancy
-        int newOccupancy = latestOccupancy.getCurrentOccupancy() + (isEntry ? 1 : -1);
+        // Increase or decrease currentOccupancy according to isEntry.
+        int newOccupancy = latestOccupancy.getCurrentOccupancy() + (Boolean.TRUE.equals(isEntry) ? 1 : -1);
 
-        // 防止 currentOccupancy 小于 0
         if (newOccupancy < 0) {
             throw new IllegalArgumentException("Current occupancy cannot be negative.");
         }
 
-        // 创建新的记录
+        // Creating a new record
         LotOccupancy newRecord = new LotOccupancy();
         newRecord.setLotId(lotId);
         newRecord.setTimestamp(LocalDateTime.now());
         newRecord.setCurrentOccupancy(newOccupancy);
-        // 保存新记录到数据库
+        // Saving new records to the database
         lotOccupancyDB.save(newRecord);
     }
 }

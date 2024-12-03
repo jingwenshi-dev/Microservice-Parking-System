@@ -25,7 +25,6 @@ public class Monitor3 {
         this.monitor = monitor;
     }
 
-    //TODO: Track occupancy rates, peak usage times, and permit sales
     @GetMapping(value = "/lookup")
     @Operation(description = "Lookup for tickets with a given ticket id and license plate")
     public EntityModel<LotOccupancyDTO> lookup(@RequestParam Long lotId) throws NotFoundException {
