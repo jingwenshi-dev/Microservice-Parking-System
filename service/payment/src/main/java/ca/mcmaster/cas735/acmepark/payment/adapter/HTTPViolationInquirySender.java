@@ -17,7 +17,7 @@ public class HTTPViolationInquirySender implements ViolationInquirySender {
     private final RestTemplate restTemplate;
     private final String violationServiceUrl;
 
-    public HTTPViolationInquirySender(RestTemplate restTemplate, @Value("${app.custom.messaging.HTTP.violation.lookup:http://violation:8080}") String violationServiceUrl) {
+    public HTTPViolationInquirySender(RestTemplate restTemplate, @Value("${app.custom.messaging.HTTP.violation}") String violationServiceUrl) {
         this.restTemplate = restTemplate;
         this.violationServiceUrl = violationServiceUrl;
     }
