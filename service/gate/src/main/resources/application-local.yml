@@ -4,7 +4,7 @@ spring:
     port: 5672
 
   datasource:
-    url: jdbc:h2:mem:gatedb
+    url: jdbc:h2:mem:gateDB
   h2.console:
     enabled: true
 

@@ -4,7 +4,7 @@ spring:
     port: 5672
 
   datasource:
-    url: jdbc:h2:mem:permitdb
+    url: jdbc:h2:mem:permitDB
   h2.console:
     enabled: true
 
