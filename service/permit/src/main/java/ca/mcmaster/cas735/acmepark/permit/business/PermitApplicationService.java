@@ -2,9 +2,11 @@ package ca.mcmaster.cas735.acmepark.permit.business;
 
 import ca.mcmaster.cas735.acmepark.permit.DTO.PermitCreatedDTO;
 import ca.mcmaster.cas735.acmepark.permit.DTO.PermitRenewalDTO;
+import ca.mcmaster.cas735.acmepark.permit.adapter.AMQPPaymentSender;
 import ca.mcmaster.cas735.acmepark.permit.business.entity.Permit;
 import ca.mcmaster.cas735.acmepark.permit.business.entity.User;
 import ca.mcmaster.cas735.acmepark.permit.business.errors.NotFoundException;
+import ca.mcmaster.cas735.acmepark.permit.port.PaymentListenerPort;
 import ca.mcmaster.cas735.acmepark.permit.port.PaymentSenderPort;
 import ca.mcmaster.cas735.acmepark.permit.port.PermitRepository;
 import ca.mcmaster.cas735.acmepark.permit.port.UserRepository;
@@ -15,16 +17,16 @@ import java.util.UUID;
 
 
 @Service
-public class PermitApplicationService  {
-    private final PaymentSenderPort paymentSenderPort;
+public class PermitApplicationService implements PaymentListenerPort {
+    private final AMQPPaymentSender amqpPaymentSender;
     private final PermitRepository permitRepository;
     private final UserRepository userRepository;
 
     @Autowired
-    public PermitApplicationService(PaymentSenderPort paymentSenderPort,
+    public PermitApplicationService(AMQPPaymentSender amqpPaymentSender,
                                     PermitRepository permitRepository,
                                     UserRepository userRepository) {
-        this.paymentSenderPort = paymentSenderPort;
+        this.amqpPaymentSender = amqpPaymentSender;
         this.permitRepository = permitRepository;
 
         this.userRepository = userRepository;
@@ -48,10 +50,12 @@ public class PermitApplicationService  {
 
 
         // Send to payment service
-        paymentSenderPort.initiatePayment(permitDTO);
+        initiatePayment(permitDTO);
 
         System.out.println("Permit application submitted and payment initiated for User ID: " + permitDTO.getUserId());
     }
+
+
 
 
     public void renewPermit(PermitRenewalDTO renewalDTO) {
@@ -72,11 +76,20 @@ public class PermitApplicationService  {
         paymentDTO.setLicensePlate(permit.getLicensePlate());
 
         //Send to payment service
-        paymentSenderPort.initiatePayment(paymentDTO);
+        initiatePayment(paymentDTO);
         System.out.println("Permit application submitted and payment initiated for User ID: " + paymentDTO.getUserId());
 
     }
 
+
+    public void initiatePayment(PermitCreatedDTO permitDTO) {
+        // Logic for initiating the payment (e.g., sending a message to RabbitMQ)
+        amqpPaymentSender.initiatePayment(permitDTO);
+        System.out.println("Payment initiation for Permit ID: " + permitDTO.getUserId());
+    }
+
+
+    @Override
     public void processPaymentSuccess(PermitCreatedDTO event){
         System.out.println("Checking and storing for permit: " + event);
         boolean paymentSuccess = event.isResult();

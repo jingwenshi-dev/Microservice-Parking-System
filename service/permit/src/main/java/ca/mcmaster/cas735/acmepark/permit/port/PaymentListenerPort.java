@@ -1,5 +1,7 @@
 package ca.mcmaster.cas735.acmepark.permit.port;
 
+import ca.mcmaster.cas735.acmepark.permit.DTO.PermitCreatedDTO;
+
 public interface PaymentListenerPort {
-    void handlePaymentSuccess(String data);
+    void processPaymentSuccess(PermitCreatedDTO event);
 }

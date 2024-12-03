@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-public class GateInteractionService{
+public class GateInteractionService implements PermitValidator{
     private final PermitRepository permitRepository;
     private final PermitValidationResultSender permitValidationResultSender;
 

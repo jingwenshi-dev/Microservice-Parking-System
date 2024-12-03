@@ -18,14 +18,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class AMQPPaymentServiceListener implements PaymentListenerPort {
+public class AMQPPaymentServiceListener{
     private final PermitApplicationService permitApplicationService;
     @Autowired
     public AMQPPaymentServiceListener(PermitApplicationService permitApplicationService) {
         this.permitApplicationService = permitApplicationService;
     }
 
-    @Override
+
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue(value = "payment.success.queue", durable = "true"),
             exchange = @Exchange(value = "${app.custom.messaging.payment-response-permit-exchange}", ignoreDeclarationExceptions = "true", type = "topic"),

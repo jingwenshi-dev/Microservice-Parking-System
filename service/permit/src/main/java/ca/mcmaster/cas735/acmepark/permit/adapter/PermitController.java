@@ -3,6 +3,7 @@ package ca.mcmaster.cas735.acmepark.permit.adapter;
 import ca.mcmaster.cas735.acmepark.permit.DTO.PermitCreatedDTO;
 import ca.mcmaster.cas735.acmepark.permit.DTO.PermitRenewalDTO;
 import ca.mcmaster.cas735.acmepark.permit.business.PermitApplicationService;
+import ca.mcmaster.cas735.acmepark.permit.port.PermitApplicationPort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,11 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/permits")
 public class PermitController {
-    private final PermitApplicationService permitService;
+    private final PermitApplicationPort permitApplicationPort;
 
     @Autowired
-    public PermitController(PermitApplicationService permitService) {
-        this.permitService = permitService;
+    public PermitController(PermitApplicationPort permitApplicationPort) {
+        this.permitApplicationPort = permitApplicationPort;
     }
 
     @PostMapping("/apply")
@@ -26,8 +27,8 @@ public class PermitController {
         System.out.println("Received payload: " + permitDTO);
         try {
         //Apply for the permit
-        permitService.applyForPermit(permitDTO);
-        return new ResponseEntity<>("Permit application initiated. Payment processing in progress.", HttpStatus.ACCEPTED);
+            permitApplicationPort.applyForPermit(permitDTO);
+            return new ResponseEntity<>("Permit application initiated. Payment processing in progress.", HttpStatus.ACCEPTED);
 
         //Return the result to the user
         } catch (Exception e) {
@@ -42,7 +43,7 @@ public class PermitController {
         System.out.println("Received payload: " + renewalDTO);
         try {
             //Renewal for the permit
-            permitService.renewPermit(renewalDTO);
+            permitApplicationPort.renewPermit(renewalDTO);
             return new ResponseEntity<>("Permit renewal application initiated. Payment processing in progress.", HttpStatus.ACCEPTED);
 
             //Return the result to the user
