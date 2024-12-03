@@ -1,7 +1,10 @@
 #!/bin/bash
 
+cd ./infrastructure/service_registry || exit
+mvn clean install -DskipTests
+docker build -t service_registry .
 
-cd ./service/gate || exit
+cd ../../service/gate || exit
 mvn clean install -DskipTests
 docker build -t gate .
 
