@@ -1,35 +1,18 @@
 spring:
   rabbitmq:
-    host: rabbitmq # Docker 容器内部的 RabbitMQ 服务
+    host: rabbitmq
+    port: 5672
 
-  app:
-    custom:
-      mqtt:
-        host: rabbitmq
-  info:
-    application:
-      name: '@project.name@ (docker deployment)'
-  ## 数据库配置
   datasource:
-    # 数据库 URL，使用 H2 数据库并将其存储为文件，路径为 /data/database-customer-service.h2
-    # 这样在 Docker 中使用时数据是持久化存储的
     url: jdbc:h2:file:/data/database-customer-service.h2
-
   h2.console:
-    # 禁用 H2 数据库的控制台，避免暴露数据库访问界面
     enabled: false
 
-  jpa:
-    # 数据库模式的自动操作设置为 create-drop，每次启动时创建表并在关闭时删除
-    hibernate.ddl-auto: create-drop
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka:8761/eureka/
 
-  sql:
-    init:
-      # 设置 SQL 初始化模式为始终，表示无论何时应用程序启动，都会执行 SQL 脚本进行初始化
-      mode: always
-
-  eureka:
-    client:
-      serviceUrl:
-        # 服务注册中心 URL，应用程序在启动时会向 Eureka 注册中心注册自己
-        defaultZone: http://service-registry:8761/eureka/
+info:
+  application:
+    name: '@project.name@ (docker deployment)'

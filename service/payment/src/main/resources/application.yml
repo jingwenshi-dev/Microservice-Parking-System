@@ -1,29 +1,31 @@
 spring:
   application:
-    name: payment # 应用程序的名称为 payment
+    name: payment
 
   rabbitmq:
-    host: rabbitmq
-    port: 5672
     username: root
     password: root
 
-  ## 数据源配置
   datasource:
-    username: root # 数据库用户名，H2 数据库默认用户为 "sa"
-    password: root # 数据库密码，H2 数据库默认没有密码
-    driverClassName: org.h2.Driver # 数据源的驱动程序类名称，用于连接 H2 数据库
+    username: root
+    password: root
+    driverClassName: org.h2.Driver
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect # 指定 H2 数据库所需的 Hibernate 方言
     defer-datasource-initialization: true # 延迟数据源初始化，确保数据库在 JPA 初始化之前已经设置好
+    hibernate:
+      ddl-auto: create-drop
 
-## 日志级别配置
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:data.sql
+
 logging.level:
   ca.mcmaster.cas735.tmt.customers:
     adapter: DEBUG # 适配器层的日志级别为 DEBUG，可以设置为 INFO 以减少日志输出
     business: DEBUG # 业务层的日志级别为 DEBUG，可以设置为 INFO 以减少日志输出
 
-# 自定义应用配置
 app:
   custom:
     messaging:
@@ -33,17 +35,14 @@ app:
       payment-response-permit-exchange: paymentResultPermitExchange #返回payment result 给permit
       payment-response-visitor-exchange: paymentResultVisitorExchange #返回payment result visitor
       add-parking-violation-data: addParkingViolationData # 添加罚单
-      ticket-delete-queue: ticket.delete.queue #
-# 服务器配置
-server:
-  port: 9090 # 服务器监听的端口号为 9090
-
-# TODO: 配置 Eureka 客户端，使其注册到 Eureka 服务器
-# 配置 Eureka 客户端，使得该应用可以注册到 Eureka 服务器上
-# 启用 Eureka 客户端的健康检查功能
-# 在 Eureka 中展示健康检查状态
+      ticket-delete-queue: ticket.delete.queue
 
 eureka:
   client:
     healthcheck:
-      enabled: true # 启用健康检查功能，使应用程序可以在 Eureka 中显示“健康”状态
+      enabled: true
+
+info:
+  application:
+    description: '@project.description@'
+    version:     '@project.version@'
