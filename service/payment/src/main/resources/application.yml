@@ -33,6 +33,7 @@ app:
       payment-response-permit-exchange: paymentResultPermitExchange #返回payment result 给permit
       payment-response-visitor-exchange: paymentResultVisitorExchange #返回payment result visitor
       add-parking-violation-data: addParkingViolationData # 添加罚单
+      ticket-delete-queue: ticket.delete.queue #
 # 服务器配置
 server:
   port: 9090 # 服务器监听的端口号为 9090

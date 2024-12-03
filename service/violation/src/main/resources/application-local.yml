@@ -9,3 +9,11 @@ spring:
   sql:
     init:
       mode: always
+  rabbitmq:
+    host: localhost
+    port: 5672
+
+  # 服务器配置
+server:
+  port: 9081 # 服务器监听的端口号为 9080
+
