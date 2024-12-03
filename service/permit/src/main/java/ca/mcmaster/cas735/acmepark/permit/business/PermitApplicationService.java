@@ -13,6 +13,8 @@ import ca.mcmaster.cas735.acmepark.permit.port.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -86,6 +88,18 @@ public class PermitApplicationService implements PaymentListenerPort {
         // Logic for initiating the payment (e.g., sending a message to RabbitMQ)
         amqpPaymentSender.initiatePayment(permitDTO);
         System.out.println("Payment initiation for Permit ID: " + permitDTO.getUserId());
+    }
+
+    public int countValidPermits() {
+        List<Permit> allPermits = permitRepository.findAll();
+        LocalDateTime today = LocalDateTime.now();
+
+        long validPermitCount = allPermits.stream()
+                .filter(permit -> permit.getValidFrom() != null && permit.getValidUntil() != null)
+                .filter(permit -> !permit.getValidFrom().isAfter(today) && !permit.getValidUntil().isBefore(today))
+                .count();
+
+        return (int) validPermitCount;
     }
 
 

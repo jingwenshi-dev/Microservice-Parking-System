@@ -16,6 +16,19 @@ services:
       timeout: 5s
       retries: 5
 
+  eureka:
+    container_name: eureka
+    build:
+      context: ./infrastructure/service_registry
+    ports:
+      - "8761:8761"
+    healthcheck:
+      test: curl -f http://localhost:8761
+      start_period: 3s
+      interval: 1s
+      timeout: 1s
+      retries: 10
+
   nginx:
     image: nginx:latest
     container_name: nginx
@@ -41,6 +54,8 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+      eureka:
+        condition: service_healthy
 
   violation:
     container_name: violation
@@ -52,6 +67,8 @@ services:
       - SERVER_PORT=8082
     depends_on:
       rabbitmq:
+        condition: service_healthy
+      eureka:
         condition: service_healthy
 
   permit:
@@ -65,6 +82,8 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+      eureka:
+        condition: service_healthy
 
   payment:
     container_name: payment
@@ -77,6 +96,8 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+      eureka:
+        condition: service_healthy
 
   visitor:
     container_name: visitor
@@ -88,4 +109,6 @@ services:
       - SERVER_PORT=8085
     depends_on:
       rabbitmq:
+        condition: service_healthy
+      eureka:
         condition: service_healthy

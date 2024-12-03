@@ -93,4 +93,12 @@ public class PermitCreatedDTO {
 
     public void setPermitType(String permitType) {this.permitType = permitType;}
 
+    public void setLicensePlate(String licensePlate) {
+        this.licensePlate = licensePlate;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
 }
