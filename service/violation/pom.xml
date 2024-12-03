@@ -20,6 +20,10 @@
 		<maven.compiler.proc>full</maven.compiler.proc>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>
 
 		<!-- Web-based system -->
 		<dependency>
