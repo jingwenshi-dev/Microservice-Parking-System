@@ -118,11 +118,10 @@ public class GateInteractionServiceImpl implements GateInteractionHandler {
 
         if (visitorOpt.isPresent()) {
             Visitor visitor = visitorOpt.get();
-            paymentRequest.builder()
-                    .entryTime(visitor.getEntryTime())
-                    .licensePlate(visitor.getLicensePlate())
-                    .userType(VISITOR)
-                    .gateId(transponderDTO.getGateId());
+            paymentRequest.setEntryTime(visitor.getEntryTime());
+            paymentRequest.setLicensePlate(visitor.getLicensePlate());
+            paymentRequest.setUserType(VISITOR);
+            paymentRequest.setGateId(transponderDTO.getGateId());
         }
         return paymentRequest;
     }
