@@ -24,27 +24,31 @@ public class PermitController {
     @PostMapping("/apply")
     public ResponseEntity<String> applyForPermit(@RequestBody PermitCreatedDTO permitDTO) {
         System.out.println("Received payload: " + permitDTO);
+        try {
         //Apply for the permit
-        boolean isPermitCreated = permitService.applyForPermit(permitDTO);
+        permitService.applyForPermit(permitDTO);
+        return new ResponseEntity<>("Permit application initiated. Payment processing in progress.", HttpStatus.ACCEPTED);
 
         //Return the result to the user
-        if (isPermitCreated) {
-            return new ResponseEntity<>("Permit and payment processed successfully.", HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>("Permit created, but payment failed.", HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            // Handle error in permit application initiation
+            return new ResponseEntity<>("Failed to initiate permit application: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-
     }
 
     @PostMapping("/renew")
     public ResponseEntity<String> renewPermit(@RequestBody PermitRenewalDTO renewalDTO) {
-        boolean renewalSuccess = permitService.renewPermit(renewalDTO);
 
-        if (renewalSuccess) {
-            return new ResponseEntity<>("Permit renewed successfully.", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Permit renewal failed due to payment issues.", HttpStatus.BAD_REQUEST);
+        System.out.println("Received payload: " + renewalDTO);
+        try {
+            //Renewal for the permit
+            permitService.renewPermit(renewalDTO);
+            return new ResponseEntity<>("Permit renewal application initiated. Payment processing in progress.", HttpStatus.ACCEPTED);
+
+            //Return the result to the user
+        } catch (Exception e) {
+            // Handle error in permit application initiation
+            return new ResponseEntity<>("Failed to initiate permit renewal application: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

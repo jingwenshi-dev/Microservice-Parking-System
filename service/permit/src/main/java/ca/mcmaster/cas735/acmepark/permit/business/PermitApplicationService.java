@@ -6,7 +6,8 @@ import ca.mcmaster.cas735.acmepark.permit.adapter.AMQPPaymentServiceListener;
 import ca.mcmaster.cas735.acmepark.permit.business.entity.Permit;
 import ca.mcmaster.cas735.acmepark.permit.business.entity.User;
 import ca.mcmaster.cas735.acmepark.permit.business.errors.UserNotFoundException;
-import ca.mcmaster.cas735.acmepark.permit.port.PaymentServicePort;
+import ca.mcmaster.cas735.acmepark.permit.port.PaymentListenerPort;
+import ca.mcmaster.cas735.acmepark.permit.port.PaymentSenderPort;
 import ca.mcmaster.cas735.acmepark.permit.port.PermitRepository;
 import ca.mcmaster.cas735.acmepark.permit.port.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,25 +17,23 @@ import java.util.UUID;
 
 
 @Service
-public class PermitApplicationService{
-    private final PaymentServicePort paymentServicePort;
+public class PermitApplicationService  {
+    private final PaymentSenderPort paymentSenderPort;
     private final PermitRepository permitRepository;
-    private final AMQPPaymentServiceListener amqpPaymentQueueListener;
     private final UserRepository userRepository;
 
     @Autowired
-    public PermitApplicationService(PaymentServicePort paymentServicePort,
+    public PermitApplicationService(PaymentSenderPort paymentSenderPort,
                                     PermitRepository permitRepository,
-                                    UserRepository userRepository,
-                                    AMQPPaymentServiceListener amqpPaymentQueueListener) {
-        this.paymentServicePort = paymentServicePort;
+                                    UserRepository userRepository) {
+        this.paymentSenderPort = paymentSenderPort;
         this.permitRepository = permitRepository;
-        this.amqpPaymentQueueListener = amqpPaymentQueueListener;
+
         this.userRepository = userRepository;
     }
 
 
-    public boolean applyForPermit(PermitCreatedDTO permitDTO) {
+    public void applyForPermit(PermitCreatedDTO permitDTO) {
         // Logic to generate transponder number
         UUID transponderNumber = generateTransponderNumber();
         permitDTO.setTransponderNumber(transponderNumber);
@@ -50,18 +49,13 @@ public class PermitApplicationService{
 
 
         // Send to payment service
-        paymentServicePort.initiatePayment(permitDTO);
+        paymentSenderPort.initiatePayment(permitDTO);
 
-        // Wait for payment success event
-        boolean paymentSuccess = amqpPaymentQueueListener.waitForPaymentSuccess(permitDTO.getLicensePlate());
-        if (paymentSuccess) {
-            storePermitData(permitDTO);  // Save permit to the database
-            return true;
-        }
-        return false;
+        System.out.println("Permit application submitted and payment initiated for User ID: " + permitDTO.getUserId());
     }
 
-    public boolean renewPermit(PermitRenewalDTO renewalDTO) {
+
+    public void renewPermit(PermitRenewalDTO renewalDTO) {
         //Retrieve the permit
         Permit permit = permitRepository.findById(renewalDTO.getPermitId())
                 .orElseThrow(() -> new RuntimeException("Permit not found"));
@@ -76,21 +70,35 @@ public class PermitApplicationService{
         paymentDTO.setUserType(permit.getUser().getUserType().toString());
 
         //Send to payment service
-        paymentServicePort.initiatePayment(paymentDTO);
+        paymentSenderPort.initiatePayment(paymentDTO);
 
-        // Wait for payment success
-        boolean paymentSuccess = amqpPaymentQueueListener.waitForPaymentSuccess(permit.getLicensePlate());
-        if (paymentSuccess) {
-            //Update the permit validity dates
-            permit.setValidFrom(renewalDTO.getValidFrom());
-            permit.setValidUntil(renewalDTO.getValidUntil());
-
-            //Save the updated permit
-            permitRepository.save(permit);
-            return true;
-        }
-        return false;
     }
+
+    public void processPaymentSuccess(PermitCreatedDTO event){
+        System.out.println("Checking and storing for permit: " + event);
+        boolean paymentSuccess = event.isResult();
+
+        if (paymentSuccess) {
+            try {
+                // Proceed with storing the permit if payment is successful
+                storePermitData(event);
+                System.out.println("Permit created successfully for Transponder Number: " + event.getTransponderNumber());
+            } catch (Exception e) {
+                System.err.println("Error while storing permit data: " + e.getMessage());
+                // Handle storage failure, e.g., retry or raise an alert
+            }
+        } else {
+            // Log or handle the payment failure
+            System.err.println("Payment failed for Permit for: " + event.getLicensePlate());
+            handlePaymentFailure(event);
+        }
+    }
+
+    private void handlePaymentFailure(PermitCreatedDTO event) {
+        System.out.println("Notifying about payment failure for permit: " + event.getLicensePlate());
+        //can future add handle method
+    }
+
 
 
 
@@ -108,11 +116,6 @@ public class PermitApplicationService{
                 permitDTO.getLicensePlate());
         permitRepository.save(permit);
     }
-
-
-
-
-
 
     private UUID generateTransponderNumber() {
         // Logic to generate a transponder number

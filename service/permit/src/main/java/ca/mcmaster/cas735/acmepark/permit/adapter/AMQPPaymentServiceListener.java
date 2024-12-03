@@ -1,5 +1,7 @@
 package ca.mcmaster.cas735.acmepark.permit.adapter;
 import ca.mcmaster.cas735.acmepark.permit.DTO.PermitCreatedDTO;
+import ca.mcmaster.cas735.acmepark.permit.business.PermitApplicationService;
+import ca.mcmaster.cas735.acmepark.permit.port.PaymentListenerPort;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -8,6 +10,7 @@ import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.CompletableFuture;
@@ -15,8 +18,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class AMQPPaymentServiceListener {
-    private final ConcurrentHashMap<String, Boolean> paymentStatusMap = new ConcurrentHashMap<>();
+public class AMQPPaymentServiceListener implements PaymentListenerPort {
+    private final PermitApplicationService permitApplicationService;
+    @Autowired
+    public AMQPPaymentServiceListener(PermitApplicationService permitApplicationService) {
+        this.permitApplicationService = permitApplicationService;
+    }
+
+    @Override
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue(value = "payment.success.queue", durable = "true"),
             exchange = @Exchange(value = "${app.custom.messaging.payment-response-permit-exchange}", ignoreDeclarationExceptions = "true", type = "topic"),
@@ -26,32 +35,16 @@ public class AMQPPaymentServiceListener {
         System.out.println("Received Plain Text Message: " + data);
         PermitCreatedDTO event = translate(data);
         try {
-            // Update the payment status map with the result from the event
-            paymentStatusMap.put(event.getLicensePlate(), event.isResult());
+            // Notify the business service to process the payment success event
+            permitApplicationService.processPaymentSuccess(event);
+
         } catch (Exception e) {
             System.err.println("Failed to process payment success event: " + e.getMessage());
         }
     }
 
 
-    public boolean waitForPaymentSuccess(String licensePlate) {
-        try {
-            // Poll the status map for the license plate for up to 30 seconds
-            long startTime = System.currentTimeMillis();
-            long timeout = 5 * 60 * 1000; // 5 minutes in milliseconds
-            while (System.currentTimeMillis() - startTime < timeout) {
-                Boolean result = paymentStatusMap.remove(licensePlate);
-                if (result != null) {
-                    return result; // Return the result as soon as it's available
-                }
-                Thread.sleep(100); // Small delay to avoid tight looping
-            }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            System.err.println("Interrupted while waiting for payment success: " + e.getMessage());
-        }
-        return false; // Return false if no result within 30 seconds
-    }
+
 
     private PermitCreatedDTO translate(String raw) {
         ObjectMapper mapper = new ObjectMapper();
