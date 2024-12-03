@@ -119,6 +119,7 @@ public class GateInteractionServiceImpl implements GateInteractionHandler {
             paymentRequest.setEntryTime(visitor.getEntryTime());
             paymentRequest.setLicensePlate(visitor.getLicensePlate());
             paymentRequest.setUserType(VISITOR);
+            paymentRequest.setLotId(ValidationDTO.getLotId());
             paymentRequest.setGateId(ValidationDTO.getGateId());
             paymentRequest.setPaymentMethod(CREDIT_CARD_STRATEGY);
             paymentRequest.setHourlyRate(ValidationDTO.getHourlyRate());

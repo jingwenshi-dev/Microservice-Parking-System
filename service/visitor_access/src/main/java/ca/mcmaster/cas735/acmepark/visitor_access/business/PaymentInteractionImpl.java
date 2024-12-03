@@ -31,8 +31,8 @@ public class PaymentInteractionImpl implements PaymentInteractionHandler {
         try {
             PaymentRequest paymentRequest= translate(data);
             GateCtrlDTO gateCtrlDTO = new GateCtrlDTO();
-            gateCtrlDTO.setIsValid(paymentRequest.isResult());
-            visitorSender.sendExitRequestToGate(paymentRequest); // 通过 VisitorSender 发送离开请求
+            paymentResultToGateCtrlDTO(paymentRequest, gateCtrlDTO);
+            visitorSender.sendExitResponseToGate(gateCtrlDTO); // 通过 VisitorSender 发送离开请求
         } catch (Exception e) {
             log.error("handle visitor exit error:", e);
         }
@@ -49,6 +49,13 @@ public class PaymentInteractionImpl implements PaymentInteractionHandler {
             log.error("translate data error:", e);
             throw new RuntimeException(e);
         }
+    }
+
+    private void paymentResultToGateCtrlDTO(PaymentRequest paymentRequest, GateCtrlDTO gateCtrlDTO) {
+        gateCtrlDTO.setGateId(paymentRequest.getGateId());
+        gateCtrlDTO.setLotId(paymentRequest.getLotId());
+        gateCtrlDTO.setIsValid(paymentRequest.isResult());
+        gateCtrlDTO.setIsEntry(false);
     }
 
 }

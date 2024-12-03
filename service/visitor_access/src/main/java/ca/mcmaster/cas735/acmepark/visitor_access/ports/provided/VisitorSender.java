@@ -11,6 +11,6 @@ public interface VisitorSender {
 
     void sendExitRequestToPayment(PaymentRequest paymentRequest);
 
-    void sendExitRequestToGate(PaymentRequest paymentRequest);
+    void sendExitResponseToGate(GateCtrlDTO gateCtrlDTO);
 
 }

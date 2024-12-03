@@ -19,7 +19,7 @@ public class PaymentRequest {
 
     private String licensePlate;
 
-    private int lotId;
+    private Long lotId;
 
     private int userId;
 

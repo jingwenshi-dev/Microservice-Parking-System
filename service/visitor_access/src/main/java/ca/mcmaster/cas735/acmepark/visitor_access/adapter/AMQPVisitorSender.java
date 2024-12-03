@@ -40,9 +40,9 @@ public class AMQPVisitorSender implements VisitorSender {
     // 发送离开请求给gate service
     // 从监听访客请求到该方法，数据均为改变，相当于直接透传服务
     @Override
-    public void sendExitRequestToGate(PaymentRequest paymentRequest) {
-        log.debug("Sending exit request message to {}: {}", visitorToGateExchange, paymentRequest);
-        rabbitTemplate.convertAndSend(visitorToGateExchange, "*", paymentRequest);
+    public void sendExitResponseToGate(GateCtrlDTO gateCtrlDTO) {
+        log.debug("Sending exit request message to {}: {}", visitorToGateExchange, gateCtrlDTO);
+        rabbitTemplate.convertAndSend(visitorToGateExchange, "*", translate(gateCtrlDTO));
     }
 
     // 请求交易，进行扣费
