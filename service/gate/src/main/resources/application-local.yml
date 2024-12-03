@@ -3,20 +3,16 @@ spring:
     host: localhost
     port: 5672
 
-  ## Data repository configuration
   datasource:
-    url: jdbc:h2:mem:gatedb # in memory database when used locally
+    url: jdbc:h2:mem:gatedb
   h2.console:
-    enabled: true # expose database web UI for debugging purposes
+    enabled: true
 
-  jpa:
-    hibernate:
-      ddl-auto: create-drop # 数据库模式自动操作设置为 create-drop，每次启动时创建表并在关闭时删除
-  sql:
-    init:
-      mode: always # 设置 SQL 初始化模式为始终，无论何时启动应用程序都会执行 SQL 脚本进行初始化
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
 
-app:
-  custom:
-    mqtt:
-      host: localhost
+info:
+  application:
+    name: '@project.name@ (local deployment)'
