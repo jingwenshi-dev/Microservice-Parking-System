@@ -1,18 +1,13 @@
 package ca.mcmaster.cas735.acmepark.payment.business;
 
-import ca.mcmaster.cas735.acmepark.payment.business.calculator.TotalFeeCalculatorImpl;
-import ca.mcmaster.cas735.acmepark.payment.dto.TicketDTO;
-import ca.mcmaster.cas735.acmepark.payment.ports.ViolationInquirySender;
 import ca.mcmaster.cas735.acmepark.payment.ports.provided.*;
 import ca.mcmaster.cas735.acmepark.payment.dto.PaymentRequest;
-import ca.mcmaster.cas735.acmepark.payment.factory.PaymentCalculatorFactory;
 import ca.mcmaster.cas735.acmepark.payment.factory.PaymentStrategyFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * 扣费程序入口，用processPayment进行扣费

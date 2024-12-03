@@ -22,7 +22,7 @@ public class PaymentCalculatorFactory {
     public PaymentCalculatorPort getPaymentCalculator(String userType) {
         switch (userType.toLowerCase()) {
             case "visitor":
-                return paymentCalculators.get("VisitorPaymentCalculator");
+                return paymentCalculators.get("HourlyPaymentCalculator");
             case "student":
             case "staff":
                 return paymentCalculators.get("MonthlyPaymentCalculator");

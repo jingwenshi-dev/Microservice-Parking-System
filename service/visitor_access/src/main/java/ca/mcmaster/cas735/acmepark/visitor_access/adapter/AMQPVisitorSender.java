@@ -3,7 +3,9 @@ package ca.mcmaster.cas735.acmepark.visitor_access.adapter;
 import ca.mcmaster.cas735.acmepark.gate.dto.GateCtrlDTO;
 import ca.mcmaster.cas735.acmepark.payment.dto.PaymentRequest;
 import ca.mcmaster.cas735.acmepark.visitor_access.ports.provided.VisitorSender;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +55,9 @@ public class AMQPVisitorSender implements VisitorSender {
     private String translate(Object obj) {
         ObjectMapper mapper = new ObjectMapper();
         try {
+            // Register the JavaTimeModule to handle LocalDateTime
+            mapper.registerModule(new JavaTimeModule());
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             // 将对象转换为 JSON 字符串
             return mapper.writeValueAsString(obj);
         } catch (Exception e) {

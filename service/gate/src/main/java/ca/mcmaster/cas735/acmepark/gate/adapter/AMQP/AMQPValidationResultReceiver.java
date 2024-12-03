@@ -3,7 +3,9 @@ package ca.mcmaster.cas735.acmepark.gate.adapter.AMQP;
 import ca.mcmaster.cas735.acmepark.gate.business.errors.NotFoundException;
 import ca.mcmaster.cas735.acmepark.gate.dto.GateCtrlDTO;
 import ca.mcmaster.cas735.acmepark.gate.port.ValidationResultReceiver;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
@@ -34,6 +36,8 @@ public class AMQPValidationResultReceiver {
     private GateCtrlDTO translate(String raw) {
         ObjectMapper mapper = new ObjectMapper();
         try {
+            mapper.registerModule(new JavaTimeModule());
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             return mapper.readValue(raw, GateCtrlDTO.class);
         } catch(Exception e) {
             throw new RuntimeException(e);
