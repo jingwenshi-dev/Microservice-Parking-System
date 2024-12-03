@@ -15,7 +15,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.Base64;
 
-// TODO: 这个代码放在哪个地方呢
 @Component
 public class QRCodeManagement implements QRCodeService {
     @Override
