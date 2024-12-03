@@ -21,6 +21,11 @@ public class PermitRenewalDTO {
         return permitId;
     }
 
+    public String getPaymentMethod(){
+        return paymentMethod;
+    }
+
+
     public LocalDateTime getValidFrom() {
         return validFrom;
     }

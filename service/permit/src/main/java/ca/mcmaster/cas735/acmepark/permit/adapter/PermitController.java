@@ -34,7 +34,7 @@ public class PermitController {
         }
     }
 
-    @PostMapping("/renew")
+    @PutMapping("/renew")
     public ResponseEntity<String> renewPermit(@RequestBody PermitRenewalDTO renewalDTO) {
 
         System.out.println("Received payload: " + renewalDTO);
