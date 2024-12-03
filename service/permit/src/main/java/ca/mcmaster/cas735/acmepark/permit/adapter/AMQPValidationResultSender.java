@@ -14,7 +14,6 @@ public class AMQPValidationResultSender implements PermitValidationResultSender 
     private final RabbitTemplate rabbitTemplate;
     private static final Logger logger = LoggerFactory.getLogger(AMQPValidationResultSender.class);
 
-
     @Autowired
     public AMQPValidationResultSender(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
@@ -23,14 +22,11 @@ public class AMQPValidationResultSender implements PermitValidationResultSender 
     @Value("${app.custom.messaging.permit-to-gate-exchange}")
     private String permitToGateExchange;
 
-
     @Override
     public void sendValidationResult(PermitValidationResponseDTO response) {
         logger.info("Sending validation result...");
         logger.info("Transponder ID: {}", response.getGateId());
-        logger.info("Is Valid: {}", response.getValid());
-
-
+        logger.info("Is Valid: {}", response.getIsValid());
 
         rabbitTemplate.convertAndSend(
                 permitToGateExchange,
