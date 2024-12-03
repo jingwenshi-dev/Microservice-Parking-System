@@ -33,6 +33,7 @@ public class PermitPaymentListener {
             key = "*")) // 路由键设置为 "*"，表示匹配任意路由键
     public void listen(String data) {
         // 记录日志，显示接收到的支付请求数据
+        System.out.println("Sending result to Permit Service"+data);
         log.debug("Received payment request: {}", data);
         // 将接收到的 JSON 字符串转换为 PaymentRequest 对象
         PaymentRequest paymentRequest = translate(data);

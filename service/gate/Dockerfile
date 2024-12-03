@@ -1,6 +1,6 @@
 FROM openjdk:23-jdk
 
-ARG JAR_FILE=target/*.jar
+ARG JAR_FILE=target/*-exec.jar
 
 COPY ${JAR_FILE} app.jar
 

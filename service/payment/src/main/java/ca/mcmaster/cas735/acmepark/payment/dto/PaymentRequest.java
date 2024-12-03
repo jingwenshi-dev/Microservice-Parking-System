@@ -19,6 +19,10 @@ public class PaymentRequest {
 
     private String licensePlate;
 
+    private int lotId;
+
+    private int userId;
+
     private UUID transponderNumber;
 
     private LocalDateTime validFrom;
