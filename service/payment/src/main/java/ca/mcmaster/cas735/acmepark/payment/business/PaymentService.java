@@ -1,13 +1,12 @@
 package ca.mcmaster.cas735.acmepark.payment.business;
 
+import ca.mcmaster.cas735.acmepark.payment.business.calculator.TotalFeeCalculatorImpl;
 import ca.mcmaster.cas735.acmepark.payment.dto.TicketDTO;
 import ca.mcmaster.cas735.acmepark.payment.ports.ViolationInquirySender;
-import ca.mcmaster.cas735.acmepark.payment.ports.provided.PaymentCalculatorPort;
+import ca.mcmaster.cas735.acmepark.payment.ports.provided.*;
 import ca.mcmaster.cas735.acmepark.payment.dto.PaymentRequest;
 import ca.mcmaster.cas735.acmepark.payment.factory.PaymentCalculatorFactory;
 import ca.mcmaster.cas735.acmepark.payment.factory.PaymentStrategyFactory;
-import ca.mcmaster.cas735.acmepark.payment.ports.provided.PaymentStrategy;
-import ca.mcmaster.cas735.acmepark.payment.ports.provided.PaymentServicePort;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,38 +22,28 @@ import java.util.List;
 public class PaymentService implements PaymentServicePort {
 
     private final PaymentStrategyFactory paymentStrategyFactory;
-    private final PaymentCalculatorFactory paymentCalculatorFactory;
-    private final ViolationInquirySender violationInquirySender;
+    private final TotalFeeCalculator totalFeeCalculator;
+    private final VoucherManager manager;
 
     @Autowired
-    public PaymentService(PaymentStrategyFactory paymentStrategyFactory, PaymentCalculatorFactory paymentCalculatorFactory, ViolationInquirySender violationInquirySender) {
+    public PaymentService(PaymentStrategyFactory paymentStrategyFactory,
+                          TotalFeeCalculator totalFeeCalculator,
+                          VoucherManager manager) {
         this.paymentStrategyFactory = paymentStrategyFactory;
-        this.paymentCalculatorFactory = paymentCalculatorFactory;
-        this.violationInquirySender = violationInquirySender;
+        this.totalFeeCalculator = totalFeeCalculator;
+        this.manager = manager;
+
     }
 
     @Override
     public boolean processPayment(PaymentRequest paymentRequest) {
         try {
-            // 根据用户类型选择支付计算器
-            PaymentCalculatorPort paymentCalculator = paymentCalculatorFactory.getPaymentCalculator(paymentRequest.getUserType());
-
-            // 计算停车费用
-            BigDecimal amount = paymentCalculator.calculateParkingFee(paymentRequest);
-
-            // Send request for violation inquiry and calculate total fines
-            List<TicketDTO> violations = violationInquirySender.sendInquiry(paymentRequest.getLicensePlate());
-            BigDecimal totalFines = BigDecimal.ZERO;
-
-            if (!violations.isEmpty()) {
-                for (TicketDTO violation : violations) {
-                    totalFines = totalFines.add(violation.getFineAmount());
-                }
+            // 有代金券，直接支付成功
+            if (manager.hasValidActiveVoucher(paymentRequest.getLicensePlate())) {
+                return true;
             }
-
-            // 计算总费用
-            BigDecimal totalAmount = amount.add(totalFines);
-            paymentRequest.setAmount(totalAmount);
+            //计算价格
+            BigDecimal amount = totalFeeCalculator.calculateTotalFee(paymentRequest);
 
             // 根据支付方式选择支付策略
             PaymentStrategy paymentStrategy = paymentStrategyFactory.getPaymentStrategy(paymentRequest.getPaymentMethod());
