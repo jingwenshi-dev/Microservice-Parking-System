@@ -26,7 +26,7 @@ public class GateInteractionServiceImpl implements GateInteractionHandler {
     private final VisitorDataRepository visitorDataRepository;
 
     private static final String VISITOR = "visitor";
-    private static final String CREDIT_CARD_STRATEGY = "CreditCard";
+    private static final String CREDIT_CARD_STRATEGY = "creditCard";
 
     @Autowired
     public GateInteractionServiceImpl(VisitorSender visitorSender, QRCodeService qrCodeService, VisitorDataRepository visitorDataRepository) {
