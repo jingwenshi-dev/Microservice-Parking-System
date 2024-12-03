@@ -27,6 +27,8 @@ public class GateInteractionService implements PermitValidator{
         this.permitValidationResultSender = permitValidationResultSender;
     }
 
+
+    @Override
     public void validatePermit(PermitValidationRequestDTO requestDTO) {
         // Retrieve the permit based on transponderId and lotId
         Optional<Permit> permitOptional = permitRepository.findByTransponderNumberAndLotId(requestDTO.getTransponderId(), requestDTO.getLotId());

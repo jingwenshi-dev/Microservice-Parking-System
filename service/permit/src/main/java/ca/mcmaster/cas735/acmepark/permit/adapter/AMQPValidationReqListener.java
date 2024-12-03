@@ -13,7 +13,7 @@ import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
 
 @Service
-public class AMQPValidationReqListener implements PermitValidator{
+public class AMQPValidationReqListener {
     private final GateInteractionService gateInteractionService;
 
     @Autowired
@@ -27,7 +27,7 @@ public class AMQPValidationReqListener implements PermitValidator{
             exchange = @Exchange(value = "${app.custom.messaging.gate-to-permit-exchange}",
                     ignoreDeclarationExceptions = "true", type = "topic"), // Declare the exchange
             key = "*")) // Specify the routing key
-    @Override
+
     public void validatePermit(PermitValidationRequestDTO request) {
         gateInteractionService.validatePermit(request);
     }
