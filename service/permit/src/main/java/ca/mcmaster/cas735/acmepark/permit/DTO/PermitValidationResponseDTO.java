@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PermitValidationResponseDTO {
     private String gateId;
-    private int lotId;
+    private Long lotId;
     private Boolean isValid;
-    private Boolean isEntry;
+    private boolean isEntry;
 
-    public PermitValidationResponseDTO(String gateId, int lotId, Boolean isValid, Boolean isEntry) {
+    public PermitValidationResponseDTO(String gateId, Long lotId, Boolean isValid, boolean isEntry) {
         this.gateId = gateId;
         this.lotId = lotId;
         this.isValid = isValid;

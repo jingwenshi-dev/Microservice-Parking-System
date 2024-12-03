@@ -43,7 +43,7 @@ public class GateInteractionService implements PermitValidator{
                 requestDTO.getGateId(),
                 requestDTO.getLotId(),
                 isValid,
-                requestDTO.getIsEntry()
+                requestDTO.isEntry()
         );
 
         permitValidationResultSender.sendValidationResult(responseDTO);

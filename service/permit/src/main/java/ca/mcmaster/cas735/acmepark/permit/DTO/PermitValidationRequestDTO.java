@@ -2,6 +2,8 @@ package ca.mcmaster.cas735.acmepark.permit.DTO;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -9,7 +11,7 @@ import java.util.UUID;
 public class PermitValidationRequestDTO {
     private UUID transponderId;
     private String gateId;
-    private int lotId;
-    private Boolean isEntry;
-    private String timestamp;
+    private Long lotId;
+    private boolean isEntry;
+    private LocalDateTime timestamp;
 }
