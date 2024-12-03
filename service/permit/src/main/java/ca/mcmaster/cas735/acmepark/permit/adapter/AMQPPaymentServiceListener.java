@@ -1,5 +1,8 @@
 package ca.mcmaster.cas735.acmepark.permit.adapter;
 import ca.mcmaster.cas735.acmepark.permit.DTO.PermitCreatedDTO;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
@@ -18,7 +21,10 @@ public class AMQPPaymentServiceListener {
             value = @Queue(value = "payment.success.queue", durable = "true"),
             exchange = @Exchange(value = "${app.custom.messaging.payment-response-permit-exchange}", ignoreDeclarationExceptions = "true", type = "topic"),
             key = "*"))
-    public void handlePaymentSuccess(PermitCreatedDTO event) {
+
+    public void handlePaymentSuccess(String data) {
+        System.out.println("Received Plain Text Message: " + data);
+        PermitCreatedDTO event = translate(data);
         try {
             // Update the payment status map with the result from the event
             paymentStatusMap.put(event.getLicensePlate(), event.isResult());
@@ -45,6 +51,18 @@ public class AMQPPaymentServiceListener {
             System.err.println("Interrupted while waiting for payment success: " + e.getMessage());
         }
         return false; // Return false if no result within 30 seconds
+    }
+
+    private PermitCreatedDTO translate(String raw) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        try {
+            return mapper.readValue(raw, PermitCreatedDTO.class);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

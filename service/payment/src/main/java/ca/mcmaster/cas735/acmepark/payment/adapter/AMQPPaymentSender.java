@@ -2,7 +2,9 @@ package ca.mcmaster.cas735.acmepark.payment.adapter;
 
 import ca.mcmaster.cas735.acmepark.payment.dto.PaymentRequest;
 import ca.mcmaster.cas735.acmepark.payment.ports.provided.PaymentSender;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,7 @@ public class AMQPPaymentSender implements PaymentSender {
 
     @Override
     public void sendPaymentResultToPermit(PaymentRequest paymentRequest) {
+        System.out.println("Sending result to Permit Service"+paymentRequest);
         log.debug("Sending payment result to Permit service: {}", paymentRequest);
         String message = translate(paymentRequest);
         rabbitTemplate.convertAndSend(paymentResultPermitExchange, "*", message);
@@ -43,6 +46,9 @@ public class AMQPPaymentSender implements PaymentSender {
     // 将对象转换为 JSON 字符串
     private String translate(Object obj) {
         ObjectMapper mapper = new ObjectMapper();
+        // Register the JavaTimeModule to handle LocalDateTime
+        mapper.registerModule(new JavaTimeModule());
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         try {
             return mapper.writeValueAsString(obj);
         } catch (Exception e) {
