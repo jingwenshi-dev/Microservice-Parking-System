@@ -49,9 +49,8 @@ public class GateInteractionService implements PermitValidator{
         permitValidationResultSender.sendValidationResult(responseDTO);
     }
 
-    private boolean isPermitValid(Permit permit, String timestamp) {
-        // Convert the timestamp from the gate service to LocalDateTime for comparison.
-        LocalDateTime currentTimestamp = LocalDateTime.parse(timestamp);
+    private boolean isPermitValid(Permit permit, LocalDateTime currentTimestamp) {
+
 
         // Convert validFrom and validUntil from LocalDate to LocalDateTime at the start of the day.
         LocalDateTime validFromDateTime = permit.getValidFrom();
