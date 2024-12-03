@@ -1,26 +1,25 @@
 spring:
   application:
-    name: visitor_access # 应用程序名称为 visitor_access
+    name: visitor_access
 
   rabbitmq:
-    host: rabbitmq
-    port: 5672
     username: root
     password: root
 
-  sql:
-    init:
-      data-locations: classpath:data.sql
-
-  ## 数据源配置
   datasource:
-    username: root # 数据库用户名，H2 数据库默认用户为 "sa"
-    password: root # 数据库密码，H2 数据库默认没有密码
-    driverClassName: org.h2.Driver # 数据源的驱动程序类名称，用于连接 H2 数据库
+    username: root
+    password: root
+    driverClassName: org.h2.Driver
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect # 指定 H2 数据库所需的 Hibernate 方言
     defer-datasource-initialization: true # 延迟数据源初始化，确保数据库在 JPA 初始化之前已经设置好
+    hibernate:
+      ddl-auto: create-drop
 
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:data.sql
 
 # 日志级别配置
 logging:
@@ -29,10 +28,6 @@ logging:
       adapter: DEBUG # 适配器层的日志级别为 INFO，可以设置为 DEBUG 以获得更细粒度的日志跟踪
       application: DEBUG # 应用层的日志级别为 INFO，可以设置为 DEBUG 以便调试
       org.springframework.boot.sql.init: DEBUG
-
-# 服务器配置
-server:
-  port: 9080 # 服务器监听的端口号为 9080
 
 # 自定义应用配置
 app:
@@ -46,24 +41,13 @@ app:
       payment-request-exchange: paymentRequestExchange #用了 visitor ->payment 退出，扣费 监听的接口
       payment-response-visitor-exchange: paymentResultVisitorExchange #用了 payment ->visitor 返回扣费结果
 
-# 管理端点配置，用于暴露服务的管理信息
-#management:
-#  info:
-#    env:
-#      enabled: true # 启用环境信息管理端点，以便查看应用程序的环境信息
-#  endpoints:
-#    web:
-#      exposure:
-#        include: info, health # 启用 "info" 和 "health" 端点，用于查看应用程序的基本信息和健康状况
-#      base-path: /actuator # 管理端点的基础路径为 "/actuator"，例如 "/actuator/health" 查看健康状况
+eureka:
+  client:
+    healthcheck:
+      enabled: true
 
 # 应用程序信息配置，用于提供项目描述和版本
 info:
   application:
-    description: '@project.description@' # 项目描述，通常从项目的构建工具（如 Maven）中注入
-    version: '@project.version@' # 项目版本，同样从项目构建工具中注入
-
-#eureka:
-#  client:
-#    healthcheck:
-#      enabled: true # 启用健康检查
+    description: '@project.description@'  # 项目描述，通常从项目的构建工具（如 Maven）中注入
+    version:     '@project.version@'  # 项目版本，同样从项目构建工具中注入
