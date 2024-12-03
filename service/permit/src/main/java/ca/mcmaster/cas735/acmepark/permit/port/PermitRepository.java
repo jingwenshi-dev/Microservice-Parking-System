@@ -10,5 +10,6 @@ import java.util.UUID;
 @Repository
 public interface PermitRepository extends JpaRepository<Permit, Integer> {
     Optional<Permit> findByTransponderNumberAndLotId(UUID transponderId, int lotId);
+    Optional<Permit> findByLicensePlate(String licensePlate);
 
 }

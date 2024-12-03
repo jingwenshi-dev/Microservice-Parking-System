@@ -1,6 +1,6 @@
 package ca.mcmaster.cas735.acmepark.permit.adapter;
 
-import ca.mcmaster.cas735.acmepark.permit.business.errors.UserNotFoundException;
+import ca.mcmaster.cas735.acmepark.permit.business.errors.NotFoundException;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +23,10 @@ public class Exception2HttpStatus {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException ex) {
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<String> handleNotFoundException(NotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
+
 
 }

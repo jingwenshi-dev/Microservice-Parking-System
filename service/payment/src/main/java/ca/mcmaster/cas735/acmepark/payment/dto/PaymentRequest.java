@@ -23,6 +23,8 @@ public class PaymentRequest {
 
     private int userId;
 
+    private String permitType;
+
     private UUID transponderNumber;
 
     private LocalDateTime validFrom;

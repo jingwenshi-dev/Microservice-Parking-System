@@ -22,6 +22,7 @@ public class PermitCreatedDTO {
     private String licensePlate;
     private String userType;
     private String paymentMethod;
+    private String permitType;
 
 
     // No-argument constructor
@@ -88,5 +89,8 @@ public class PermitCreatedDTO {
         return lotId;
     }
 
+    public String getPermitType() {return permitType;}
+
+    public void setPermitType(String permitType) {this.permitType = permitType;}
 
 }

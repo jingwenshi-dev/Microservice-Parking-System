@@ -14,6 +14,8 @@ public class PermitRenewalDTO {
     private int permitId;
     private LocalDateTime validFrom;
     private LocalDateTime validUntil;
+    private String paymentMethod;
+
 
     public int getPermitId() {
         return permitId;
