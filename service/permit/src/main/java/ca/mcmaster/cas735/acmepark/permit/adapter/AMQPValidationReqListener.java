@@ -1,10 +1,14 @@
 package ca.mcmaster.cas735.acmepark.permit.adapter;
 
+import ca.mcmaster.cas735.acmepark.permit.DTO.PermitCreatedDTO;
 import ca.mcmaster.cas735.acmepark.permit.DTO.PermitValidationRequestDTO;
 import ca.mcmaster.cas735.acmepark.permit.DTO.PermitValidationResponseDTO;
 import ca.mcmaster.cas735.acmepark.permit.business.GateInteractionService;
 import ca.mcmaster.cas735.acmepark.permit.port.PermitValidationResultSender;
 import ca.mcmaster.cas735.acmepark.permit.port.PermitValidator;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +32,27 @@ public class AMQPValidationReqListener {
                     ignoreDeclarationExceptions = "true", type = "topic"), // Declare the exchange
             key = "*")) // Specify the routing key
 
-    public void validatePermit(PermitValidationRequestDTO request) {
+    public void validatePermit(String data) {
+        System.out.println("Received Plain Text Message: " + data);
+        PermitValidationRequestDTO request = translate(data);
+        System.out.println("Translated Message: " + request);
+
+        try {
         gateInteractionService.validatePermit(request);
+        } catch (Exception e) {
+            System.err.println("Failed to process payment success event: " + e.getMessage());
+        }
+    }
+    private PermitValidationRequestDTO translate(String raw) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        try {
+            return mapper.readValue(raw, PermitValidationRequestDTO.class);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
+

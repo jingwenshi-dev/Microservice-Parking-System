@@ -21,6 +21,9 @@ spring:
       mode: always
       data-locations: classpath:data.sql
 
+server:
+  port: 9090
+
 app:
   custom:
     messaging:
