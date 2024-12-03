@@ -11,6 +11,6 @@ public class VoucherRedemption {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String LicensePlate;
+    private String licensePlate;
     private String voucher;
 }

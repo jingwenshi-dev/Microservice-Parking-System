@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface VoucherRedemptionRepo extends JpaRepository<VoucherRedemption, String> {
+public interface VoucherRedemptionRepo extends JpaRepository<VoucherRedemption, Long> {
     Optional<VoucherRedemption> findByLicensePlate(String licensePlate);
 }
