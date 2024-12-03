@@ -1,7 +1,6 @@
 package ca.mcmaster.cas735.acmepark.gate.adapter.AMQP;
 
 import ca.mcmaster.cas735.acmepark.gate.dto.GateCtrlDTO;
-import ca.mcmaster.cas735.acmepark.gate.dto.ValidationDTO;
 import ca.mcmaster.cas735.acmepark.gate.port.GateController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -27,6 +26,7 @@ public class AMQPGateController implements GateController {
         String routingKey = String.format(gateRoutingKey, gateCtrl.getGateId());
         rabbitTemplate.convertAndSend(gateExchange, routingKey, translate(gateCtrl));
     }
+
     private String translate(GateCtrlDTO gateCtrl) {
         ObjectMapper mapper= new ObjectMapper();
         try {

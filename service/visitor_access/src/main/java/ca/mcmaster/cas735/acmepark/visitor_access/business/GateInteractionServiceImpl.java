@@ -8,7 +8,9 @@ import ca.mcmaster.cas735.acmepark.visitor_access.ports.provided.GateInteraction
 import ca.mcmaster.cas735.acmepark.visitor_access.ports.provided.QRCodeService;
 import ca.mcmaster.cas735.acmepark.visitor_access.ports.provided.VisitorSender;
 import ca.mcmaster.cas735.acmepark.visitor_access.ports.required.VisitorDataRepository;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -88,6 +90,8 @@ public class GateInteractionServiceImpl implements GateInteractionHandler {
     private ValidationDTO translate(String raw) {
         ObjectMapper mapper = new ObjectMapper();
         try {
+            mapper.registerModule(new JavaTimeModule());
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             return mapper.readValue(raw, ValidationDTO.class);
         } catch (Exception e) {
             log.error("translate data error:", e);

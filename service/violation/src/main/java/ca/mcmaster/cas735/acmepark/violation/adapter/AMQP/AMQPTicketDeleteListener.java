@@ -2,6 +2,7 @@ package ca.mcmaster.cas735.acmepark.violation.adapter.AMQP;
 
 import ca.mcmaster.cas735.acmepark.payment.dto.PaymentRequest;
 import ca.mcmaster.cas735.acmepark.violation.port.provided.TicketManager;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.amqp.rabbit.annotation.Queue;
@@ -13,13 +14,10 @@ import org.springframework.stereotype.Service;
 public class AMQPTicketDeleteListener {
 
     private final TicketManager ticketManager;
-    private final ObjectMapper mapper;
 
     @Autowired
     public AMQPTicketDeleteListener(TicketManager ticketManager) {
         this.ticketManager = ticketManager;
-        this.mapper = new ObjectMapper();
-        this.mapper.registerModule(new JavaTimeModule());
     }
 
     @RabbitListener(queuesToDeclare = @Queue("ticket.delete.queue"))
@@ -29,7 +27,10 @@ public class AMQPTicketDeleteListener {
     }
 
     private PaymentRequest translate(String raw) {
+        ObjectMapper mapper = new ObjectMapper();
         try {
+            mapper.registerModule(new JavaTimeModule());
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             return mapper.readValue(raw, PaymentRequest.class);
         } catch(Exception e) {
             throw new RuntimeException(e);

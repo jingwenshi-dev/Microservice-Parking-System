@@ -5,7 +5,9 @@ import ca.mcmaster.cas735.acmepark.gate.dto.TransponderDTO;
 import ca.mcmaster.cas735.acmepark.gate.dto.ValidationDTO;
 import ca.mcmaster.cas735.acmepark.gate.port.ValidationReqSender;
 import ca.mcmaster.cas735.acmepark.gate.port.provided.Monitor;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +65,8 @@ public class AMQPValidationReqSender implements ValidationReqSender {
     private String translate(ValidationDTO validation) {
         ObjectMapper mapper= new ObjectMapper();
         try {
+            mapper.registerModule(new JavaTimeModule());
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             return mapper.writeValueAsString(validation);
         } catch (Exception e){
             throw new RuntimeException(e);

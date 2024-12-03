@@ -51,8 +51,4 @@ public class PermitController {
             return new ResponseEntity<>("Failed to initiate permit renewal application: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
-
-
 }

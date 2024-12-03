@@ -15,12 +15,12 @@ import java.util.List;
 public class HTTPViolationInquirySender implements ViolationInquirySender {
 
     private final RestTemplate restTemplate;
-    private final String violationServiceUrl;
+    @Value("${app.custom.messaging.HTTP.violation}") String violationServiceUrl;
 
-    public HTTPViolationInquirySender(RestTemplate restTemplate, @Value("${app.custom.messaging.HTTP.violation}") String violationServiceUrl) {
+    public HTTPViolationInquirySender(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        this.violationServiceUrl = violationServiceUrl;
     }
+
 
     @Override
     public List<TicketDTO> sendInquiry(String licensePlate) {

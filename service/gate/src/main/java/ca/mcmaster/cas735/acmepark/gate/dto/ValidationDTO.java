@@ -3,6 +3,7 @@ package ca.mcmaster.cas735.acmepark.gate.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -11,7 +12,7 @@ public class ValidationDTO {
     private String licensePlate;
     private String gateId;
     private boolean isEntry;
-    private String timestamp;
+    private LocalDateTime timestamp;
 
     private Long lotId;
     private boolean visitorAllowed;

@@ -39,9 +39,7 @@ public class VoucherProcessor implements VoucherManager {
             throw new AlreadyExistingException("Voucher", voucherCode.getVoucher());
         }
 
-        LocalDateTime validFrom;
-        LocalDateTime validUntil;
-
+        LocalDateTime validFrom, validUntil;
         try {
             validFrom = LocalDateTime.parse(voucherCode.getValidFrom());
             validUntil = LocalDateTime.parse(voucherCode.getValidUntil());
