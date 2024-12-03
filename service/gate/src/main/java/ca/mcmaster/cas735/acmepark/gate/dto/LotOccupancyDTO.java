@@ -12,7 +12,9 @@ public class LotOccupancyDTO {
     private Long id;
     private Long lotId;
     private LocalDateTime timestamp;
-    private int currentOccupancy;
+    private int currentOccupancy; // 当前的车辆数
+    private String occupancyRate;
+    private String peakingHour;
 
     public LotOccupancyDTO(LotOccupancy lot) {
         this.id = lot.getId();
@@ -20,5 +22,4 @@ public class LotOccupancyDTO {
         this.timestamp = lot.getTimestamp();
         this.currentOccupancy = lot.getCurrentOccupancy();
     }
-
 }
