@@ -1,4 +1,4 @@
-package ca.mcmaster.cas735.acmepark.permit.adapter;
+package ca.mcmaster.cas735.acmepark.permit.adapter.REST;
 
 import ca.mcmaster.cas735.acmepark.permit.DTO.PermitCreatedDTO;
 import ca.mcmaster.cas735.acmepark.permit.DTO.PermitRenewalDTO;
@@ -21,16 +21,16 @@ public class PermitController {
 
     @PostMapping("/apply")
     public ResponseEntity<String> applyForPermit(@RequestBody PermitCreatedDTO permitDTO) {
-        System.out.println("Received payload: " + permitDTO);
         try {
         //Apply for the permit
             permitApplicationPort.applyForPermit(permitDTO);
-            return new ResponseEntity<>("Permit application initiated. Payment processing in progress.", HttpStatus.ACCEPTED);
-
+            return new ResponseEntity<>("Permit application initiated. Payment processing in progress.",
+                    HttpStatus.ACCEPTED);
         //Return the result to the user
         } catch (Exception e) {
             // Handle error in permit application initiation
-            return new ResponseEntity<>("Failed to initiate permit application: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Failed to initiate permit application: " + e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

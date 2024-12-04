@@ -1,18 +1,12 @@
-package ca.mcmaster.cas735.acmepark.permit.adapter;
+package ca.mcmaster.cas735.acmepark.permit.adapter.AMQP;
 
 
 import ca.mcmaster.cas735.acmepark.permit.DTO.PermitCreatedDTO;
-import ca.mcmaster.cas735.acmepark.permit.business.entity.User;
-import ca.mcmaster.cas735.acmepark.permit.business.errors.NotFoundException;
 import ca.mcmaster.cas735.acmepark.permit.port.PaymentSenderPort;
-import ca.mcmaster.cas735.acmepark.permit.port.PermitRepository;
-import ca.mcmaster.cas735.acmepark.permit.port.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-
-import java.util.UUID;
 
 @Service
 public class AMQPPaymentSender implements PaymentSenderPort {

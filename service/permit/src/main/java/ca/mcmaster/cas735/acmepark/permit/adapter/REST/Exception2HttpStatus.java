@@ -1,4 +1,4 @@
-package ca.mcmaster.cas735.acmepark.permit.adapter;
+package ca.mcmaster.cas735.acmepark.permit.adapter.REST;
 
 import ca.mcmaster.cas735.acmepark.permit.business.errors.NotFoundException;
 import org.springframework.data.crossstore.ChangeSetPersister;

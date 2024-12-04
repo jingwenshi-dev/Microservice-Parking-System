@@ -4,7 +4,6 @@ import ca.mcmaster.cas735.acmepark.permit.DTO.PermitCreatedDTO;
 import ca.mcmaster.cas735.acmepark.permit.DTO.PermitRenewalDTO;
 import ca.mcmaster.cas735.acmepark.permit.business.PermitApplicationService;
 import ca.mcmaster.cas735.acmepark.permit.port.PermitApplicationPort;
-import ca.mcmaster.cas735.acmepark.permit.port.PermitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,19 +18,19 @@ public class PermitApplicationServiceAdapter implements PermitApplicationPort {
     }
 
     @Override
-    public void applyForPermit(PermitCreatedDTO permitDTO) throws Exception {
+    public void applyForPermit(PermitCreatedDTO permitDTO) {
         // Call domain services to apply for a permit
         permitApplicationService.applyForPermit(permitDTO);
     }
 
     @Override
-    public void renewPermit(PermitRenewalDTO renewalDTO) throws Exception {
+    public void renewPermit(PermitRenewalDTO renewalDTO) {
         // Call domain services to renew a permit
         permitApplicationService.renewPermit(renewalDTO);
     }
 
     @Override
-    public int getValidPermitCount(){
+    public int getValidPermitCount() {
         return permitApplicationService.countValidPermits();
     }
 }

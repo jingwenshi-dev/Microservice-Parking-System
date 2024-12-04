@@ -2,12 +2,11 @@ package ca.mcmaster.cas735.acmepark.permit.business;
 
 import ca.mcmaster.cas735.acmepark.permit.DTO.PermitCreatedDTO;
 import ca.mcmaster.cas735.acmepark.permit.DTO.PermitRenewalDTO;
-import ca.mcmaster.cas735.acmepark.permit.adapter.AMQPPaymentSender;
+import ca.mcmaster.cas735.acmepark.permit.adapter.AMQP.AMQPPaymentSender;
 import ca.mcmaster.cas735.acmepark.permit.business.entity.Permit;
 import ca.mcmaster.cas735.acmepark.permit.business.entity.User;
 import ca.mcmaster.cas735.acmepark.permit.business.errors.NotFoundException;
 import ca.mcmaster.cas735.acmepark.permit.port.PaymentListenerPort;
-import ca.mcmaster.cas735.acmepark.permit.port.PaymentSenderPort;
 import ca.mcmaster.cas735.acmepark.permit.port.PermitRepository;
 import ca.mcmaster.cas735.acmepark.permit.port.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +29,8 @@ public class PermitApplicationService implements PaymentListenerPort {
                                     UserRepository userRepository) {
         this.amqpPaymentSender = amqpPaymentSender;
         this.permitRepository = permitRepository;
-
         this.userRepository = userRepository;
     }
-
 
     public void applyForPermit(PermitCreatedDTO permitDTO) {
         // Logic to generate transponder number
@@ -43,22 +40,16 @@ public class PermitApplicationService implements PaymentListenerPort {
 
         // Fetch the user entity based on the userId from the PermitCreatedDTO
         User user = userRepository.findByUserId(permitDTO.getUserId())
-                .orElseThrow(() -> new NotFoundException("User with ID " + permitDTO.getUserId() + " not found"));;
+                .orElseThrow(() -> new NotFoundException("User with ID " + permitDTO.getUserId() + " not found"));
 
         // Set the userType based on the User entity
         permitDTO.setUserType(user.getUserType().toString());
-
-
-
 
         // Send to payment service
         initiatePayment(permitDTO);
 
         System.out.println("Permit application submitted and payment initiated for User ID: " + permitDTO.getUserId());
     }
-
-
-
 
     public void renewPermit(PermitRenewalDTO renewalDTO) {
         //Retrieve the permit
@@ -80,9 +71,7 @@ public class PermitApplicationService implements PaymentListenerPort {
         //Send to payment service
         initiatePayment(paymentDTO);
         System.out.println("Permit application submitted and payment initiated for User ID: " + paymentDTO.getUserId());
-
     }
-
 
     public void initiatePayment(PermitCreatedDTO permitDTO) {
         // Logic for initiating the payment (e.g., sending a message to RabbitMQ)
@@ -102,9 +91,8 @@ public class PermitApplicationService implements PaymentListenerPort {
         return (int) validPermitCount;
     }
 
-
     @Override
-    public void processPaymentSuccess(PermitCreatedDTO event){
+    public void processPaymentSuccess(PermitCreatedDTO event) {
         System.out.println("Checking and storing for permit: " + event);
         boolean paymentSuccess = event.isResult();
 
@@ -129,14 +117,10 @@ public class PermitApplicationService implements PaymentListenerPort {
         //can future add handle method
     }
 
-
-
-
-
     //method to store permit data
     private void storePermitData(PermitCreatedDTO permitDTO) {
         User user = userRepository.findById(permitDTO.getUserId())
-                .orElseThrow(() ->  new NotFoundException("User with ID " + permitDTO.getUserId() + " not found"));
+                .orElseThrow(() -> new NotFoundException("User with ID " + permitDTO.getUserId() + " not found"));
         if ("APPLY".equalsIgnoreCase(permitDTO.getPermitType())) {
             Permit permit = new Permit(
                     permitDTO.getTransponderNumber(),
@@ -147,7 +131,7 @@ public class PermitApplicationService implements PaymentListenerPort {
                     permitDTO.getLicensePlate());
             permitRepository.save(permit);
             System.out.println("Permit save for Permit id: " + permit.getPermitId());
-        }else if ("RENEW".equalsIgnoreCase(permitDTO.getPermitType())) {
+        } else if ("RENEW".equalsIgnoreCase(permitDTO.getPermitType())) {
             // Handle RENEW permit type
             Permit existingPermit = permitRepository.findByLicensePlate(permitDTO.getLicensePlate())
                     .orElseThrow(() -> new NotFoundException("Permit with License Plate " + permitDTO.getLicensePlate() + " not found"));

@@ -1,7 +1,6 @@
-package ca.mcmaster.cas735.acmepark.permit.adapter;
+package ca.mcmaster.cas735.acmepark.permit.adapter.AMQP;
 import ca.mcmaster.cas735.acmepark.permit.DTO.PermitCreatedDTO;
 import ca.mcmaster.cas735.acmepark.permit.business.PermitApplicationService;
-import ca.mcmaster.cas735.acmepark.permit.port.PaymentListenerPort;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -12,10 +11,6 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 @Service
 public class AMQPPaymentServiceListener{

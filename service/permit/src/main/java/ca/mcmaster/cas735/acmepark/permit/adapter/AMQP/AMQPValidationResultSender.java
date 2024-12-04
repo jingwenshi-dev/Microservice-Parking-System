@@ -1,4 +1,4 @@
-package ca.mcmaster.cas735.acmepark.permit.adapter;
+package ca.mcmaster.cas735.acmepark.permit.adapter.AMQP;
 
 import ca.mcmaster.cas735.acmepark.permit.DTO.PermitValidationResponseDTO;
 import ca.mcmaster.cas735.acmepark.permit.port.PermitValidationResultSender;
@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 @Service
 public class AMQPValidationResultSender implements PermitValidationResultSender {
 
@@ -35,7 +36,7 @@ public class AMQPValidationResultSender implements PermitValidationResultSender 
 
         rabbitTemplate.convertAndSend(
                 permitToGateExchange,
-            "*",
+                "*",
                 data
         );
     }
@@ -51,6 +52,5 @@ public class AMQPValidationResultSender implements PermitValidationResultSender 
             throw new RuntimeException(e);
         }
     }
-
 
 }

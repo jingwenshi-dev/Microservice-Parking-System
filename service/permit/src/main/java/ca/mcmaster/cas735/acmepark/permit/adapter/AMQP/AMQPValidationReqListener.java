@@ -1,11 +1,7 @@
-package ca.mcmaster.cas735.acmepark.permit.adapter;
+package ca.mcmaster.cas735.acmepark.permit.adapter.AMQP;
 
-import ca.mcmaster.cas735.acmepark.permit.DTO.PermitCreatedDTO;
 import ca.mcmaster.cas735.acmepark.permit.DTO.PermitValidationRequestDTO;
-import ca.mcmaster.cas735.acmepark.permit.DTO.PermitValidationResponseDTO;
 import ca.mcmaster.cas735.acmepark.permit.business.GateInteractionService;
-import ca.mcmaster.cas735.acmepark.permit.port.PermitValidationResultSender;
-import ca.mcmaster.cas735.acmepark.permit.port.PermitValidator;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -25,11 +21,8 @@ public class AMQPValidationReqListener {
         this.gateInteractionService = gateInteractionService;
     }
 
-
-    @RabbitListener(bindings = @QueueBinding(
-            value = @Queue(value = "permit.validation.queue", durable = "true"), // Declare the queue
-            exchange = @Exchange(value = "${app.custom.messaging.gate-to-permit-exchange}",
-                    ignoreDeclarationExceptions = "true", type = "topic"), // Declare the exchange
+    @RabbitListener(bindings = @QueueBinding(value = @Queue(value = "permit.validation.queue", durable = "true"), // Declare the queue
+            exchange = @Exchange(value = "${app.custom.messaging.gate-to-permit-exchange}", ignoreDeclarationExceptions = "true", type = "topic"), // Declare the exchange
             key = "*")) // Specify the routing key
 
     public void validatePermit(String data) {
@@ -38,11 +31,12 @@ public class AMQPValidationReqListener {
         System.out.println("Translated Message: " + request);
 
         try {
-        gateInteractionService.validatePermit(request);
+            gateInteractionService.validatePermit(request);
         } catch (Exception e) {
             System.err.println("Failed to process payment success event: " + e.getMessage());
         }
     }
+
     private PermitValidationRequestDTO translate(String raw) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
