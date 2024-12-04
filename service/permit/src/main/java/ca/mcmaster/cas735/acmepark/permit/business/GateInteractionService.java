@@ -33,12 +33,14 @@ public class GateInteractionService implements PermitValidator {
 
         // Check if the permit exists.
         // Check the permit validity based on validFrom, validUntil, and the current timestamp.
-        boolean isValid = permitOptional.map(
-                permit -> isPermitValid(permit, requestDTO.getTimestamp())).orElse(false);
+        boolean isValid = permitOptional.map(permit -> isPermitValid(permit, requestDTO.getTimestamp())).orElse(false);
 
         // Prepare the response based on validity.
-        PermitValidationResponseDTO responseDTO = new PermitValidationResponseDTO(
-                requestDTO.getGateId(), requestDTO.getLotId(), isValid, requestDTO.isEntry());
+        PermitValidationResponseDTO responseDTO = new PermitValidationResponseDTO();
+        responseDTO.setGateId(requestDTO.getGateId());
+        responseDTO.setLotId(requestDTO.getLotId());
+        responseDTO.setIsValid(isValid);
+        responseDTO.setEntry(requestDTO.isEntry());
 
         permitValidationResultSender.sendValidationResult(responseDTO);
     }

@@ -11,11 +11,4 @@ public class PermitValidationResponseDTO {
     private Long lotId;
     private Boolean isValid;
     private boolean isEntry;
-
-    public PermitValidationResponseDTO(String gateId, Long lotId, Boolean isValid, boolean isEntry) {
-        this.gateId = gateId;
-        this.lotId = lotId;
-        this.isValid = isValid;
-        this.isEntry = isEntry;
-    }
 }
