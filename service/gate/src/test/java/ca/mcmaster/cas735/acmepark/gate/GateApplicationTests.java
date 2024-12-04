@@ -16,8 +16,9 @@ import ca.mcmaster.cas735.acmepark.gate.port.required.LotOccupancyDataRepo;
 import ca.mcmaster.cas735.acmepark.gate.port.required.ParkingLotDataRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -28,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class GateApplicationTests {
 
 	@Mock
@@ -51,13 +53,11 @@ class GateApplicationTests {
 	private LotOccupancyHandler lotOccupancyHandler;
 
 	@BeforeEach
-	void setUp() throws Exception {
-		try (var _ = MockitoAnnotations.openMocks(this)) {
-			dashboard = new Dashboard(parkingLotDB, lotOccupancyDB, lotOccupancyPort);
-			gateReqHandler = new GateReqHandler(validationReqSender);
-			gateResultHandler = new GateResultHandler(gateController, dashboard);
-			lotOccupancyHandler = new LotOccupancyHandler(lotOccupancyDB, parkingLotDB);
-		}
+	void setUp() {
+		dashboard = new Dashboard(parkingLotDB, lotOccupancyDB, lotOccupancyPort);
+		gateReqHandler = new GateReqHandler(validationReqSender);
+		gateResultHandler = new GateResultHandler(gateController, dashboard);
+		lotOccupancyHandler = new LotOccupancyHandler(lotOccupancyDB, parkingLotDB);
 	}
 
 	/**
