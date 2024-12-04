@@ -34,7 +34,7 @@ public class Dashboard implements Monitor {
     }
 
     @Override
-    public LotOccupancyDTO getParkingLotStatus(Long lotId) throws NotFoundException, IllegalArgumentException {
+    public LotOccupancyDTO getParkingLotStatus(Long lotId) throws NotFoundException {
         LotOccupancyDTO lotOccupancyDTO= new LotOccupancyDTO(lotOccupancyDB.findFirstByLotIdOrderByTimestampDesc(lotId)
                 .orElseThrow(() -> new NotFoundException(lotId.toString())));
         String occupancyRate = lotOccupancyPort.getOccupancyRate(lotId);

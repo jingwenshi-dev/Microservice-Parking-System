@@ -5,7 +5,7 @@ mvn clean install -DskipTests
 docker build -t service_registry .
 
 cd ../../service/gate || exit
-mvn clean install -DskipTests
+mvn clean install
 docker build -t gate .
 
 cd ../permit || exit
