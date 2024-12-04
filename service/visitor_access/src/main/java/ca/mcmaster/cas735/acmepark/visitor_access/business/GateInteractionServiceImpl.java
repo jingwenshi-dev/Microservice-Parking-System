@@ -1,6 +1,8 @@
 package ca.mcmaster.cas735.acmepark.visitor_access.business;
 
 import ca.mcmaster.cas735.acmepark.gate.dto.ValidationDTO;
+import ca.mcmaster.cas735.acmepark.visitor_access.ports.EntryRequestHandler;
+import ca.mcmaster.cas735.acmepark.visitor_access.ports.ExitRequestHandler;
 import ca.mcmaster.cas735.acmepark.visitor_access.ports.provided.GateInteractionHandler;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

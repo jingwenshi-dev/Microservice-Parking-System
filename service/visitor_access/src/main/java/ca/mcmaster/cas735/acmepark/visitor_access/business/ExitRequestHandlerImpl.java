@@ -3,6 +3,7 @@ package ca.mcmaster.cas735.acmepark.visitor_access.business;
 import ca.mcmaster.cas735.acmepark.gate.dto.ValidationDTO;
 import ca.mcmaster.cas735.acmepark.payment.dto.PaymentRequest;
 import ca.mcmaster.cas735.acmepark.visitor_access.business.entities.Visitor;
+import ca.mcmaster.cas735.acmepark.visitor_access.ports.ExitRequestHandler;
 import ca.mcmaster.cas735.acmepark.visitor_access.ports.provided.VisitorSender;
 import ca.mcmaster.cas735.acmepark.visitor_access.ports.required.VisitorDataRepository;
 import lombok.extern.slf4j.Slf4j;

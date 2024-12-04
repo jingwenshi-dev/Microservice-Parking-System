@@ -3,6 +3,7 @@ package ca.mcmaster.cas735.acmepark.visitor_access.business;
 import ca.mcmaster.cas735.acmepark.gate.dto.GateCtrlDTO;
 import ca.mcmaster.cas735.acmepark.gate.dto.ValidationDTO;
 import ca.mcmaster.cas735.acmepark.visitor_access.business.entities.Visitor;
+import ca.mcmaster.cas735.acmepark.visitor_access.ports.EntryRequestHandler;
 import ca.mcmaster.cas735.acmepark.visitor_access.ports.provided.QRCodeService;
 import ca.mcmaster.cas735.acmepark.visitor_access.ports.provided.VisitorSender;
 import ca.mcmaster.cas735.acmepark.visitor_access.ports.required.VisitorDataRepository;
