@@ -58,9 +58,6 @@ public class AMQPVisitorSender implements VisitorSender {
             // Register the JavaTimeModule to handle LocalDateTime
             mapper.registerModule(new JavaTimeModule());
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            // 将对象转换为 JSON 字符串
-            mapper.registerModule(new JavaTimeModule());
-            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             return mapper.writeValueAsString(obj);
         } catch (Exception e) {
             // 如果转换失败，抛出运行时异常
