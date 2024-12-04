@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 
 @Service
 @Slf4j
-public class EntryRequestHandlerImpl implements EntryRequestHandler {
+public class EntryReqHandlerImpl implements EntryRequestHandler {
 
     private final VisitorSender visitorSender;
     private final QRCodeService qrCodeService;
@@ -24,8 +24,8 @@ public class EntryRequestHandlerImpl implements EntryRequestHandler {
 
 
     @Autowired
-    public EntryRequestHandlerImpl(VisitorSender visitorSender, QRCodeService qrCodeService,
-                                   VisitorDataRepository visitorDataRepository) {
+    public EntryReqHandlerImpl(VisitorSender visitorSender, QRCodeService qrCodeService,
+                               VisitorDataRepository visitorDataRepository) {
         this.visitorSender = visitorSender;
         this.qrCodeService = qrCodeService;
         this.visitorDataRepository = visitorDataRepository;
@@ -44,6 +44,9 @@ public class EntryRequestHandlerImpl implements EntryRequestHandler {
             // Add QR data
             addQRCode(validationDTO, gateCtrlDTO);
         } else {
+            gateCtrlDTO.setGateId(validationDTO.getGateId());
+            gateCtrlDTO.setLotId(validationDTO.getLotId());
+            gateCtrlDTO.setIsEntry(validationDTO.isEntry());
             gateCtrlDTO.setIsValid(false);
         }
         visitorSender.sendEntryResponseToGate(gateCtrlDTO);

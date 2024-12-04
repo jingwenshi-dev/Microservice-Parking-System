@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-public class ExitRequestHandlerImpl implements ExitRequestHandler {
+public class ExitReqHandlerImpl implements ExitRequestHandler {
 
     private final VisitorSender visitorSender;
     private final VisitorDataRepository visitorDataRepository;
@@ -23,7 +23,7 @@ public class ExitRequestHandlerImpl implements ExitRequestHandler {
     private static final String CREDIT_CARD_STRATEGY = "creditCard";
 
     @Autowired
-    public ExitRequestHandlerImpl(VisitorSender visitorSender, VisitorDataRepository visitorDataRepository) {
+    public ExitReqHandlerImpl(VisitorSender visitorSender, VisitorDataRepository visitorDataRepository) {
         this.visitorSender = visitorSender;
         this.visitorDataRepository = visitorDataRepository;
     }
