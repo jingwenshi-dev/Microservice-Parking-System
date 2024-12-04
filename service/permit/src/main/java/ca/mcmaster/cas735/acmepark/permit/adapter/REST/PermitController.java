@@ -22,11 +22,11 @@ public class PermitController {
     @PostMapping("/apply")
     public ResponseEntity<String> applyForPermit(@RequestBody PermitCreatedDTO permitDTO) {
         try {
-        //Apply for the permit
+            //Apply for the permit
             permitApplicationPort.applyForPermit(permitDTO);
             return new ResponseEntity<>("Permit application initiated. Payment processing in progress.",
                     HttpStatus.ACCEPTED);
-        //Return the result to the user
+            //Return the result to the user
         } catch (Exception e) {
             // Handle error in permit application initiation
             return new ResponseEntity<>("Failed to initiate permit application: " + e.getMessage(),
@@ -36,16 +36,12 @@ public class PermitController {
 
     @PutMapping("/renew")
     public EntityModel<ResponseEntity<String>> renewPermit(@RequestBody PermitRenewalDTO renewalDTO) {
-
         System.out.println("Received payload: " + renewalDTO);
-
-            //Renewal for the permit
-            permitApplicationPort.renewPermit(renewalDTO);
-            return asEntity(
-                    new ResponseEntity<>("Permit renewal application initiated. Payment processing in progress.",
-                            HttpStatus.ACCEPTED));
-
-
+        //Renewal for the permit
+        permitApplicationPort.renewPermit(renewalDTO);
+        return asEntity(
+                new ResponseEntity<>("Permit renewal application initiated. Payment processing in progress.",
+                        HttpStatus.ACCEPTED));
     }
 
     @GetMapping("/valid-permits")
