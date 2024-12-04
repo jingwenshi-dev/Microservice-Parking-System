@@ -30,22 +30,21 @@ public class AMQPVisitorSender implements VisitorSender {
     private String paymentRequestExchange;
 
 
-    // 发送进入
+
     @Override
     public void sendEntryResponseToGate(GateCtrlDTO gateCtrlDTO) {
         log.debug("Sending gate entry response message to {}: {}", visitorToGateExchange, gateCtrlDTO);
         rabbitTemplate.convertAndSend(visitorToGateExchange, "*", translate(gateCtrlDTO));
     }
 
-    // 发送离开请求给gate service
-    // 从监听访客请求到该方法，数据均为改变，相当于直接透传服务
+    // Send a leave request to the gate service
     @Override
     public void sendExitResponseToGate(GateCtrlDTO gateCtrlDTO) {
         log.debug("Sending exit request message to {}: {}", visitorToGateExchange, gateCtrlDTO);
         rabbitTemplate.convertAndSend(visitorToGateExchange, "*", translate(gateCtrlDTO));
     }
 
-    // 请求交易，进行扣费
+    // Request a transaction for chargeback
     @Override
     public void sendExitRequestToPayment(PaymentRequest paymentRequest) {
         log.debug("Sending exit  response message to {}: {}", paymentRequestExchange, paymentRequest);
@@ -55,12 +54,10 @@ public class AMQPVisitorSender implements VisitorSender {
     private String translate(Object obj) {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            // Register the JavaTimeModule to handle LocalDateTime
             mapper.registerModule(new JavaTimeModule());
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             return mapper.writeValueAsString(obj);
         } catch (Exception e) {
-            // 如果转换失败，抛出运行时异常
             log.error("Object translation error:", e);
             throw new RuntimeException(e);
         }

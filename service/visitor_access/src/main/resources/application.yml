@@ -11,8 +11,8 @@ spring:
     password: root
     driverClassName: org.h2.Driver
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect # 指定 H2 数据库所需的 Hibernate 方言
-    defer-datasource-initialization: true # 延迟数据源初始化，确保数据库在 JPA 初始化之前已经设置好
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
     hibernate:
       ddl-auto: create-drop
 
@@ -21,30 +21,29 @@ spring:
       mode: always
       data-locations: classpath:data.sql
 
-# 日志级别配置
+
 logging:
   level:
     ca.mcmaster.cas735.acmepark.visitor_access:
-      adapter: DEBUG # 适配器层的日志级别为 INFO，可以设置为 DEBUG 以获得更细粒度的日志跟踪
-      application: DEBUG # 应用层的日志级别为 INFO，可以设置为 DEBUG 以便调试
+      adapter: DEBUG
+      application: DEBUG
       org.springframework.boot.sql.init: DEBUG
 
-# 自定义应用配置
+
 app:
   custom:
     messaging:
-      gate-to-visitor-exchange: gateToVisitorExchange # gate -> visitor
-      visitor-to-gate-exchange: toGateResultExchange  # visitor -> gate
-      payment-request-exchange: paymentRequestExchange #用了 visitor ->payment 退出，扣费 监听的接口
-      payment-response-visitor-exchange: paymentResultVisitorExchange #用了 payment ->visitor 返回扣费结果
+      gate-to-visitor-exchange: gateToVisitorExchange
+      visitor-to-gate-exchange: toGateResultExchange
+      payment-request-exchange: paymentRequestExchange
+      payment-response-visitor-exchange: paymentResultVisitorExchange
 
 eureka:
   client:
     healthcheck:
       enabled: true
 
-# 应用程序信息配置，用于提供项目描述和版本
 info:
   application:
-    description: '@project.description@'  # 项目描述，通常从项目的构建工具（如 Maven）中注入
-    version:     '@project.version@'  # 项目版本，同样从项目构建工具中注入
+    description: '@project.description@'
+    version:     '@project.version@'

@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface TicketDataRepo extends JpaRepository<ParkingViolation, UUID>{
+
     List<ParkingViolation> findAllByLicensePlate(String licensePlate);
+
     void deleteAllByLicensePlate(String licensePlate);
 }

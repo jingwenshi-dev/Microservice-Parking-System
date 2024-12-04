@@ -8,7 +8,10 @@ import ca.mcmaster.cas735.acmepark.payment.dto.ApplyVoucherDTO;
 import ca.mcmaster.cas735.acmepark.payment.dto.VoucherDTO;
 
 public interface VoucherManager {
+
     boolean hasValidActiveVoucher(String licencePlate);
+
     String createVoucher(VoucherDTO voucherCode) throws AlreadyExistingException, InvalidDateException;
+
     String applyVoucher(ApplyVoucherDTO voucherCode) throws NotFoundException, VoucherExpiredException;
 }

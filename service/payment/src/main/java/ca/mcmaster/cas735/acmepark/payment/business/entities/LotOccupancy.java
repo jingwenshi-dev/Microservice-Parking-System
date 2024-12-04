@@ -11,11 +11,12 @@ import java.time.LocalDateTime;
 @Table(name = "LOT_OCCUPANCY")
 public class LotOccupancy {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)  // 自增主键
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long lotId;
 
     private LocalDateTime timestamp;
+
     private int currentOccupancy;
 }

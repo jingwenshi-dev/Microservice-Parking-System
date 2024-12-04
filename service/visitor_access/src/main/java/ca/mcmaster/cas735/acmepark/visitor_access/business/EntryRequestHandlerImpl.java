@@ -34,13 +34,13 @@ public class EntryRequestHandlerImpl implements EntryRequestHandler {
     public void handleEntry(ValidationDTO validationDTO) {
         GateCtrlDTO gateCtrlDTO = new GateCtrlDTO();
         if (validationDTO != null && validationDTO.isVisitorAllowed()) {
-            //写入数据库进入时间。
+            // Write database entry time.
             setVisitorToRepository(validationDTO);
             gateCtrlDTO.setIsValid(true);
             gateCtrlDTO.setGateId(validationDTO.getGateId());
             gateCtrlDTO.setLotId(validationDTO.getLotId());
             gateCtrlDTO.setIsEntry(validationDTO.isEntry());
-            // 添加QR数据
+            // Add QR data
             addQRCode(validationDTO, gateCtrlDTO);
         } else {
             gateCtrlDTO.setIsValid(false);
@@ -52,15 +52,16 @@ public class EntryRequestHandlerImpl implements EntryRequestHandler {
         try {
             Visitor newVisitor = new Visitor();
             newVisitor.setLicensePlate(validationDTO.getLicensePlate());
-            newVisitor.setEntryTime(LocalDateTime.now()); // 设置进入时间
-            visitorDataRepository.save(newVisitor); // 保存新的访客
-            log.info("New visitor created with LicensePlate: {}, EntryTime: {}", newVisitor.getLicensePlate(), newVisitor.getEntryTime());
+            newVisitor.setEntryTime(LocalDateTime.now());
+            visitorDataRepository.save(newVisitor);
+            log.info("New visitor created with LicensePlate: {}, EntryTime: {}",
+                    newVisitor.getLicensePlate(), newVisitor.getEntryTime());
         } catch (Exception ex) {
             log.error("add new user error:", ex);
         }
     }
 
-    // 将原始 JSON 数据转换为 QR 码字符串
+    // Convert raw JSON data to QR code strings
     private void addQRCode(ValidationDTO validationDTO, GateCtrlDTO gateCtrlDTO) {
         try {
             if (validationDTO != null &&

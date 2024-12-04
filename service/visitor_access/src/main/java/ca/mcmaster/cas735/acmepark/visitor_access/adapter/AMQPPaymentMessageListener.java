@@ -11,13 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * 监听用户相关请求的消息
+ * Listening for messages related to user requests
  */
 @Service
 @Slf4j
 public class AMQPPaymentMessageListener {
 
-    // 注入 VisitorService 以处理业务逻辑
+    // Inject VisitorService to handle business logic
     private final PaymentInteractionHandler paymentInteractionService;
 
     @Autowired
@@ -25,16 +25,14 @@ public class AMQPPaymentMessageListener {
         this.paymentInteractionService = paymentInteractionService;
     }
 
-
-    // 监听交易返回的数据
+    // Listen to the data returned by the transaction
     @RabbitListener(bindings = @QueueBinding(
-            value = @Queue(value = "PaymentToVisitorExitQueue", durable = "true"), // 定义队列名称为 visitorExitQueue，并设置为持久化
-            exchange = @Exchange(value = "${app.custom.messaging.payment-response-visitor-exchange}", ignoreDeclarationExceptions = "true", type = "topic"), // 绑定到交换机，使用配置中的名称，类型为 topic
-            key = "*")) // 路由键设置为 "*"，表示匹配任意路由键
+            value = @Queue(value = "PaymentToVisitorExitQueue", durable = "true"),
+            exchange = @Exchange(value = "${app.custom.messaging.payment-response-visitor-exchange}", ignoreDeclarationExceptions = "true", type = "topic"),
+            key = "*"))
     public void listenPaymentForVisitorExit(String data) {
-        log.debug("接收到交易返回的结果: {}", data);
-        paymentInteractionService.handlePaymentResult(data); // 调用业务逻辑处理访客退出
+        log.debug("Receive the results returned by the transaction.{}", data);
+        paymentInteractionService.handlePaymentResult(data);
     }
-
 
 }

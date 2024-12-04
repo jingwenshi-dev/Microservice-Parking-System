@@ -27,10 +27,11 @@ public class TotalFeeCalculatorImpl implements TotalFeeCalculator {
 
     @Override
     public BigDecimal calculateTotalFee(PaymentRequest paymentRequest) {
-        // 根据用户类型选择支付计算器
-        PaymentCalculatorPort paymentCalculator = paymentCalculatorFactory.getPaymentCalculator(paymentRequest.getUserType());
+        // Choose a payment calculator based on user type
+        PaymentCalculatorPort paymentCalculator =
+                paymentCalculatorFactory.getPaymentCalculator(paymentRequest.getUserType());
 
-        // 计算停车费用
+        // Calculating Parking Fees
         BigDecimal amount = paymentCalculator.calculateParkingFee(paymentRequest);
 
         // Send request for violation inquiry and calculate total fines
@@ -43,8 +44,7 @@ public class TotalFeeCalculatorImpl implements TotalFeeCalculator {
             }
         }
 
-
-        // 计算总费用
+        // Calculate the total cost
         return amount.add(totalFines);
     }
 }

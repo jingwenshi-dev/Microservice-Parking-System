@@ -20,7 +20,8 @@ public class HourlyPaymentCalculator implements PaymentCalculatorPort {
         Duration duration = Duration.between(entryTime, exitTime);
         long hours = duration.toHours();
         if (duration.toMinutes() % 60 > 0) {
-            hours += 1; // 按整小时计算，即使多出几分钟
+            // On a full hour basis, even if a few extra minutes
+            hours += 1;
         }
         return hourlyRate.multiply(BigDecimal.valueOf(hours));
     }

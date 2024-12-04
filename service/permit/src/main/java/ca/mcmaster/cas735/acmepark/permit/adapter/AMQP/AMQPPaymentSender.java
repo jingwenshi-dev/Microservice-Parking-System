@@ -14,23 +14,17 @@ public class AMQPPaymentSender implements PaymentSenderPort {
     @Autowired
     public AMQPPaymentSender(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
-
-
     }
 
     @Value("${app.custom.messaging.payment-request-exchange}")
     private String paymentRequestExchange;
 
-
     @Override
     public void initiatePayment(PermitCreatedDTO permitDTO) {
-
         rabbitTemplate.convertAndSend(
                 paymentRequestExchange,
                 "*",
                 permitDTO
         );
     }
-
-
 }

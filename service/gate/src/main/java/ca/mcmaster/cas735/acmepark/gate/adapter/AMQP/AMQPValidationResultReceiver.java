@@ -24,7 +24,7 @@ public class AMQPValidationResultReceiver {
     }
 
     @RabbitListener(
-            bindings = @QueueBinding(value = @Queue(value = "validation.result.queue", durable = "false"),
+            bindings = @QueueBinding(value = @Queue(value = "validation.result.queue", durable = "true"),
                     exchange = @Exchange(value = "${app.custom.messaging.response.exchange}", ignoreDeclarationExceptions = "true", type = "topic"),
                     key = "*")
     )

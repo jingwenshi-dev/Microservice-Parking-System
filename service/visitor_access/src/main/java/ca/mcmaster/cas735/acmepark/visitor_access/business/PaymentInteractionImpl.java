@@ -25,14 +25,14 @@ public class PaymentInteractionImpl implements PaymentInteractionHandler {
     }
 
 
-    // 处理支付结果
+    // Processing of payment results
     @Override
     public void handlePaymentResult(String data) {
         try {
             PaymentRequest paymentRequest= translate(data);
             GateCtrlDTO gateCtrlDTO = new GateCtrlDTO();
             paymentResultToGateCtrlDTO(paymentRequest, gateCtrlDTO);
-            visitorSender.sendExitResponseToGate(gateCtrlDTO); // 通过 VisitorSender 发送离开请求
+            visitorSender.sendExitResponseToGate(gateCtrlDTO);
         } catch (Exception e) {
             log.error("handle visitor exit error:", e);
         }

@@ -25,24 +25,16 @@ public class AMQPTicketDeleteSender implements TicketDeleteSender {
     @Override
     public void sendTicketDelete(PaymentRequest paymentRequest) {
         try {
-            // 序列化 PaymentRequest 为 JSON 字符串
             String message =translate(paymentRequest);
-
-            // 发送消息到指定队列
             rabbitTemplate.convertAndSend(ticketDeleteQueue, message);
-
-            // 日志记录
             log.debug("Ticket delete message sent to queue: " + ticketDeleteQueue);
-
         } catch (Exception e) {
             throw new RuntimeException("Failed to send ticket delete message", e);
         }
     }
 
-    // 将对象转换为 JSON 字符串
     private String translate(Object obj) {
         ObjectMapper mapper = new ObjectMapper();
-        // Register the JavaTimeModule to handle LocalDateTime
         mapper.registerModule(new JavaTimeModule());
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         try {

@@ -27,32 +27,31 @@ public class PaymentService implements PaymentServicePort {
         this.paymentStrategyFactory = paymentStrategyFactory;
         this.totalFeeCalculator = totalFeeCalculator;
         this.manager = manager;
-
     }
 
     @Override
     public boolean processPayment(PaymentRequest paymentRequest) {
         try {
-            // 有代金券，直接支付成功
+            // There are vouchers, direct payment success
             if (manager.hasValidActiveVoucher(paymentRequest.getLicensePlate())) {
                 return true;
             }
-            //计算价格
+            // Calculate price
             BigDecimal amount = totalFeeCalculator.calculateTotalFee(paymentRequest);
 
-            // 根据支付方式选择支付策略
+            // Choose a payment strategy based on the payment method
             PaymentStrategy paymentStrategy = paymentStrategyFactory.getPaymentStrategy(paymentRequest.getPaymentMethod());
 
-            // 执行支付
+            // Implementation payments
             boolean paymentSuccess = paymentStrategy.pay(amount);
 
             if (paymentSuccess) {
-                log.info("Payment of {} for license plate {} has been successfully processed.", amount, paymentRequest.getLicensePlate());
+                log.info("Payment of {} for license plate {} has been successfully processed.",
+                        amount, paymentRequest.getLicensePlate());
             } else {
                 log.warn("Payment of {} for license plate {} failed to process.", amount, paymentRequest.getLicensePlate());
             }
             return paymentSuccess;
-
         } catch (Exception e) {
             log.error("Error processing payment for license plate {}: {}", paymentRequest.getLicensePlate(), e.getMessage());
             return false;

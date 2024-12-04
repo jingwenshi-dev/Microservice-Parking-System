@@ -28,11 +28,11 @@ public class DefaultPaymentProcessor implements PaymentProcessor {
 
     @Override
     public void processPayment(PaymentRequest paymentRequest) {
-        // 进行扣费获取支付结果
+        // Perform a chargeback to get the payment result
         boolean result = paymentService.processPayment(paymentRequest);
         paymentRequest.setResult(result);
 
-        // 根据 userType 决定支付结果发送的目标服务
+        // Determines the target service to which the payment result is sent based on the userType.
         switch (paymentRequest.getUserType().toLowerCase()) {
             case "visitor":
                 log.info("Sending payment result to Visitor service for license plate: {}", paymentRequest.getLicensePlate());

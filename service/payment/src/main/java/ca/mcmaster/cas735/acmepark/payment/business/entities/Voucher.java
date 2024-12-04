@@ -15,5 +15,6 @@ public class Voucher {
     private String voucher;
 
     private String validFrom;
+
     private String validUntil;
 }

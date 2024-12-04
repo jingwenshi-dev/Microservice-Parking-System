@@ -16,10 +16,14 @@ public class User {
     private int userId;
 
     private String firstName;
+
     private String lastName;
+
     private String email;
+
     @Enumerated(EnumType.STRING)
     private UserType userType;
+
     private BigDecimal totalOutstandingAmount;
 
     public enum UserType {

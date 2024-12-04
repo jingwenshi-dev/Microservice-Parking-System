@@ -15,7 +15,8 @@ import java.util.List;
 public class HTTPViolationInquirySender implements ViolationInquirySender {
 
     private final RestTemplate restTemplate;
-    @Value("${app.custom.messaging.HTTP.violation}") String violationServiceUrl;
+    @Value("${app.custom.messaging.HTTP.violation}")
+    String violationServiceUrl;
 
     public HTTPViolationInquirySender(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -33,7 +34,9 @@ public class HTTPViolationInquirySender implements ViolationInquirySender {
 
             TicketDTO[] responseArray = restTemplate.getForObject(url, TicketDTO[].class);
 
-            if (responseArray != null) {return Arrays.asList(responseArray);}
+            if (responseArray != null) {
+                return Arrays.asList(responseArray);
+            }
             return Collections.emptyList();
 
         } catch (Exception e) {

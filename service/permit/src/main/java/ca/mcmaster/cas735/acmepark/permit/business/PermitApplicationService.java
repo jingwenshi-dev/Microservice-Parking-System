@@ -24,9 +24,7 @@ public class PermitApplicationService implements PaymentListenerPort {
     private final UserRepository userRepository;
 
     @Autowired
-    public PermitApplicationService(AMQPPaymentSender amqpPaymentSender,
-                                    PermitRepository permitRepository,
-                                    UserRepository userRepository) {
+    public PermitApplicationService(AMQPPaymentSender amqpPaymentSender, PermitRepository permitRepository, UserRepository userRepository) {
         this.amqpPaymentSender = amqpPaymentSender;
         this.permitRepository = permitRepository;
         this.userRepository = userRepository;
@@ -48,13 +46,14 @@ public class PermitApplicationService implements PaymentListenerPort {
         // Send to payment service
         initiatePayment(permitDTO);
 
-        System.out.println("Permit application submitted and payment initiated for User ID: " + permitDTO.getUserId());
+        System.out.println("Permit application submitted and payment initiated for User ID: "
+                + permitDTO.getUserId());
     }
 
     public void renewPermit(PermitRenewalDTO renewalDTO) {
         //Retrieve the permit
-        Permit permit = permitRepository.findById(renewalDTO.getPermitId())
-                .orElseThrow(() -> new NotFoundException("Permit with ID " + renewalDTO.getPermitId() + " not found"));
+        Permit permit = permitRepository.findById(renewalDTO.getPermitId()).orElseThrow(
+                () -> new NotFoundException("Permit with ID " + renewalDTO.getPermitId() + " not found"));
 
         // Prepare for payment
         PermitCreatedDTO paymentDTO = new PermitCreatedDTO();
@@ -83,10 +82,8 @@ public class PermitApplicationService implements PaymentListenerPort {
         List<Permit> allPermits = permitRepository.findAll();
         LocalDateTime today = LocalDateTime.now();
 
-        long validPermitCount = allPermits.stream()
-                .filter(permit -> permit.getValidFrom() != null && permit.getValidUntil() != null)
-                .filter(permit -> !permit.getValidFrom().isAfter(today) && !permit.getValidUntil().isBefore(today))
-                .count();
+        long validPermitCount = allPermits.stream().filter(permit -> permit.getValidFrom() != null
+                && permit.getValidUntil() != null).filter(permit -> !permit.getValidFrom().isAfter(today) && !permit.getValidUntil().isBefore(today)).count();
 
         return (int) validPermitCount;
     }
@@ -119,22 +116,14 @@ public class PermitApplicationService implements PaymentListenerPort {
 
     //method to store permit data
     private void storePermitData(PermitCreatedDTO permitDTO) {
-        User user = userRepository.findById(permitDTO.getUserId())
-                .orElseThrow(() -> new NotFoundException("User with ID " + permitDTO.getUserId() + " not found"));
+        User user = userRepository.findById(permitDTO.getUserId()).orElseThrow(() -> new NotFoundException("User with ID " + permitDTO.getUserId() + " not found"));
         if ("APPLY".equalsIgnoreCase(permitDTO.getPermitType())) {
-            Permit permit = new Permit(
-                    permitDTO.getTransponderNumber(),
-                    permitDTO.getValidFrom(),
-                    permitDTO.getValidUntil(),
-                    user,
-                    permitDTO.getLotId(),
-                    permitDTO.getLicensePlate());
+            Permit permit = new Permit(permitDTO.getTransponderNumber(), permitDTO.getValidFrom(), permitDTO.getValidUntil(), user, permitDTO.getLotId(), permitDTO.getLicensePlate());
             permitRepository.save(permit);
             System.out.println("Permit save for Permit id: " + permit.getPermitId());
         } else if ("RENEW".equalsIgnoreCase(permitDTO.getPermitType())) {
             // Handle RENEW permit type
-            Permit existingPermit = permitRepository.findByLicensePlate(permitDTO.getLicensePlate())
-                    .orElseThrow(() -> new NotFoundException("Permit with License Plate " + permitDTO.getLicensePlate() + " not found"));
+            Permit existingPermit = permitRepository.findByLicensePlate(permitDTO.getLicensePlate()).orElseThrow(() -> new NotFoundException("Permit with License Plate " + permitDTO.getLicensePlate() + " not found"));
 
             // Update validFrom and validUntil
             existingPermit.setValidFrom(permitDTO.getValidFrom());

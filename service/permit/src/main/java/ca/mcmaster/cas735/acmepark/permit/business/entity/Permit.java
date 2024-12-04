@@ -17,7 +17,9 @@ public class Permit {
     private int permitId;
 
     private UUID transponderNumber;
+
     private LocalDateTime validFrom;
+
     private LocalDateTime validUntil;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -25,6 +27,7 @@ public class Permit {
     private User user;
 
     private Long lotId;
+
     private String licensePlate;
 
 

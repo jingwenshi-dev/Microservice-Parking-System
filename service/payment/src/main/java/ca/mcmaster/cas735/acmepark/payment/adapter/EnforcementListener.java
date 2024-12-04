@@ -31,7 +31,7 @@ public class EnforcementListener {
         log.debug("Received violation report: {}", data);
         ParkingViolation request = translate(data);
 
-        // 根据请求中的信息创建 ParkingViolation 实体
+        // Create the ParkingViolation entity based on the information in the request
         ParkingViolation violation = new ParkingViolation();
         violation.setLicensePlate(request.getLicensePlate());
         violation.setViolationTime(LocalDateTime.now());
@@ -40,7 +40,7 @@ public class EnforcementListener {
         violation.setOfficerId(request.getOfficerId());
         violation.setLotId(request.getLotId());
 
-        // 保存到数据库中
+        // Save to database
         repository.save(violation);
     }
 

@@ -30,7 +30,6 @@ public class AMQPPaymentSender implements PaymentSender {
 
     @Override
     public void sendPaymentResultToPermit(PaymentRequest paymentRequest) {
-        System.out.println("Sending result to Permit Service"+paymentRequest);
         log.debug("Sending payment result to Permit service: {}", paymentRequest);
         String message = translate(paymentRequest);
         rabbitTemplate.convertAndSend(paymentResultPermitExchange, "*", message);
@@ -43,10 +42,8 @@ public class AMQPPaymentSender implements PaymentSender {
         rabbitTemplate.convertAndSend(paymentResultVisitorExchange, "*", message);
     }
 
-    // 将对象转换为 JSON 字符串
     private String translate(Object obj) {
         ObjectMapper mapper = new ObjectMapper();
-        // Register the JavaTimeModule to handle LocalDateTime
         mapper.registerModule(new JavaTimeModule());
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         try {

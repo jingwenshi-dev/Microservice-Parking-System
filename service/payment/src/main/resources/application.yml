@@ -11,8 +11,8 @@ spring:
     password: root
     driverClassName: org.h2.Driver
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect # 指定 H2 数据库所需的 Hibernate 方言
-    defer-datasource-initialization: true # 延迟数据源初始化，确保数据库在 JPA 初始化之前已经设置好
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
     hibernate:
       ddl-auto: create-drop
 
@@ -23,18 +23,18 @@ spring:
 
 logging.level:
   ca.mcmaster.cas735.tmt.customers:
-    adapter: DEBUG # 适配器层的日志级别为 DEBUG，可以设置为 INFO 以减少日志输出
-    business: DEBUG # 业务层的日志级别为 DEBUG，可以设置为 INFO 以减少日志输出
+    adapter: DEBUG
+    business: DEBUG
 
 app:
   custom:
     messaging:
       HTTP:
         violation: http://violation
-      payment-request-exchange: paymentRequestExchange #payment 监听的接口
-      payment-response-permit-exchange: paymentResultPermitExchange #返回payment result 给permit
-      payment-response-visitor-exchange: paymentResultVisitorExchange #返回payment result visitor
-      add-parking-violation-data: addParkingViolationData # 添加罚单
+      payment-request-exchange: paymentRequestExchange
+      payment-response-permit-exchange: paymentResultPermitExchange
+      payment-response-visitor-exchange: paymentResultVisitorExchange
+      add-parking-violation-data: addParkingViolationData
       ticket-delete-queue: ticket.delete.queue
 
 eureka:

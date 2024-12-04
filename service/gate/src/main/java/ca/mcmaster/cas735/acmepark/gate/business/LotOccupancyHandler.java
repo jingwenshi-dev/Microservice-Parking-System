@@ -26,17 +26,17 @@ public class LotOccupancyHandler implements LotOccupancyPort {
 
     @Override
     public String getOccupancyRate(Long lotId) throws NotFoundException {
-        // 获取最新的占用数据
+        // Get the latest occupancy data
         LotOccupancy lotOccupancy = lotOccupancyDB.findFirstByLotIdOrderByTimestampDesc(lotId)
                 .orElseThrow(() -> new NotFoundException("LotOccupancy not found for lotId: " + lotId));
         int cutrrentOccpuancy =lotOccupancy.getCurrentOccupancy();
 
-        // 获取停车场总车位数
+        // Get the total number of parking spaces in the parking lot
         int totalSpots = parkingLotDB.findByLotId(lotId)
                 .map(ParkingLot::getTotalSpots)
                 .orElseThrow(() -> new NotFoundException("ParkingLot not found for lotId: " + lotId));
 
-        // 返回带有占用率的
+        // Returns the occupancy rate of the
         double occupancyRate = totalSpots > 0
                 ? ((double)cutrrentOccpuancy / (double) totalSpots) * 100
                 : 0.0;
@@ -45,15 +45,17 @@ public class LotOccupancyHandler implements LotOccupancyPort {
 
     @Override
     public String getParkingLotPeakHours(Long lotId) throws NotFoundException {
-        // 从数据库中获取当前停车场的所有占用记录
+        // Get all current parking lot occupancy records from the database
         List<LotOccupancy> occupancies = lotOccupancyDB.findAllByLotIdOrderByTimestampAsc(lotId)
                 .orElseThrow(() -> new NotFoundException("No occupancy data found for lotId:" + lotId));
 
-        // 简化示例：找到最大占用的时间段
+        // Find the maximum occupied time period
         LotOccupancy peakOccupancy = occupancies.stream()
                 .max(Comparator.comparingInt(LotOccupancy::getCurrentOccupancy))
                 .orElseThrow(() -> new NotFoundException("Could not determine peak hours for lotId: " + lotId));
 
-        return String.format("Peak hours: %s with %d vehicles", peakOccupancy.getTimestamp(), peakOccupancy.getCurrentOccupancy());
+        return String.format("Peak hours: %s with %d vehicles",
+                peakOccupancy.getTimestamp(),
+                peakOccupancy.getCurrentOccupancy());
     }
 }

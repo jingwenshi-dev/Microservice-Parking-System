@@ -14,7 +14,6 @@ public class CustomerData {
 
     private int totalFine;
 
-    // ParkingPermits 表的字段
     private String transponderNumber;
 
     private String validFrom;
@@ -27,7 +26,6 @@ public class CustomerData {
 
     private Integer payrollNum;
 
-    // ParkingLots 表的字段
     private int lotId;
 
     private String lotName;
@@ -40,17 +38,14 @@ public class CustomerData {
 
     private String location;
 
-    // Visitor 表的字段
     private String voucher;
 
     private String entryTime;
 
-    // Voucher 表的字段
     private String validFromVoucher;
 
     private String validUntilVoucher;
 
-    // ParkingViolations 表的字段
     private int violationId;
 
     private String violationTime;
@@ -61,7 +56,6 @@ public class CustomerData {
 
     private int officerId;
 
-    // LotOccupancy 表的字段
     private String timestamp;
 
     private int currentOccupancy;

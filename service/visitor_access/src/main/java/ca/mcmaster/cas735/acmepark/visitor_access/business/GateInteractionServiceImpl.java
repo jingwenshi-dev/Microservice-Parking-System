@@ -18,16 +18,16 @@ public class GateInteractionServiceImpl implements GateInteractionHandler {
     private final ExitRequestHandler exitRequestHandler;
 
     @Autowired
-    public GateInteractionServiceImpl(EntryRequestHandler entryRequestHandler, ExitRequestHandler exitRequestHandler) {
+    public GateInteractionServiceImpl(EntryRequestHandler entryRequestHandler,
+                                      ExitRequestHandler exitRequestHandler) {
         this.exitRequestHandler = exitRequestHandler;
         this.entryRequestHandler = entryRequestHandler;
 
     }
 
-    // 处理 Gate 服务的进入响应
+    // Processing Gate Service Entry Responses
     @Override
     public void handleGateRequest(String data) {
-        // 处理进入请求的 Gate 响应逻辑
         log.info("Handling gate entry response: {}", data);
         ValidationDTO validationDTO = translate(data);
         if (validationDTO.isEntry()) {

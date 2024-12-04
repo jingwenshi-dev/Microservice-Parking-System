@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 public class PermitApplicationServiceAdapter implements PermitApplicationPort {
     private final PermitApplicationService permitApplicationService;
 
-
     @Autowired
     public PermitApplicationServiceAdapter(PermitApplicationService permitApplicationService) {
         this.permitApplicationService = permitApplicationService;

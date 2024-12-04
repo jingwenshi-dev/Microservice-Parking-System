@@ -6,6 +6,8 @@ import ca.mcmaster.cas735.acmepark.gate.dto.ParkingLotDTO;
 
 public interface Monitor {
     ParkingLotDTO getParkingLotInfo(Long lotID) throws NotFoundException;
+
     LotOccupancyDTO getParkingLotStatus(Long lotId) throws NotFoundException;
+
     void recordOccupancy(Long lotId, Boolean isEntry) throws NotFoundException, IllegalArgumentException;
 }

@@ -10,12 +10,16 @@ import java.math.BigDecimal;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)  // 自增主键
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
     private String firstName;
+
     private String lastName;
+
     private String email;
+
     private String userType;
+
     private BigDecimal totalFine;
 }

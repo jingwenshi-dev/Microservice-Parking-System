@@ -29,7 +29,6 @@ public class AMQPValidationReqListener {
         System.out.println("Received Plain Text Message: " + data);
         PermitValidationRequestDTO request = translate(data);
         System.out.println("Translated Message: " + request);
-
         try {
             gateInteractionService.validatePermit(request);
         } catch (Exception e) {

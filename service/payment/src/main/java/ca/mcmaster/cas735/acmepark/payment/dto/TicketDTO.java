@@ -14,9 +14,13 @@ public class TicketDTO {
     private UUID ticketNum;
 
     private String licensePlate;
+
     private BigDecimal fineAmount;
+
     private long officerId;
+
     private long lotId;
+
     private LocalDateTime violationTime = LocalDateTime.now();
 
 }

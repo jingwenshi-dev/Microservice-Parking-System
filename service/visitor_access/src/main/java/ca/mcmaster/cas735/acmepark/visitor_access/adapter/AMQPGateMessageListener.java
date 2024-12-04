@@ -10,13 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * 监听 Gate 服务相关响应的消息
+ * Listening for Gate service-related responses
  */
 @Service
 @Slf4j
 public class AMQPGateMessageListener {
 
-    // 注入 VisitorService 以处理业务逻辑
+    // Inject VisitorService to handle business logic
     private final GateInteractionHandler gateInteractionServiceImpl;
 
     @Autowired
@@ -24,15 +24,14 @@ public class AMQPGateMessageListener {
         this.gateInteractionServiceImpl = gateInteractionServiceImpl;
     }
 
-    // 监听 Gate 服务
-    //TODO: durable 设置为true
-    @RabbitListener(bindings = @QueueBinding(value = @Queue(value = "gateEntryResponseQueue", durable = "false"), // 定义队列名称为 gateEntryResponseQueue，并设置为持久化
+    // Listening to the Gate service
+    @RabbitListener(bindings = @QueueBinding(value = @Queue(value = "gateEntryResponseQueue", durable = "true"),
             exchange = @Exchange(value = "${app.custom.messaging.gate-to-visitor-exchange}",
-                    ignoreDeclarationExceptions = "true", type = "topic"), // 绑定到交换机，使用配置中的名称，类型为 topic
-            key = "*")) // 路由键设置为 "*"，表示匹配任意路由键
+                    ignoreDeclarationExceptions = "true", type = "topic"),
+            key = "*"))
     public void listenForGateEntryRequest(String data) {
-        log.debug("接收到 Gate 服务的进入响应: {}", data);
-        // 调用 VisitorService 来处理 Gate 返回的结果
+        log.debug("Receive an incoming response from the Gate service: {}", data);
+        // Call the VisitorService to process the results returned by the Gate.
         gateInteractionServiceImpl.handleGateRequest(data);
     }
 

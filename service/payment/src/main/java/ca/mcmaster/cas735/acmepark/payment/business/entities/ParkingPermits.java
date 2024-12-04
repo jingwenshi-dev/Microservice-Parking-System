@@ -16,8 +16,12 @@ public class ParkingPermits {
     private UUID transponderNumber;
 
     private LocalDate validFrom;
+
     private LocalDate validUntil;
+
     private String licensePlate;
+
     private String paymentMethod;
+
     private String payrollNum;
 }

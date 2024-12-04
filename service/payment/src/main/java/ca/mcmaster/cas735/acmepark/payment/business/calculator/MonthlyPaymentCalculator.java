@@ -12,7 +12,7 @@ public class MonthlyPaymentCalculator implements PaymentCalculatorPort {
 
     @Override
     public BigDecimal calculateParkingFee(PaymentRequest paymentRequest) {
-        // 按月计算，忽略具体进出时间
+        // Calculated on a monthly basis, ignoring specific entry and exit times
         return new BigDecimal(30);
     }
 }

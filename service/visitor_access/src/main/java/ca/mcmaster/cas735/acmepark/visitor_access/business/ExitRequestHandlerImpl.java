@@ -29,7 +29,6 @@ public class ExitRequestHandlerImpl implements ExitRequestHandler {
 
     @Override
     public void handleExit(ValidationDTO validationDTO) {
-        // 查数据库，然后获取进入的时间,组装成交易请求
         PaymentRequest paymentRequest = getVisitorFromRepository(validationDTO);
         visitorSender.sendExitRequestToPayment(paymentRequest);
     }
@@ -37,7 +36,7 @@ public class ExitRequestHandlerImpl implements ExitRequestHandler {
     private PaymentRequest getVisitorFromRepository(ValidationDTO validationDTO) {
         PaymentRequest paymentRequest = new PaymentRequest();
 
-        // 根据 licensePlate 查找 Visitor
+        // Find Visitor by licensePlate
         Optional<Visitor> visitorOpt = visitorDataRepository.
                 findFirstByLicensePlateOrderByEntryTimeDesc(validationDTO.getLicensePlate());
 

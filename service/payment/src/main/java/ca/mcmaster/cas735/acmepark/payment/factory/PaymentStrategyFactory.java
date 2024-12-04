@@ -14,15 +14,10 @@ public class PaymentStrategyFactory {
     @Autowired
     public PaymentStrategyFactory(Map<String, PaymentStrategy> paymentStrategies) {
         this.paymentStrategies = paymentStrategies;
-
-        System.out.println("Payment Strategies: " + paymentStrategies);
     }
 
     public PaymentStrategy getPaymentStrategy(String paymentMethod) {
         PaymentStrategy strategy = paymentStrategies.get(paymentMethod + "PaymentStrategy");
-
-        System.out.println("Selected Payment Strategy: " + paymentStrategies);
-
         if (strategy == null) {
             throw new IllegalArgumentException("Invalid payment method: " + paymentMethod);
         }
