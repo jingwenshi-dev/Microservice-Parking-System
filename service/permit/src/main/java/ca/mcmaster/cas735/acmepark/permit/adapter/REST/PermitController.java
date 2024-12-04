@@ -2,7 +2,6 @@ package ca.mcmaster.cas735.acmepark.permit.adapter.REST;
 
 import ca.mcmaster.cas735.acmepark.permit.DTO.PermitCreatedDTO;
 import ca.mcmaster.cas735.acmepark.permit.DTO.PermitRenewalDTO;
-import org.springframework.hateoas.EntityModel;
 import ca.mcmaster.cas735.acmepark.permit.port.PermitApplicationPort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,27 +34,23 @@ public class PermitController {
     }
 
     @PutMapping("/renew")
-    public EntityModel<ResponseEntity<String>> renewPermit(@RequestBody PermitRenewalDTO renewalDTO) {
+    public ResponseEntity<String> renewPermit(@RequestBody PermitRenewalDTO renewalDTO) {
         System.out.println("Received payload: " + renewalDTO);
         //Renewal for the permit
         permitApplicationPort.renewPermit(renewalDTO);
-        return asEntity(
-                new ResponseEntity<>("Permit renewal application initiated. Payment processing in progress.",
-                        HttpStatus.ACCEPTED));
+        return new ResponseEntity<>("Permit renewal application initiated. Payment processing in progress.",
+                HttpStatus.ACCEPTED);
     }
 
     @GetMapping("/valid-permits")
-    public ResponseEntity<Integer> getValidPermitCount() {
+    public ResponseEntity<String> getValidPermitCount() {
         try {
             int validPermitCount = permitApplicationPort.getValidPermitCount();
-            return new ResponseEntity<>(validPermitCount, HttpStatus.OK);
+            String result = "valid Permit Count :" + validPermitCount;
+            return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(0, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("error in validPermitCount", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
-
-    private EntityModel<ResponseEntity<String>> asEntity(ResponseEntity<String> data) {
-        return EntityModel.of(data);
     }
 
 }
