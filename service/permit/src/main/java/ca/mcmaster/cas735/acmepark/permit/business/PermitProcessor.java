@@ -6,7 +6,7 @@ import ca.mcmaster.cas735.acmepark.permit.adapter.AMQP.AMQPPaymentSender;
 import ca.mcmaster.cas735.acmepark.permit.business.entity.Permit;
 import ca.mcmaster.cas735.acmepark.permit.business.entity.User;
 import ca.mcmaster.cas735.acmepark.permit.business.errors.NotFoundException;
-import ca.mcmaster.cas735.acmepark.permit.port.PermitApplicationPort;
+import ca.mcmaster.cas735.acmepark.permit.port.PermitManager;
 import ca.mcmaster.cas735.acmepark.permit.port.PermitDataRepo;
 import ca.mcmaster.cas735.acmepark.permit.port.UserDataRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,20 +18,20 @@ import java.util.UUID;
 
 
 @Service
-public class PermitApplicationService implements PermitApplicationPort {
+public class PermitProcessor implements PermitManager {
     private final AMQPPaymentSender amqpPaymentSender;
     private final PermitDataRepo permitDB;
     private final UserDataRepo userDB;
 
     @Autowired
-    public PermitApplicationService(AMQPPaymentSender amqpPaymentSender, PermitDataRepo permitDB, UserDataRepo userDB) {
+    public PermitProcessor(AMQPPaymentSender amqpPaymentSender, PermitDataRepo permitDB, UserDataRepo userDB) {
         this.amqpPaymentSender = amqpPaymentSender;
         this.permitDB = permitDB;
         this.userDB = userDB;
     }
 
     @Override
-    public void applyForPermit(PermitCreatedDTO permitDTO) {
+    public void applyForPermit(PermitCreatedDTO permitDTO) throws NotFoundException {
         // Logic to generate transponder number
         UUID transponderNumber = UUID.randomUUID();
         permitDTO.setTransponderNumber(transponderNumber);
@@ -52,8 +52,9 @@ public class PermitApplicationService implements PermitApplicationPort {
     }
 
     @Override
-    public void renewPermit(PermitRenewalDTO renewalDTO) {
+    public void renewPermit(PermitRenewalDTO renewalDTO) throws NotFoundException {
         //Retrieve the permit
+        // Do not need to verify the if user exists as the user is already validated at first time purchase.
         Permit permit = permitDB.findById(renewalDTO.getPermitId()).orElseThrow(
                 () -> new NotFoundException("Permit with ID " + renewalDTO.getPermitId() + " not found"));
 
@@ -118,8 +119,10 @@ public class PermitApplicationService implements PermitApplicationPort {
     }
 
     //method to store permit data
-    private void storePermitData(PermitCreatedDTO permitDTO) {
+    private void storePermitData(PermitCreatedDTO permitDTO) throws NotFoundException, IllegalArgumentException {
+        // Should never throw this exception as the user is validated before initiating payment
         User user = userDB.findById(permitDTO.getUserId()).orElseThrow(() -> new NotFoundException("User with ID " + permitDTO.getUserId() + " not found"));
+
         if ("APPLY".equalsIgnoreCase(permitDTO.getPermitType())) {
             Permit permit = new Permit();
             permit.setTransponderNumber(permitDTO.getTransponderNumber());
@@ -128,8 +131,10 @@ public class PermitApplicationService implements PermitApplicationPort {
             permit.setUser(user);
             permit.setLotId(permitDTO.getLotId());
             permit.setLicensePlate(permitDTO.getLicensePlate());
+
             permitDB.save(permit);
             System.out.println("Permit save for Permit id: " + permit.getPermitId());
+
         } else if ("RENEW".equalsIgnoreCase(permitDTO.getPermitType())) {
             // Handle RENEW permit type
             Permit existingPermit = permitDB.findByLicensePlate(permitDTO.getLicensePlate()).orElseThrow(() -> new NotFoundException("Permit with License Plate " + permitDTO.getLicensePlate() + " not found"));
@@ -142,6 +147,7 @@ public class PermitApplicationService implements PermitApplicationPort {
             System.out.println("Permit renewed for Permit ID: " + existingPermit.getPermitId());
 
         } else {
+            // Should never throw this exception as the permit type is set by the application
             throw new IllegalArgumentException("Invalid permit type: " + permitDTO.getPermitType());
         }
     }
