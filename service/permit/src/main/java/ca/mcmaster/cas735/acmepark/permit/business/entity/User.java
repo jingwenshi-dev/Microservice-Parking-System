@@ -1,10 +1,6 @@
 package ca.mcmaster.cas735.acmepark.permit.business.entity;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-
-import java.math.BigDecimal;
 
 @Data
 @Entity
@@ -23,7 +19,6 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private UserType userType;
-
 
     public enum UserType {
         STUDENT,
