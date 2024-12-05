@@ -3,8 +3,15 @@ flowchart LR
     RabbitMQ([fa:fa-server RabbitMQ])
     GateService([fa:fa-cogs Gate Service])
     PermitService([fa:fa-cogs Permit Service])
-    Cassandra([fa:fa-database Cassandra])
-    Transponder --> RabbitMQ --> GateService
-    GateService --> RabbitMQ --> PermitService
-    PermitService --> RabbitMQ --> Transponder
-    PermitService <--> Cassandra
+    VisitorService([fa:fa-cogs Visitor Service])
+    ViolationService([fa:fa-cogs Violation Service])
+    PaymentService([fa:fa-cogs Payment Service])
+
+    H2([fa:fa-database H2])
+
+    Transponder <--> RabbitMQ
+    GateService <--> RabbitMQ
+    PermitService <--> RabbitMQ
+    VisitorService <--> RabbitMQ
+    ViolationService <--> RabbitMQ
+    PaymentService <--> RabbitMQ

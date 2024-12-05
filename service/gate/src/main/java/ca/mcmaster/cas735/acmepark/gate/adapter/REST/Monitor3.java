@@ -26,7 +26,7 @@ public class Monitor3 {
     }
 
     @GetMapping(value = "/lookup")
-    @Operation(description = "Lookup for tickets with a given ticket id and license plate")
+    @Operation(description = "Lookup for parking lot status")
     public EntityModel<LotOccupancyDTO> lookup(@RequestParam Long lotId) throws NotFoundException {
         return asEntity(monitor.getParkingLotStatus(lotId));
     }

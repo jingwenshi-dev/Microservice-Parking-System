@@ -1,23 +1,44 @@
-flowchart LR
+flowchart
 
     AMQPGateController([fa:fa-circle-right AMQP fa:fa-envelope<br> Gate Controller])
     AMQPTransponderReader([fa:fa-circle-right AMQP fa:fa-envelope<br> Transponder Reader])
     AMQPValidationReqSender([fa:fa-circle-right AMQP fa:fa-envelope<br> Validation Req Sender])
     AMQPValidationResultReceiver([fa:fa-circle-right AMQP fa:fa-envelope<br> Validation Result Receiver])
+    Monitor3([fa:fa-circle-right HTTP fa:fa-envelope<br> Monitor3 <br> /verbs/*])
 
     subgraph "<< Gate Service >>"
         TransponderReader("<< InputPort >><br>Transponder Reader")
-        PermitValidationReqReceiver("<< InputPort >><br>Validation Req Receiver")
-        PermitValidationReqSender("<< OutputPort >><br>Validation Req Sender")
+        ValidationReqReceiver("<< InputPort >><br>Validation Req Receiver")
+        ValidationReqSender("<< OutputPort >><br>Validation Req Sender")
         GateController("<< OutputPort >><br>Gate Controller")
         GateReqHandler{{"Gate <br> Request Handler"}}
         GateResultHandler{{"Gate <br> Result Handler"}}
+
+        Monitor("<< Bi-directional Port >><br>Monitor")
+        Dashboard{{"Dashboard"}}
+        ParkingLotDataRepo("<< OutputPort >><br>Parking Lot Data Repo")
+        LotOccupancyDataRepo("<< OutputPort >><br> Lot Occupancy Data Repo")
+
+        LotOccupancyPort("<< InputPort >><br> Lot Occupancy Port")
+        LotOccupancyHandler{{"Lot Occupancy Handler"}}
+
     end
 
-    AMQPTransponderReader -- Transponder ID --> TransponderReader
-    AMQPValidationResultReceiver -- Valid/Invalid --> PermitValidationReqReceiver
-    PermitValidationReqSender -- Transponder ID --> AMQPValidationReqSender
-    GateController -- True/False --> AMQPGateController
+    AMQPTransponderReader -- TransponderDTO --> TransponderReader
+    AMQPValidationResultReceiver -- GateCtrlDTO --> ValidationReqReceiver
+    ValidationReqSender -- TransponderDTO --> AMQPValidationReqSender
+    GateController -- GateCtrlDTO --> AMQPGateController
+    Monitor3 -- Level 3 --> Monitor
+    LotOccupancyPort -- lotId --> LotOccupancyHandler
 
-    TransponderReader -. offered .-> GateReqHandler -. required .-> PermitValidationReqSender
-    PermitValidationReqReceiver -. offered .-> GateResultHandler -. required .-> GateController
+    TransponderReader -. offered .-> GateReqHandler -. required .-> ValidationReqSender
+    ValidationReqReceiver -. offered .-> GateResultHandler -. required .-> GateController
+    GateResultHandler -. required .-> Monitor
+    Monitor -. offered .-> Dashboard -. required .-> ParkingLotDataRepo --> h2
+    Dashboard -. required .-> LotOccupancyPort
+    LotOccupancyHandler -. required .-> LotOccupancyDataRepo
+    LotOccupancyHandler -. required .-> ParkingLotDataRepo
+    Dashboard -. required .-> LotOccupancyDataRepo --> h2
+    AMQPValidationReqSender -. required .-> Monitor
+
+    h2[(\nSQL\n\nH2\nDatabase)]
