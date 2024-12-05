@@ -1,8 +1,8 @@
 -- Insert two sample users
-INSERT INTO Users (first_name, last_name, email, user_type, total_outstanding_amount)
+INSERT INTO Users (first_name, last_name, email, user_type)
 VALUES
-    ('John', 'Doe', 'john.doe@example.com', 'STUDENT', 0.0),
-    ('Jane', 'Smith', 'jane.smith@example.com', 'STAFF', 0.0);
+    ('John', 'Doe', 'john.doe@example.com', 'STUDENT'),
+    ('Jane', 'Smith', 'jane.smith@example.com', 'STAFF');
 
 -- Sample insert into Permit (user_id references the Users table)
 ALTER TABLE Permit ALTER COLUMN permit_id BIGINT AUTO_INCREMENT;
