@@ -2,7 +2,7 @@ package ca.mcmaster.cas735.acmepark.permit.adapter.REST;
 
 import ca.mcmaster.cas735.acmepark.permit.DTO.PermitCreatedDTO;
 import ca.mcmaster.cas735.acmepark.permit.DTO.PermitRenewalDTO;
-import ca.mcmaster.cas735.acmepark.permit.port.PermitApplicationPort;
+import ca.mcmaster.cas735.acmepark.permit.business.PermitApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,23 +11,20 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/permits")
 public class PermitController {
-    private final PermitApplicationPort permitApplicationPort;
+    private final PermitApplicationService permitApplicationService;
 
     @Autowired
-    public PermitController(PermitApplicationPort permitApplicationPort) {
-        this.permitApplicationPort = permitApplicationPort;
+    public PermitController(PermitApplicationService permitApplicationService) {
+        this.permitApplicationService = permitApplicationService;
     }
 
     @PostMapping("/apply")
     public ResponseEntity<String> applyForPermit(@RequestBody PermitCreatedDTO permitDTO) {
         try {
-            //Apply for the permit
-            permitApplicationPort.applyForPermit(permitDTO);
+            permitApplicationService.applyForPermit(permitDTO);
             return new ResponseEntity<>("Permit application initiated. Payment processing in progress.",
                     HttpStatus.ACCEPTED);
-            //Return the result to the user
         } catch (Exception e) {
-            // Handle error in permit application initiation
             return new ResponseEntity<>("Failed to initiate permit application: " + e.getMessage(),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -35,9 +32,7 @@ public class PermitController {
 
     @PutMapping("/renew")
     public ResponseEntity<String> renewPermit(@RequestBody PermitRenewalDTO renewalDTO) {
-        System.out.println("Received payload: " + renewalDTO);
-        //Renewal for the permit
-        permitApplicationPort.renewPermit(renewalDTO);
+        permitApplicationService.renewPermit(renewalDTO);
         return new ResponseEntity<>("Permit renewal application initiated. Payment processing in progress.",
                 HttpStatus.ACCEPTED);
     }
@@ -45,12 +40,10 @@ public class PermitController {
     @GetMapping("/valid-permits")
     public ResponseEntity<String> getValidPermitCount() {
         try {
-            int validPermitCount = permitApplicationPort.getValidPermitCount();
-            String result = "valid Permit Count :" + validPermitCount;
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            int validPermitCount = permitApplicationService.getValidPermitCount();
+            return new ResponseEntity<>("Valid Permit Count: " + validPermitCount, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("error in validPermitCount", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Error in validPermitCount", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
 }

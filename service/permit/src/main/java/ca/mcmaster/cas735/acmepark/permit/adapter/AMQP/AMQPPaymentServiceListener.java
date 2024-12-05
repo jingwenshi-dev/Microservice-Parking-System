@@ -20,7 +20,6 @@ public class AMQPPaymentServiceListener{
         this.permitApplicationService = permitApplicationService;
     }
 
-
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue(value = "payment.success.queue", durable = "true"),
             exchange = @Exchange(value = "${app.custom.messaging.payment-response-permit-exchange}", ignoreDeclarationExceptions = "true", type = "topic"),
@@ -37,9 +36,6 @@ public class AMQPPaymentServiceListener{
             System.err.println("Failed to process payment success event: " + e.getMessage());
         }
     }
-
-
-
 
     private PermitCreatedDTO translate(String raw) {
         ObjectMapper mapper = new ObjectMapper();

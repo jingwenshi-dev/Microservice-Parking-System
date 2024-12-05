@@ -5,7 +5,7 @@ import ca.mcmaster.cas735.acmepark.permit.DTO.PermitValidationResponseDTO;
 
 
 import ca.mcmaster.cas735.acmepark.permit.business.entity.Permit;
-import ca.mcmaster.cas735.acmepark.permit.port.PermitRepository;
+import ca.mcmaster.cas735.acmepark.permit.port.PermitDataRepo;
 import ca.mcmaster.cas735.acmepark.permit.port.PermitValidationResultSender;
 import ca.mcmaster.cas735.acmepark.permit.port.PermitValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,19 +16,19 @@ import java.util.Optional;
 
 @Service
 public class GateInteractionService implements PermitValidator {
-    private final PermitRepository permitRepository;
+    private final PermitDataRepo permitDataRepo;
     private final PermitValidationResultSender permitValidationResultSender;
 
     @Autowired
-    public GateInteractionService(PermitRepository permitRepository, PermitValidationResultSender permitValidationResultSender) {
-        this.permitRepository = permitRepository;
+    public GateInteractionService(PermitDataRepo permitDataRepo, PermitValidationResultSender permitValidationResultSender) {
+        this.permitDataRepo = permitDataRepo;
         this.permitValidationResultSender = permitValidationResultSender;
     }
 
     @Override
     public void validatePermit(PermitValidationRequestDTO requestDTO) {
         // Retrieve the permit based on transponderId and lotId
-        Optional<Permit> permitOptional = permitRepository.findByTransponderNumberAndLotId(
+        Optional<Permit> permitOptional = permitDataRepo.findByTransponderNumberAndLotId(
                 requestDTO.getTransponderId(), requestDTO.getLotId());
 
         // Check if the permit exists.

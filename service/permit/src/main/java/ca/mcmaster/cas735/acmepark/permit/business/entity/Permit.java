@@ -3,7 +3,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 

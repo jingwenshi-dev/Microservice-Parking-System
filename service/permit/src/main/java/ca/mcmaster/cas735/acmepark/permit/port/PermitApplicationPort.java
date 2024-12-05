@@ -7,4 +7,5 @@ public interface PermitApplicationPort {
     void applyForPermit(PermitCreatedDTO permitDTO);
     void renewPermit(PermitRenewalDTO renewalDTO);
     int getValidPermitCount();
+    void processPaymentSuccess(PermitCreatedDTO event);
 }

@@ -6,9 +6,9 @@ import ca.mcmaster.cas735.acmepark.permit.adapter.AMQP.AMQPPaymentSender;
 import ca.mcmaster.cas735.acmepark.permit.business.entity.Permit;
 import ca.mcmaster.cas735.acmepark.permit.business.entity.User;
 import ca.mcmaster.cas735.acmepark.permit.business.errors.NotFoundException;
-import ca.mcmaster.cas735.acmepark.permit.port.PaymentListenerPort;
-import ca.mcmaster.cas735.acmepark.permit.port.PermitRepository;
-import ca.mcmaster.cas735.acmepark.permit.port.UserRepository;
+import ca.mcmaster.cas735.acmepark.permit.port.PermitApplicationPort;
+import ca.mcmaster.cas735.acmepark.permit.port.PermitDataRepo;
+import ca.mcmaster.cas735.acmepark.permit.port.UserDataRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,26 +18,27 @@ import java.util.UUID;
 
 
 @Service
-public class PermitApplicationService implements PaymentListenerPort {
+public class PermitApplicationService implements PermitApplicationPort {
     private final AMQPPaymentSender amqpPaymentSender;
-    private final PermitRepository permitRepository;
-    private final UserRepository userRepository;
+    private final PermitDataRepo permitDB;
+    private final UserDataRepo userDB;
 
     @Autowired
-    public PermitApplicationService(AMQPPaymentSender amqpPaymentSender, PermitRepository permitRepository, UserRepository userRepository) {
+    public PermitApplicationService(AMQPPaymentSender amqpPaymentSender, PermitDataRepo permitDB, UserDataRepo userDB) {
         this.amqpPaymentSender = amqpPaymentSender;
-        this.permitRepository = permitRepository;
-        this.userRepository = userRepository;
+        this.permitDB = permitDB;
+        this.userDB = userDB;
     }
 
+    @Override
     public void applyForPermit(PermitCreatedDTO permitDTO) {
         // Logic to generate transponder number
-        UUID transponderNumber = generateTransponderNumber();
+        UUID transponderNumber = UUID.randomUUID();
         permitDTO.setTransponderNumber(transponderNumber);
         permitDTO.setPermitType("APPLY");
 
         // Fetch the user entity based on the userId from the PermitCreatedDTO
-        User user = userRepository.findByUserId(permitDTO.getUserId())
+        User user = userDB.findByUserId(permitDTO.getUserId())
                 .orElseThrow(() -> new NotFoundException("User with ID " + permitDTO.getUserId() + " not found"));
 
         // Set the userType based on the User entity
@@ -50,9 +51,10 @@ public class PermitApplicationService implements PaymentListenerPort {
                 + permitDTO.getUserId());
     }
 
+    @Override
     public void renewPermit(PermitRenewalDTO renewalDTO) {
         //Retrieve the permit
-        Permit permit = permitRepository.findById(renewalDTO.getPermitId()).orElseThrow(
+        Permit permit = permitDB.findById(renewalDTO.getPermitId()).orElseThrow(
                 () -> new NotFoundException("Permit with ID " + renewalDTO.getPermitId() + " not found"));
 
         // Prepare for payment
@@ -72,20 +74,21 @@ public class PermitApplicationService implements PaymentListenerPort {
         System.out.println("Permit application submitted and payment initiated for User ID: " + paymentDTO.getUserId());
     }
 
-    public void initiatePayment(PermitCreatedDTO permitDTO) {
-        // Logic for initiating the payment (e.g., sending a message to RabbitMQ)
-        amqpPaymentSender.initiatePayment(permitDTO);
-        System.out.println("Payment initiation for Permit ID: " + permitDTO.getUserId());
-    }
-
-    public int countValidPermits() {
-        List<Permit> allPermits = permitRepository.findAll();
+    @Override
+    public int getValidPermitCount() {
+        List<Permit> allPermits = permitDB.findAll();
         LocalDateTime today = LocalDateTime.now();
 
         long validPermitCount = allPermits.stream().filter(permit -> permit.getValidFrom() != null
                 && permit.getValidUntil() != null).filter(permit -> !permit.getValidFrom().isAfter(today) && !permit.getValidUntil().isBefore(today)).count();
 
         return (int) validPermitCount;
+    }
+
+    public void initiatePayment(PermitCreatedDTO permitDTO) {
+        // Logic for initiating the payment (e.g., sending a message to RabbitMQ)
+        amqpPaymentSender.initiatePayment(permitDTO);
+        System.out.println("Payment initiation for Permit ID: " + permitDTO.getUserId());
     }
 
     @Override
@@ -116,9 +119,8 @@ public class PermitApplicationService implements PaymentListenerPort {
 
     //method to store permit data
     private void storePermitData(PermitCreatedDTO permitDTO) {
-        User user = userRepository.findById(permitDTO.getUserId()).orElseThrow(() -> new NotFoundException("User with ID " + permitDTO.getUserId() + " not found"));
+        User user = userDB.findById(permitDTO.getUserId()).orElseThrow(() -> new NotFoundException("User with ID " + permitDTO.getUserId() + " not found"));
         if ("APPLY".equalsIgnoreCase(permitDTO.getPermitType())) {
-            //Permit permit = new Permit(permitDTO.getTransponderNumber(), permitDTO.getValidFrom(), permitDTO.getValidUntil(), user, permitDTO.getLotId(), permitDTO.getLicensePlate());
             Permit permit = new Permit();
             permit.setTransponderNumber(permitDTO.getTransponderNumber());
             permit.setValidFrom(permitDTO.getValidFrom());
@@ -126,27 +128,21 @@ public class PermitApplicationService implements PaymentListenerPort {
             permit.setUser(user);
             permit.setLotId(permitDTO.getLotId());
             permit.setLicensePlate(permitDTO.getLicensePlate());
-            permitRepository.save(permit);
+            permitDB.save(permit);
             System.out.println("Permit save for Permit id: " + permit.getPermitId());
         } else if ("RENEW".equalsIgnoreCase(permitDTO.getPermitType())) {
             // Handle RENEW permit type
-            Permit existingPermit = permitRepository.findByLicensePlate(permitDTO.getLicensePlate()).orElseThrow(() -> new NotFoundException("Permit with License Plate " + permitDTO.getLicensePlate() + " not found"));
+            Permit existingPermit = permitDB.findByLicensePlate(permitDTO.getLicensePlate()).orElseThrow(() -> new NotFoundException("Permit with License Plate " + permitDTO.getLicensePlate() + " not found"));
 
             // Update validFrom and validUntil
             existingPermit.setValidFrom(permitDTO.getValidFrom());
             existingPermit.setValidUntil(permitDTO.getValidUntil());
 
-            permitRepository.save(existingPermit);
+            permitDB.save(existingPermit);
             System.out.println("Permit renewed for Permit ID: " + existingPermit.getPermitId());
 
         } else {
             throw new IllegalArgumentException("Invalid permit type: " + permitDTO.getPermitType());
         }
     }
-
-    private UUID generateTransponderNumber() {
-        // Logic to generate a transponder number
-        return UUID.randomUUID();// Example transponder number
-    }
-
 }
