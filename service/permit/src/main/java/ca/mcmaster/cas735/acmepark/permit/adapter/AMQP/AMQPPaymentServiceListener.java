@@ -14,10 +14,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AMQPPaymentServiceListener{
-    private final PermitProcessor permitApplicationService;
+    private final PermitProcessor permitProcessor;
     @Autowired
-    public AMQPPaymentServiceListener(PermitProcessor permitApplicationService) {
-        this.permitApplicationService = permitApplicationService;
+    public AMQPPaymentServiceListener(PermitProcessor permitProcessor) {
+        this.permitProcessor = permitProcessor;
     }
 
     @RabbitListener(bindings = @QueueBinding(
@@ -30,7 +30,7 @@ public class AMQPPaymentServiceListener{
         PermitCreatedDTO event = translate(data);
         try {
             // Notify the business service to process the payment success event
-            permitApplicationService.processPaymentSuccess(event);
+            permitProcessor.processPaymentSuccess(event);
 
         } catch (Exception e) {
             System.err.println("Failed to process payment success event: " + e.getMessage());
