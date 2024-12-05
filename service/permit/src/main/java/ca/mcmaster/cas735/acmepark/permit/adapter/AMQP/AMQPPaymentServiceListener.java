@@ -1,6 +1,6 @@
 package ca.mcmaster.cas735.acmepark.permit.adapter.AMQP;
 import ca.mcmaster.cas735.acmepark.permit.DTO.PermitCreatedDTO;
-import ca.mcmaster.cas735.acmepark.permit.business.PermitApplicationService;
+import ca.mcmaster.cas735.acmepark.permit.business.PermitProcessor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -14,9 +14,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AMQPPaymentServiceListener{
-    private final PermitApplicationService permitApplicationService;
+    private final PermitProcessor permitApplicationService;
     @Autowired
-    public AMQPPaymentServiceListener(PermitApplicationService permitApplicationService) {
+    public AMQPPaymentServiceListener(PermitProcessor permitApplicationService) {
         this.permitApplicationService = permitApplicationService;
     }
 
