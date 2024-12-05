@@ -162,7 +162,7 @@ class PermitProcessorTests {
         testPermitDTO.setValidUntil(LocalDateTime.now().plusMonths(12));
 
         when(userDataRepo.findById(1)).thenReturn(Optional.of(testUser));
-        when(permitDataRepo.findByTransponderNumber(testPermitDTO.getTransponderNumber())).thenReturn(Optional.of(testPermit));
+        when(permitDataRepo.findByPermitId(testPermitDTO.getPermitId())).thenReturn(Optional.of(testPermit));
 
         // Act
         permitProcessor.processPaymentSuccess(testPermitDTO);
