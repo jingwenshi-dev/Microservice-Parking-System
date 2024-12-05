@@ -14,46 +14,49 @@ import java.math.BigDecimal;
  */
 @Service
 @Slf4j
-public class PaymentService implements PaymentServicePort {
+public class PaymentExecutorImpl implements PaymentExecutor {
 
     private final PaymentStrategyFactory paymentStrategyFactory;
     private final TotalFeeCalculator totalFeeCalculator;
-    private final VoucherManager manager;
+    private final VoucherManager voucherManager;
 
     @Autowired
-    public PaymentService(PaymentStrategyFactory paymentStrategyFactory,
-                          TotalFeeCalculator totalFeeCalculator,
-                          VoucherManager manager) {
+    public PaymentExecutorImpl(PaymentStrategyFactory paymentStrategyFactory,
+                               TotalFeeCalculator totalFeeCalculator,
+                               VoucherManager voucherManager) {
         this.paymentStrategyFactory = paymentStrategyFactory;
         this.totalFeeCalculator = totalFeeCalculator;
-        this.manager = manager;
+        this.voucherManager = voucherManager;
     }
 
     @Override
-    public boolean processPayment(PaymentRequest paymentRequest) {
+    public boolean executePayment(PaymentRequest paymentRequest) {
         try {
-            // There are vouchers, direct payment success
-            if (manager.hasValidActiveVoucher(paymentRequest.getLicensePlate())) {
+            // Check for valid voucher
+            if (voucherManager.hasValidActiveVoucher(paymentRequest.getLicensePlate())) {
                 return true;
             }
-            // Calculate price
+
+            // Calculate total amount
             BigDecimal amount = totalFeeCalculator.calculateTotalFee(paymentRequest);
 
-            // Choose a payment strategy based on the payment method
-            PaymentStrategy paymentStrategy = paymentStrategyFactory.getPaymentStrategy(paymentRequest.getPaymentMethod());
-
-            // Implementation payments
+            // Get and execute payment strategy
+            PaymentStrategy paymentStrategy =
+                    paymentStrategyFactory.getPaymentStrategy(paymentRequest.getPaymentMethod());
             boolean paymentSuccess = paymentStrategy.pay(amount);
 
             if (paymentSuccess) {
                 log.info("Payment of {} for license plate {} has been successfully processed.",
                         amount, paymentRequest.getLicensePlate());
             } else {
-                log.warn("Payment of {} for license plate {} failed to process.", amount, paymentRequest.getLicensePlate());
+                log.warn("Payment of {} for license plate {} failed to process.",
+                        amount, paymentRequest.getLicensePlate());
             }
             return paymentSuccess;
+
         } catch (Exception e) {
-            log.error("Error processing payment for license plate {}: {}", paymentRequest.getLicensePlate(), e.getMessage());
+            log.error("Error processing payment for license plate {}: {}",
+                    paymentRequest.getLicensePlate(), e.getMessage());
             return false;
         }
     }

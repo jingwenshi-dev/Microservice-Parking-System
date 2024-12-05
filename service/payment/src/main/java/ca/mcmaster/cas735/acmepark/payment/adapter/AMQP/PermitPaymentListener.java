@@ -1,7 +1,7 @@
 package ca.mcmaster.cas735.acmepark.payment.adapter.AMQP;
 
 import ca.mcmaster.cas735.acmepark.payment.dto.PaymentRequest;
-import ca.mcmaster.cas735.acmepark.payment.ports.provided.PaymentProcessor;
+import ca.mcmaster.cas735.acmepark.payment.ports.provided.PaymentHandler;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper; // 用于将 JSON 字符串与 Java 对象之间的转换
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -18,10 +18,10 @@ import org.springframework.stereotype.Service; // 将该类标记为 Spring 服�
 public class PermitPaymentListener {
 
     // For payment logic processing
-    private final PaymentProcessor paymentProcessor;
+    private final PaymentHandler paymentProcessor;
 
     @Autowired
-    public PermitPaymentListener(PaymentProcessor paymentProcessor) {
+    public PermitPaymentListener(PaymentHandler paymentProcessor) {
         this.paymentProcessor = paymentProcessor;
     }
 
@@ -33,7 +33,7 @@ public class PermitPaymentListener {
         PaymentRequest paymentRequest = translate(data);
 
         // Processing of payment requests
-        paymentProcessor.processPayment(paymentRequest);
+        paymentProcessor.handlePayment(paymentRequest);
     }
 
     // 将接收到的原始 JSON 字符串转换为 PaymentRequest 对象
