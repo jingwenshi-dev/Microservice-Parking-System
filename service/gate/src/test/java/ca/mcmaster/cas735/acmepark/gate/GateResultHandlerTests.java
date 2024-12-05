@@ -1,9 +1,7 @@
 package ca.mcmaster.cas735.acmepark.gate;
 
 import ca.mcmaster.cas735.acmepark.gate.business.Dashboard;
-import ca.mcmaster.cas735.acmepark.gate.business.GateReqHandler;
 import ca.mcmaster.cas735.acmepark.gate.business.GateResultHandler;
-import ca.mcmaster.cas735.acmepark.gate.business.LotOccupancyHandler;
 import ca.mcmaster.cas735.acmepark.gate.business.entities.LotOccupancy;
 import ca.mcmaster.cas735.acmepark.gate.business.errors.NotFoundException;
 import ca.mcmaster.cas735.acmepark.gate.dto.GateCtrlDTO;
@@ -46,24 +44,29 @@ class GateResultHandlerTests {
         gateResultHandler = new GateResultHandler(gateController, dashboard);
     }
 
-    /**
-     * Verifies that the `GateResultHandler` class correctly sends a valid gate control result exactly once.
-     * Verifies that the occurrence of the current occupancy is recorded exactly once by `monitor`.
-     */
+    private GateCtrlDTO createTestGateCtrlDTO(Long lotId, boolean isEntry) {
+        GateCtrlDTO gateCtrl = new GateCtrlDTO();
+        gateCtrl.setGateId("G1");
+        gateCtrl.setLotId(lotId);
+        gateCtrl.setIsValid(true);
+        gateCtrl.setIsEntry(isEntry);
+        gateCtrl.setQrCode("Some QR Code");
+        return gateCtrl;
+    }
+
+    private LotOccupancy createTestLotOccupancy(int currentOccupancy) {
+        LotOccupancy occupancy = new LotOccupancy();
+        occupancy.setLotId(1L);
+        occupancy.setCurrentOccupancy(currentOccupancy);
+        occupancy.setTimestamp(LocalDateTime.now());
+        return occupancy;
+    }
+
     @Test
     void testReceiveValidResult() throws NotFoundException {
         // Arrange
-        GateCtrlDTO gateCtrl = new GateCtrlDTO();
-        gateCtrl.setGateId("G1");
-        gateCtrl.setLotId(1L);
-        gateCtrl.setIsValid(true);
-        gateCtrl.setIsEntry(true);
-        gateCtrl.setQrCode("Some QR Code");
-
-        LotOccupancy occupancy = new LotOccupancy();
-        occupancy.setLotId(1L);
-        occupancy.setCurrentOccupancy(50);
-        occupancy.setTimestamp(LocalDateTime.now());
+        GateCtrlDTO gateCtrl = createTestGateCtrlDTO(1L, true);
+        LotOccupancy occupancy = createTestLotOccupancy(50);
 
         when(lotOccupancyDB.findFirstByLotIdOrderByTimestampDesc(1L))
                 .thenReturn(Optional.of(occupancy));
@@ -78,17 +81,10 @@ class GateResultHandlerTests {
         verify(lotOccupancyDB, times(1)).save(any(LotOccupancy.class));
     }
 
-    /**
-     * Verifies that the `GateResultHandler` class can handle a gate control with invalid parking lot id.
-     */
     @Test
     void testReceiveInvalidLotId() {
         // Arrange
-        GateCtrlDTO gateCtrl = new GateCtrlDTO();
-        gateCtrl.setGateId("G1");
-        gateCtrl.setLotId(999L);
-        gateCtrl.setIsValid(true);
-        gateCtrl.setIsEntry(true);
+        GateCtrlDTO gateCtrl = createTestGateCtrlDTO(999L, true);
 
         when(lotOccupancyDB.findFirstByLotIdOrderByTimestampDesc(999L)).thenReturn(Optional.empty());
 
@@ -96,23 +92,11 @@ class GateResultHandlerTests {
         assertThrows(NotFoundException.class, () -> gateResultHandler.receive(gateCtrl));
     }
 
-    /**
-     * Verifies that the `GateResultHandler` class can handle a gate control result with invalid exit.
-     */
     @Test
     void testReceiveInvalidExit() {
         // Arrange
-        GateCtrlDTO gateCtrl = new GateCtrlDTO();
-        gateCtrl.setGateId("G1");
-        gateCtrl.setLotId(1L);
-        gateCtrl.setIsValid(true);
-        gateCtrl.setIsEntry(false);
-        gateCtrl.setQrCode("Some QR Code");
-
-        LotOccupancy occupancy = new LotOccupancy();
-        occupancy.setLotId(1L);
-        occupancy.setCurrentOccupancy(0);
-        occupancy.setTimestamp(LocalDateTime.now());
+        GateCtrlDTO gateCtrl = createTestGateCtrlDTO(1L, false);
+        LotOccupancy occupancy = createTestLotOccupancy(0);
 
         when(lotOccupancyDB.findFirstByLotIdOrderByTimestampDesc(1L))
                 .thenReturn(Optional.of(occupancy));

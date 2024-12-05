@@ -36,16 +36,7 @@ class LotOccupancyHandlerTests {
         lotOccupancyHandler = new LotOccupancyHandler(lotOccupancyDB, parkingLotDB);
     }
 
-    /**
-     * Verifies that the `LotOccupancyHandler` class can retrieve the occupancy rate of a parking lot.
-     */
-    @Test
-    void testGetOccupancyRate_Success() throws NotFoundException {
-        LotOccupancy occupancy = new LotOccupancy();
-        occupancy.setLotId(1L);
-        occupancy.setCurrentOccupancy(75);
-        occupancy.setTimestamp(LocalDateTime.now());
-
+    private ParkingLot createTestParkingLot() {
         ParkingLot parkingLot = new ParkingLot();
         parkingLot.setLotId(1L);
         parkingLot.setLotName("Test Lot");
@@ -53,6 +44,24 @@ class LotOccupancyHandlerTests {
         parkingLot.setHourlyRate(new BigDecimal("5.00"));
         parkingLot.setVisitorAllowed(true);
         parkingLot.setTotalSpots(100);
+        return parkingLot;
+    }
+
+    private LotOccupancy createTestLotOccupancy(Long lotId, int currentOccupancy) {
+        LotOccupancy occupancy = new LotOccupancy();
+        occupancy.setLotId(lotId);
+        occupancy.setCurrentOccupancy(currentOccupancy);
+        occupancy.setTimestamp(LocalDateTime.now());
+        return occupancy;
+    }
+
+    /**
+     * Verifies that the `LotOccupancyHandler` class can retrieve the occupancy rate of a parking lot.
+     */
+    @Test
+    void testGetOccupancyRate_Success() throws NotFoundException {
+        LotOccupancy occupancy = createTestLotOccupancy(1L, 75);
+        ParkingLot parkingLot = createTestParkingLot();
 
         when(lotOccupancyDB.findFirstByLotIdOrderByTimestampDesc(1L))
                 .thenReturn(Optional.of(occupancy));
@@ -63,7 +72,6 @@ class LotOccupancyHandlerTests {
 
         assertEquals("75.00%", result);
     }
-
 
     /**
      * Verifies that the `LotOccupancyHandler` class can handle a parking lot occupancy not found.
@@ -77,18 +85,13 @@ class LotOccupancyHandlerTests {
         assertThrows(NotFoundException.class, () -> lotOccupancyHandler.getOccupancyRate(lotId));
     }
 
-
     /**
      * Verifies that the `LotOccupancyHandler` class can handle a parking lot not found.
      */
     @Test
     void testGetOccupancyRate_ParkingLotNotFound() {
         Long lotId = 999L;
-
-        LotOccupancy occupancy = new LotOccupancy();
-        occupancy.setLotId(lotId);
-        occupancy.setCurrentOccupancy(75);
-        occupancy.setTimestamp(LocalDateTime.now());
+        LotOccupancy occupancy = createTestLotOccupancy(lotId, 75);
 
         when(lotOccupancyDB.findFirstByLotIdOrderByTimestampDesc(lotId))
                 .thenReturn(Optional.of(occupancy));
@@ -106,19 +109,13 @@ class LotOccupancyHandlerTests {
         Long lotId = 1L;
         LocalDateTime peakTime = LocalDateTime.now();
 
-        LotOccupancy occupancy1 = new LotOccupancy();
-        occupancy1.setLotId(lotId);
-        occupancy1.setCurrentOccupancy(50);
+        LotOccupancy occupancy1 = createTestLotOccupancy(lotId, 50);
         occupancy1.setTimestamp(peakTime.minusHours(1));
 
-        LotOccupancy occupancy2 = new LotOccupancy();
-        occupancy2.setLotId(lotId);
-        occupancy2.setCurrentOccupancy(80);
+        LotOccupancy occupancy2 = createTestLotOccupancy(lotId, 80);
         occupancy2.setTimestamp(peakTime);
 
-        LotOccupancy occupancy3 = new LotOccupancy();
-        occupancy3.setLotId(lotId);
-        occupancy3.setCurrentOccupancy(30);
+        LotOccupancy occupancy3 = createTestLotOccupancy(lotId, 30);
         occupancy3.setTimestamp(peakTime.plusHours(1));
 
         when(lotOccupancyDB.findAllByLotIdOrderByTimestampAsc(lotId))

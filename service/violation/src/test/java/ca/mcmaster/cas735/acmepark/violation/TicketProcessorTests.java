@@ -5,7 +5,6 @@ import ca.mcmaster.cas735.acmepark.violation.business.entities.ParkingViolation;
 import ca.mcmaster.cas735.acmepark.violation.business.errors.NotFoundException;
 import ca.mcmaster.cas735.acmepark.violation.dto.TicketDTO;
 import ca.mcmaster.cas735.acmepark.violation.port.required.TicketDataRepo;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,29 +30,28 @@ class TicketProcessorTests {
     @InjectMocks
     private TicketProcessor ticketProcessor;
 
-    private ParkingViolation violation;
-    private TicketDTO ticketDTO;
     private final String TEST_LICENSE_PLATE = "ABC123";
 
-    @BeforeEach
-    void setUp() {
-        // Initialize test violation
-        violation = new ParkingViolation();
+    private ParkingViolation createTestViolation() {
+        ParkingViolation violation = new ParkingViolation();
         violation.setViolationId(UUID.randomUUID());
         violation.setLicensePlate(TEST_LICENSE_PLATE);
         violation.setFineAmount(new BigDecimal("50.00"));
         violation.setOfficerId(1L);
         violation.setLotId(1L);
         violation.setViolationTime(LocalDateTime.now());
+        return violation;
+    }
 
-        // Initialize test DTO
-        ticketDTO = new TicketDTO();
+    private TicketDTO createTestTicketDTO() {
+        TicketDTO ticketDTO = new TicketDTO();
         ticketDTO.setTicketNum(UUID.randomUUID());
         ticketDTO.setLicensePlate(TEST_LICENSE_PLATE);
         ticketDTO.setFineAmount(new BigDecimal("50.00"));
         ticketDTO.setOfficerId(1L);
         ticketDTO.setLotId(1L);
         ticketDTO.setViolationTime(LocalDateTime.now());
+        return ticketDTO;
     }
 
     /**
@@ -63,6 +61,7 @@ class TicketProcessorTests {
     @Test
     void testLookupTicket_Success() throws NotFoundException {
         // Arrange
+        ParkingViolation violation = createTestViolation();
         when(ticketDataRepo.findAllByLicensePlate(TEST_LICENSE_PLATE))
                 .thenReturn(Collections.singletonList(violation));
 
@@ -99,6 +98,8 @@ class TicketProcessorTests {
     @Test
     void testIssueTicket_Success() {
         // Arrange
+        ParkingViolation violation = createTestViolation();
+        TicketDTO ticketDTO = createTestTicketDTO();
         when(ticketDataRepo.saveAndFlush(any(ParkingViolation.class)))
                 .thenReturn(violation);
 

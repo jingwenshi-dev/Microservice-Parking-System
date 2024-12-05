@@ -39,13 +39,7 @@ class DashboardTests {
         dashboard = new Dashboard(parkingLotDB, lotOccupancyDB, lotOccupancyPort);
     }
 
-    /**
-     * Verifies that the `Dashboard` class correctly retrieves the information
-     * of a parking lot when the `getParkingLotInfo` method is called with a valid lot ID.
-     */
-    @Test
-    void testGetParkingLotInfo_Success() throws NotFoundException {
-        // Arrange
+    private ParkingLot createTestParkingLot() {
         ParkingLot parkingLot = new ParkingLot();
         parkingLot.setLotId(1L);
         parkingLot.setLotName("Test Lot");
@@ -53,7 +47,25 @@ class DashboardTests {
         parkingLot.setVisitorAllowed(true);
         parkingLot.setHourlyRate(new BigDecimal("5.00"));
         parkingLot.setLocation("Test Location");
+        return parkingLot;
+    }
 
+    private LotOccupancy createTestLotOccupancy() {
+        LotOccupancy occupancy = new LotOccupancy();
+        occupancy.setLotId(1L);
+        occupancy.setCurrentOccupancy(50);
+        occupancy.setTimestamp(LocalDateTime.now());
+        return occupancy;
+    }
+
+    /**
+     * Verifies that the `Dashboard` class correctly retrieves the information
+     * of a parking lot when the `getParkingLotInfo` method is called with a valid lot ID.
+     */
+    @Test
+    void testGetParkingLotInfo_Success() throws NotFoundException {
+        // Arrange
+        ParkingLot parkingLot = createTestParkingLot();
         when(parkingLotDB.findByLotId(1L)).thenReturn(Optional.of(parkingLot));
 
         // Act & Assert
@@ -85,13 +97,8 @@ class DashboardTests {
     @Test
     void testGetParkingLotStatus_Success() throws NotFoundException {
         // Arrange
-        LotOccupancy occupancy = new LotOccupancy();
-        occupancy.setLotId(1L);
-        occupancy.setCurrentOccupancy(50);
-        occupancy.setTimestamp(LocalDateTime.now());
-
-        when(lotOccupancyDB.findFirstByLotIdOrderByTimestampDesc(1L))
-                .thenReturn(Optional.of(occupancy));
+        LotOccupancy occupancy = createTestLotOccupancy();
+        when(lotOccupancyDB.findFirstByLotIdOrderByTimestampDesc(1L)).thenReturn(Optional.of(occupancy));
         when(lotOccupancyPort.getOccupancyRate(1L)).thenReturn("50%");
         when(lotOccupancyPort.getParkingLotPeakHours(1L)).thenReturn("12:00 PM - 2:00 PM");
 
@@ -111,8 +118,7 @@ class DashboardTests {
     @Test
     void testGetParkingLotStatus_NotFound() {
         // Arrange
-        when(lotOccupancyDB.findFirstByLotIdOrderByTimestampDesc(999L))
-                .thenReturn(Optional.empty());
+        when(lotOccupancyDB.findFirstByLotIdOrderByTimestampDesc(999L)).thenReturn(Optional.empty());
 
         // Act & Assert
         assertThrows(NotFoundException.class, () -> dashboard.getParkingLotStatus(999L));
@@ -125,15 +131,9 @@ class DashboardTests {
     @Test
     void testRecordOccupancy_Success() {
         // Arrange
-        LotOccupancy occupancy = new LotOccupancy();
-        occupancy.setLotId(1L);
-        occupancy.setCurrentOccupancy(50);
-        occupancy.setTimestamp(LocalDateTime.now());
-
-        when(lotOccupancyDB.findFirstByLotIdOrderByTimestampDesc(1L))
-                .thenReturn(Optional.of(occupancy));
-        when(lotOccupancyDB.save(any(LotOccupancy.class)))
-                .thenAnswer(invocation -> invocation.getArgument(0));
+        LotOccupancy occupancy = createTestLotOccupancy();
+        when(lotOccupancyDB.findFirstByLotIdOrderByTimestampDesc(1L)).thenReturn(Optional.of(occupancy));
+        when(lotOccupancyDB.save(any(LotOccupancy.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         // Act & Assert
         assertDoesNotThrow(() -> dashboard.recordOccupancy(1L, true));
@@ -147,16 +147,11 @@ class DashboardTests {
     @Test
     void testRecordOccupancy_InvalidExit() {
         // Arrange
-        LotOccupancy occupancy = new LotOccupancy();
-        occupancy.setLotId(1L);
+        LotOccupancy occupancy = createTestLotOccupancy();
         occupancy.setCurrentOccupancy(0);
-        occupancy.setTimestamp(LocalDateTime.now());
-
-        when(lotOccupancyDB.findFirstByLotIdOrderByTimestampDesc(1L))
-                .thenReturn(Optional.of(occupancy));
+        when(lotOccupancyDB.findFirstByLotIdOrderByTimestampDesc(1L)).thenReturn(Optional.of(occupancy));
 
         // Act & Assert
-        assertThrows(IllegalArgumentException.class,
-                () -> dashboard.recordOccupancy(1L, false));
+        assertThrows(IllegalArgumentException.class, () -> dashboard.recordOccupancy(1L, false));
     }
 }

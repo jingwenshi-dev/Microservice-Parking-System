@@ -17,9 +17,9 @@ mvn clean install -DskipTests
 docker build -t payment .
 
 cd ../violation || exit
-mvn clean package -DskipTests
+mvn clean package
 docker build -t violation .
 
 cd ../visitor_access || exit
-mvn clean package -DskipTests
+mvn clean package
 docker build -t visitor_access .

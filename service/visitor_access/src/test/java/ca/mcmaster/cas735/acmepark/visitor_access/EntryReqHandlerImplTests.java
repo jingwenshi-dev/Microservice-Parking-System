@@ -34,12 +34,7 @@ class EntryReqHandlerImplTests {
         entryRequestHandler = new EntryReqHandlerImpl(visitorSender, qrCodeService, visitorDataRepository);
     }
 
-    /**
-     * Verifies that the handleEntry method a gate open response when the visitor is allowed to enter.
-     */
-    @Test
-    void testHandleEntry_Success() throws Exception {
-        // Arrange
+    private ValidationDTO createTestValidationDTO(boolean visitorAllowed) {
         ValidationDTO validationDTO = new ValidationDTO();
         validationDTO.setTransponderId("transponder1");
         validationDTO.setLicensePlate("ABC123");
@@ -47,9 +42,18 @@ class EntryReqHandlerImplTests {
         validationDTO.setEntry(true);
         validationDTO.setTimestamp(LocalDateTime.now());
         validationDTO.setLotId(1L);
-        validationDTO.setVisitorAllowed(true);
+        validationDTO.setVisitorAllowed(visitorAllowed);
         validationDTO.setHourlyRate(BigDecimal.valueOf(10.0));
+        return validationDTO;
+    }
 
+    /**
+     * Verifies that the handleEntry method a gate open response when the visitor is allowed to enter.
+     */
+    @Test
+    void testHandleEntry_Success() throws Exception {
+        // Arrange
+        ValidationDTO validationDTO = createTestValidationDTO(true);
         String mockQRCode = "mocked-qr-code";
         when(qrCodeService.generateQRCode(anyString())).thenReturn(mockQRCode);
 
@@ -67,18 +71,13 @@ class EntryReqHandlerImplTests {
         ));
     }
 
+    /**
+     * Verifies that the handleEntry method denies access when the visitor is not allowed to enter.
+     */
     @Test
     void testHandleEntry_DeniesAccess() {
         // Arrange
-        ValidationDTO validationDTO = new ValidationDTO();
-        validationDTO.setTransponderId("transponder1");
-        validationDTO.setLicensePlate("ABC123");
-        validationDTO.setGateId("Gate1");
-        validationDTO.setEntry(true);
-        validationDTO.setTimestamp(LocalDateTime.now());
-        validationDTO.setLotId(1L);
-        validationDTO.setVisitorAllowed(false);
-        validationDTO.setHourlyRate(BigDecimal.valueOf(10.0));
+        ValidationDTO validationDTO = createTestValidationDTO(false);
 
         // Act
         entryRequestHandler.handleEntry(validationDTO);

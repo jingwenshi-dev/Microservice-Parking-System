@@ -17,7 +17,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-
 @ExtendWith(MockitoExtension.class)
 class ExitReqHandlerImplTests {
     @Mock
@@ -32,9 +31,7 @@ class ExitReqHandlerImplTests {
         exitRequestHandler = new ExitReqHandlerImpl(visitorSender, visitorDataRepository);
     }
 
-    @Test
-    void testHandleExit_SendsPaymentRequest() {
-        // Arrange
+    private ValidationDTO createTestValidationDTO() {
         ValidationDTO validationDTO = new ValidationDTO();
         validationDTO.setTransponderId("transponder1");
         validationDTO.setLicensePlate("ABC123");
@@ -44,11 +41,25 @@ class ExitReqHandlerImplTests {
         validationDTO.setLotId(1L);
         validationDTO.setVisitorAllowed(true);
         validationDTO.setHourlyRate(BigDecimal.valueOf(10.0));
+        return validationDTO;
+    }
 
+    private Visitor createTestVisitor() {
         Visitor visitor = new Visitor();
         visitor.setLicensePlate("ABC123");
         visitor.setEntryTime(LocalDateTime.now().minusHours(2));
         visitor.setLotId(1L);
+        return visitor;
+    }
+
+    /**
+     * Verifies that the handleExit method sends a payment request when the visitor exits.
+     */
+    @Test
+    void testHandleExit_SendsPaymentRequest() {
+        // Arrange
+        ValidationDTO validationDTO = createTestValidationDTO();
+        Visitor visitor = createTestVisitor();
 
         when(visitorDataRepository.findFirstByLicensePlateOrderByEntryTimeDesc("ABC123"))
                 .thenReturn(Optional.of(visitor));
