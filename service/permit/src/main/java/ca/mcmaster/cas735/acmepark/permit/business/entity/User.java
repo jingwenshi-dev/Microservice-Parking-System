@@ -31,22 +31,4 @@ public class User {
         FACULTY,
         STAFF
     }
-
-    public User() {}
-
-    public User(String firstName, String lastName, String email, UserType userType, BigDecimal totalOutstandingAmount) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.userType = userType;
-        this.totalOutstandingAmount = totalOutstandingAmount;
-    }
-
-    public UserType getUserType() {
-            return userType;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
 }

@@ -118,7 +118,14 @@ public class PermitApplicationService implements PaymentListenerPort {
     private void storePermitData(PermitCreatedDTO permitDTO) {
         User user = userRepository.findById(permitDTO.getUserId()).orElseThrow(() -> new NotFoundException("User with ID " + permitDTO.getUserId() + " not found"));
         if ("APPLY".equalsIgnoreCase(permitDTO.getPermitType())) {
-            Permit permit = new Permit(permitDTO.getTransponderNumber(), permitDTO.getValidFrom(), permitDTO.getValidUntil(), user, permitDTO.getLotId(), permitDTO.getLicensePlate());
+            //Permit permit = new Permit(permitDTO.getTransponderNumber(), permitDTO.getValidFrom(), permitDTO.getValidUntil(), user, permitDTO.getLotId(), permitDTO.getLicensePlate());
+            Permit permit = new Permit();
+            permit.setTransponderNumber(permitDTO.getTransponderNumber());
+            permit.setValidFrom(permitDTO.getValidFrom());
+            permit.setValidUntil(permitDTO.getValidUntil());
+            permit.setUser(user);
+            permit.setLotId(permitDTO.getLotId());
+            permit.setLicensePlate(permitDTO.getLicensePlate());
             permitRepository.save(permit);
             System.out.println("Permit save for Permit id: " + permit.getPermitId());
         } else if ("RENEW".equalsIgnoreCase(permitDTO.getPermitType())) {
