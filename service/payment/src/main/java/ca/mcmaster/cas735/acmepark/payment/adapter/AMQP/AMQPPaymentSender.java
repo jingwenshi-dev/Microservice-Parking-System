@@ -1,4 +1,4 @@
-package ca.mcmaster.cas735.acmepark.payment.adapter;
+package ca.mcmaster.cas735.acmepark.payment.adapter.AMQP;
 
 import ca.mcmaster.cas735.acmepark.payment.dto.PaymentRequest;
 import ca.mcmaster.cas735.acmepark.payment.ports.provided.PaymentSender;

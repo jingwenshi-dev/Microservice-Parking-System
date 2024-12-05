@@ -1,4 +1,4 @@
-package ca.mcmaster.cas735.acmepark.payment.adapter;
+package ca.mcmaster.cas735.acmepark.payment.adapter.AMQP;
 
 import ca.mcmaster.cas735.acmepark.payment.business.entities.ParkingViolation;
 import ca.mcmaster.cas735.acmepark.payment.ports.required.ParkingViolationsRepository;

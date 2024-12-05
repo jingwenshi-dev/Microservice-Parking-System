@@ -1,4 +1,4 @@
-package ca.mcmaster.cas735.acmepark.payment.adapter;
+package ca.mcmaster.cas735.acmepark.payment.adapter.REST;
 
 import ca.mcmaster.cas735.acmepark.payment.business.errors.AlreadyExistingException;
 import ca.mcmaster.cas735.acmepark.payment.business.errors.InvalidDateException;

@@ -1,8 +1,7 @@
-package ca.mcmaster.cas735.acmepark.payment.adapter;
+package ca.mcmaster.cas735.acmepark.payment.adapter.AMQP;
 
 import ca.mcmaster.cas735.acmepark.payment.dto.PaymentRequest;
 import ca.mcmaster.cas735.acmepark.payment.ports.provided.PaymentProcessor;
-import ca.mcmaster.cas735.acmepark.payment.ports.provided.PaymentServicePort;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper; // 用于将 JSON 字符串与 Java 对象之间的转换
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;

@@ -1,4 +1,4 @@
-package ca.mcmaster.cas735.acmepark.payment.adapter;
+package ca.mcmaster.cas735.acmepark.payment.adapter.AMQP;
 
 import ca.mcmaster.cas735.acmepark.payment.dto.PaymentRequest;
 import ca.mcmaster.cas735.acmepark.payment.ports.provided.TicketDeleteSender;
@@ -18,7 +18,7 @@ public class AMQPTicketDeleteSender implements TicketDeleteSender {
     @Value("${app.custom.messaging.ticket-delete-queue}")
     private String ticketDeleteQueue;
 
-    public AMQPTicketDeleteSender(RabbitTemplate rabbitTemplate, ObjectMapper objectMapper) {
+    public AMQPTicketDeleteSender(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
     }
 
