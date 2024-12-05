@@ -43,4 +43,6 @@ public class PaymentRequest {
 
     private String gateId;
 
+    private int permitId;
+
 }
