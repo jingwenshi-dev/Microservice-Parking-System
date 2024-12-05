@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 
 /**
- * 扣费程序入口，用processPayment进行扣费
+ * Entrance to the chargeback process, chargeback with processPayment
  */
 @Service
 @Slf4j

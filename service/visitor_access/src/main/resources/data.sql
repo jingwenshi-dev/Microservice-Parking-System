@@ -1,4 +1,3 @@
--- 访客表
 INSERT INTO VISITOR (LICENSE_PLATE, ENTRY_TIME, LOT_ID)
 VALUES
     -- License plate number, Guest credentials (optional), Access time, Parking lot ID

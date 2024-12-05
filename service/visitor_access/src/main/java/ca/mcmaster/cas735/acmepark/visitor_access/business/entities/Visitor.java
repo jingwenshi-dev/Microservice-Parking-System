@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class Visitor {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 自增主键
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String licensePlate;
