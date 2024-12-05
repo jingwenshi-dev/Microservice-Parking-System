@@ -9,11 +9,11 @@ mvn clean install
 docker build -t gate .
 
 cd ../permit || exit
-mvn clean package -DskipTests
+mvn clean package
 docker build -t permit .
 
 cd ../payment || exit
-mvn clean install -DskipTests
+mvn clean install
 docker build -t payment .
 
 cd ../violation || exit
