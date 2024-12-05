@@ -20,5 +20,6 @@ public class PermitCreatedDTO {
     private String userType;
     private String paymentMethod;
     private String permitType;
+    private int permitId;
 
 }

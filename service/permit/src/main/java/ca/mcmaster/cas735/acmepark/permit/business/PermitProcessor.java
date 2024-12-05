@@ -60,6 +60,7 @@ public class PermitProcessor implements PermitManager {
 
         // Prepare for payment
         PermitCreatedDTO paymentDTO = new PermitCreatedDTO();
+        paymentDTO.setPermitId(renewalDTO.getPermitId());
         paymentDTO.setPermitType("RENEW");
         paymentDTO.setTransponderNumber(permit.getTransponderNumber());
         paymentDTO.setValidFrom(renewalDTO.getValidFrom());
@@ -137,7 +138,7 @@ public class PermitProcessor implements PermitManager {
 
         } else if ("RENEW".equalsIgnoreCase(permitDTO.getPermitType())) {
             // Handle RENEW permit type
-            Permit existingPermit = permitDB.findByTransponderNumber(permitDTO.getTransponderNumber()).orElseThrow(() -> new NotFoundException("Permit with Transponder Number" + permitDTO.getTransponderNumber() + " not found"));
+            Permit existingPermit = permitDB.findByPermitId(permitDTO.getPermitId()).orElseThrow(() -> new NotFoundException("Permit with Transponder Number" + permitDTO.getTransponderNumber() + " not found"));
 
             // Update validFrom and validUntil
             existingPermit.setValidFrom(permitDTO.getValidFrom());
