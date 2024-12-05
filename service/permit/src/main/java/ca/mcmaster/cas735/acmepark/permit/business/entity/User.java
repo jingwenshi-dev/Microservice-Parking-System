@@ -24,7 +24,6 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserType userType;
 
-    private BigDecimal totalOutstandingAmount;
 
     public enum UserType {
         STUDENT,

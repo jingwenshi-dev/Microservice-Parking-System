@@ -137,7 +137,7 @@ public class PermitProcessor implements PermitManager {
 
         } else if ("RENEW".equalsIgnoreCase(permitDTO.getPermitType())) {
             // Handle RENEW permit type
-            Permit existingPermit = permitDB.findByLicensePlate(permitDTO.getLicensePlate()).orElseThrow(() -> new NotFoundException("Permit with License Plate " + permitDTO.getLicensePlate() + " not found"));
+            Permit existingPermit = permitDB.findByTransponderNumber(permitDTO.getTransponderNumber()).orElseThrow(() -> new NotFoundException("Permit with Transponder Number" + permitDTO.getTransponderNumber() + " not found"));
 
             // Update validFrom and validUntil
             existingPermit.setValidFrom(permitDTO.getValidFrom());
