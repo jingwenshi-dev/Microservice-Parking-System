@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>ca.mcmaster.cas735.acmepark</groupId>
 	<artifactId>gate</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0-SNAPSHOT</version>
 	<name>gate</name>
 	<description>gate</description>
 
