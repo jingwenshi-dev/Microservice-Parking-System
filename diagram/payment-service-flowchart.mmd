@@ -1,0 +1,25 @@
+flowchart LR
+
+    AMQPPaymentReqListener([fa:fa-circle-right AMQP fa:fa-envelope<br> Payment Req Listener])
+    AMQPPaymentResultSender([fa:fa-circle-right AMQP fa:fa-envelope<br> Payment Result Sender])
+    H2DatabaseAccessor([fa:fa-circle-right SQL fa:fa-database<br> H2 Database Accessor])
+    ViolationService([fa:fa-circle-right REST fa:fa-server<br> Violation Service])
+
+    subgraph "<< Payment Service >>"
+        PaymentProcessor("<< InputPort >><br> Payment Processor")
+        PaymentResultSender("<< OutputPort >><br> Payment Result Sender")
+        PaymentDBAccessor("<< Unidirectional Port >><br> DB Accessor")
+        PAYMENT_SERVICE{{"Payment <br> Service"}}
+    end
+
+    AMQPPaymentReqListener -- Payment Request --> PaymentProcessor
+    PaymentProcessor -- Fine Information Request --> ViolationService
+    ViolationService -- Fine Information Response --> PaymentProcessor
+    PaymentProcessor -- Payment Details --> PaymentDBAccessor
+    PaymentResultSender -- Success/Failure --> AMQPPaymentResultSender
+    PaymentDBAccessor -- Query --> H2DatabaseAccessor
+
+    PaymentProcessor -. offered .-> PAYMENT_SERVICE
+    PAYMENT_SERVICE -. required .-> PaymentResultSender
+    PAYMENT_SERVICE -. required .-> PaymentDBAccessor
+    PAYMENT_SERVICE -. required .-> ViolationService

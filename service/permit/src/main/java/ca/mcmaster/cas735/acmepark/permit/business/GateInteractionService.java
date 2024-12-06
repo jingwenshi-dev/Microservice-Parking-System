@@ -1,9 +1,7 @@
 package ca.mcmaster.cas735.acmepark.permit.business;
 
+import ca.mcmaster.cas735.acmepark.gate.dto.GateCtrlDTO;
 import ca.mcmaster.cas735.acmepark.permit.DTO.PermitValidationRequestDTO;
-import ca.mcmaster.cas735.acmepark.permit.DTO.PermitValidationResponseDTO;
-
-
 import ca.mcmaster.cas735.acmepark.permit.business.entity.Permit;
 import ca.mcmaster.cas735.acmepark.permit.port.PermitDataRepo;
 import ca.mcmaster.cas735.acmepark.permit.port.PermitValidationResultSender;
@@ -36,12 +34,11 @@ public class GateInteractionService implements PermitValidator {
         boolean isValid = permitOptional.map(permit -> isPermitValid(permit, requestDTO.getTimestamp())).orElse(false);
 
         // Prepare the response based on validity.
-        PermitValidationResponseDTO responseDTO = new PermitValidationResponseDTO();
+        GateCtrlDTO responseDTO = new GateCtrlDTO();
         responseDTO.setGateId(requestDTO.getGateId());
         responseDTO.setLotId(requestDTO.getLotId());
         responseDTO.setIsValid(isValid);
-        responseDTO.setEntry(requestDTO.isEntry());
-
+        responseDTO.setIsEntry(requestDTO.isEntry());
         permitValidationResultSender.sendValidationResult(responseDTO);
     }
 
