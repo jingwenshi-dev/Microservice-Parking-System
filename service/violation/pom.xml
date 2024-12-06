@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>ca.mcmaster.cas735.acmepark</groupId>
 	<artifactId>violation</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0-SNAPSHOT</version>
 	<name>violation</name>
 	<description>violation</description>
 
@@ -81,7 +81,7 @@
         <dependency>
             <groupId>ca.mcmaster.cas735.acmepark</groupId>
             <artifactId>payment</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+			<version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 		<dependency>
