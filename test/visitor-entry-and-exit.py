@@ -1,30 +1,24 @@
 import json
+import threading
+import time
 from datetime import datetime
 import pika
-
 
 GREEN = '\033[0;32m'
 RED = '\033[0;31m'
 NC = '\033[0m'
-
 
 RABBITMQ_USER = 'root'
 RABBITMQ_PASS = 'root'
 RABBITMQ_HOST = 'localhost'
 RABBITMQ_PORT = 5672
 
-
 GATE_EXCHANGE = "gateOpenRequestExchange"
 GATE_ROUTING_KEY_PATTERN = "gate.%s.command"
 QUEUE_NAME = "gateCommandQueue"
 
-
-
-
-
 def receive_gate_control_message(gate_id):
     routing_key = GATE_ROUTING_KEY_PATTERN % gate_id
-
 
     credentials = pika.PlainCredentials(RABBITMQ_USER, RABBITMQ_PASS)
     connection = pika.BlockingConnection(pika.ConnectionParameters(
@@ -34,34 +28,25 @@ def receive_gate_control_message(gate_id):
     ))
     channel = connection.channel()
 
-
-    debug_log(f"Declaring exchange: {GATE_EXCHANGE}")
     channel.exchange_declare(exchange=GATE_EXCHANGE, exchange_type='direct', durable=True)
 
-    debug_log(f"Declaring queue: {QUEUE_NAME}")
     channel.queue_declare(queue=QUEUE_NAME, durable=True)
 
-    debug_log(f"Binding queue: {QUEUE_NAME} to exchange: {GATE_EXCHANGE} with routingKey: {routing_key}")
     channel.queue_bind(exchange=GATE_EXCHANGE, queue=QUEUE_NAME, routing_key=routing_key)
-
-    debug_log(f"Listening for messages on queue: {QUEUE_NAME} with routingKey: {routing_key}")
 
     def callback(ch, method, properties, body):
 
         try:
-            debug_log(f"Received raw message: {body}")
             decoded_body = body.decode('utf-8')
-            debug_log(f"Decoded message: {decoded_body}")
-
 
             try:
                 message = json.loads(decoded_body)
                 if isinstance(message, dict) and "isValid" in message:
+                    print(f"{RED}GATE OPEN {RED}")
                     print(f"{GREEN}Gate Control Message: {message}{NC}")
                 else:
                     print(f"{RED}Unexpected JSON Format: {decoded_body}{NC}")
             except json.JSONDecodeError:
-
                 if decoded_body.lower() in ["true", "false"]:
                     gate_ctrl = {"isValid": decoded_body.lower() == "true"}
                     print(f"{GREEN}Gate Control Message: {gate_ctrl}{NC}")
@@ -90,6 +75,8 @@ def build_transponder_dto(transponder_id, license_plate, gate_id, lot_id, is_ent
 
 
 def send_transponder_data(transponder_dto, queue_name):
+    print(f"{RED}REQUEST OPEN GATE{RED}")
+    print(f"{GREEN}Gate input Message: {transponder_dto}{NC}")
     credentials = pika.PlainCredentials(RABBITMQ_USER, RABBITMQ_PASS)
     connection = pika.BlockingConnection(pika.ConnectionParameters(
         host=RABBITMQ_HOST,
@@ -97,7 +84,6 @@ def send_transponder_data(transponder_dto, queue_name):
         credentials=credentials
     ))
     channel = connection.channel()
-
 
     channel.queue_declare(queue=queue_name, durable=True)
 
@@ -113,10 +99,18 @@ def send_transponder_data(transponder_dto, queue_name):
     connection.close()
 
 
+def start_consumer_thread(gate_id):
+    consumer_thread = threading.Thread(target=receive_gate_control_message, args=(gate_id,))
+    consumer_thread.daemon = True
+    consumer_thread.start()
+
+
 def main():
+    start_consumer_thread("Gate1")
+    time.sleep(1)
 
     transponder_data = build_transponder_dto(
-        transponder_id="97ae1bb0-b42a-41db-8cfc-fd2ba3bbf008",
+        transponder_id="",
         license_plate="AAAAAA",
         gate_id="Gate1",
         lot_id=1,
@@ -124,17 +118,18 @@ def main():
     )
     send_transponder_data(transponder_data, "transponder.queue")
 
-
+    time.sleep(2)
 
     transponder_data = build_transponder_dto(
-        transponder_id="97ae1bb0-b42a-41db-8cfc-fd2ba3bbf008",
-        license_plate="AAAAAA",
+        transponder_id="",
+        license_plate="XYZ789",
         gate_id="Gate1",
         lot_id=1,
         is_entry=False
     )
     send_transponder_data(transponder_data, "transponder.queue")
-    receive_gate_control_message("Gate1")
+
+    time.sleep(5)
 
 
 if __name__ == "__main__":
