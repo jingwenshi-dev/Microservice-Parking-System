@@ -15,6 +15,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    restart: always
 
   eureka:
     container_name: eureka
@@ -28,6 +29,7 @@ services:
       interval: 1s
       timeout: 1s
       retries: 10
+    restart: always
 
   nginx:
     image: nginx:latest
@@ -42,6 +44,7 @@ services:
       - permit
       - payment
       - visitor
+    restart: always
 
   gate:
     container_name: gate
@@ -56,6 +59,7 @@ services:
         condition: service_healthy
       eureka:
         condition: service_healthy
+    restart: always
 
   violation:
     container_name: violation
@@ -70,6 +74,7 @@ services:
         condition: service_healthy
       eureka:
         condition: service_healthy
+    restart: always
 
   permit:
     container_name: permit
@@ -84,6 +89,7 @@ services:
         condition: service_healthy
       eureka:
         condition: service_healthy
+    restart: always
 
   payment:
     container_name: payment
@@ -98,6 +104,7 @@ services:
         condition: service_healthy
       eureka:
         condition: service_healthy
+    restart: always
 
   visitor:
     container_name: visitor
@@ -112,3 +119,4 @@ services:
         condition: service_healthy
       eureka:
         condition: service_healthy
+    restart: always
