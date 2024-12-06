@@ -24,11 +24,23 @@ All unit tests will be triggered when building the project with `build.sh`.
 #### Python Testing Script
 
 The test folder contains Python test scripts for different functionalities:
-
 - `student-entry-and-exit.py`: Tests the scenario when a car with a transponder enters the gate.
+```bash
+python3 student-entry-and-exit.py
+```
+
 - `violation-visitor-entry-and-exit.py`: Tests the scenario when a car with a violation exits the gate.
+```bash 
+python3 violation-visitor-entry-and-exit.py
+```
 - `visitor-entry-and-exit.py`: Tests the scenario when a visitor enters the gate.
+```bash
+python3 visitor-entry-and-exit.py
+- ``` 
 - `voucher-visitor-entry-and-exit.py`: Tests the exit of a visitor with a voucher applied.
+```bash
+python3 voucher-visitor-entry-and-exit.py
+```
 
 
 
@@ -37,15 +49,9 @@ The test folder contains Python test scripts for different functionalities:
 The following functionalities can be tested using Postman. Below are the corresponding curl commands for each test case:
 
 ##### Permit: 
-- curl --location 'http://localhost/permits/renew' \
-  --header 'Content-Type: application/json' \
-  --data '{
-  "validFrom": "2024-12-01T00:00:00",
-  "validUntil": "2024-12-31T00:00:00",
-  "permitId": 1,
-  "paymentMethod": "creditCard"
-  }'
-- curl --location 'http://localhost/permit/api/renew' \
+-issue permit 
+```bash
+- curl --location 'http://localhost/permit/api/apply' \
   --header 'Content-Type: application/json' \
   --data '{
   "validFrom": "2024-12-01T00:00:00",
@@ -55,11 +61,30 @@ The following functionalities can be tested using Postman. Below are the corresp
   "lotId": 10,
   "paymentMethod": "creditCard"
   }'
-- curl --location 'http://localhost/permit/api/valid-permits' \
+  ```
+- renew permit 
+```bash
+- curl --location --request PUT 'http://localhost/permit/api/renew' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "validFrom": "2024-12-01T00:00:00",
+  "validUntil": "2024-12-31T00:00:00",
+  "permitId": 1,
+  "paymentMethod": "creditCard"
+  }'
+  ```
+
+
+- Get valid permit count
+```bash
+curl --location 'http://localhost/permit/api/valid-permits' \
   --data ''
+ ```
 ##### Violation:
 
-- curl --location 'http://localhost/violation/tickets/issue' \
+- issue a ticket
+```bash
+curl --location 'http://localhost/violation/tickets/issue' \
 --header 'Content-Type: application/json' \
 --data '{
 "licensePlate": "ABC123",
@@ -67,8 +92,15 @@ The following functionalities can be tested using Postman. Below are the corresp
 "officerId": 12345,
 "lotId": 67890
 }'
-- curl --location 'http://localhost/violation/tickets/lookup?licensePlate=ABC123'
-
+```
+- list existing tickets
+```bash
+curl --location 'http://localhost/violation/tickets/lookup?licensePlate=ABC123'
+```
 ##### Gate:
-- curl --location 'http://localhost/gate/monitor/lookup?lotId=1' \
+- Check for parking lot statistics
+```bash
+curl --location 'http://localhost/gate/monitor/lookup?lotId=1' \
   --data ''
+```
+
