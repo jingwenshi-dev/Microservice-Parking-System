@@ -104,3 +104,14 @@ curl --location 'http://localhost/gate/monitor/lookup?lotId=1' \
   --data ''
 ```
 
+##### Payment:
+- Apply a voucher 
+```bash
+curl --location --request POST 'http://localhost/payment/voucher/create' \
+--header 'Content-Type: application/json' \
+--data '{
+    "voucher": "DISCOUNT2024",
+    "validFrom": "2024-12-01T00:00:00",
+    "validUntil": "2024-12-31T23:59:59"
+}'
+```
