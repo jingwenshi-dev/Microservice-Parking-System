@@ -35,7 +35,6 @@ def receive_gate_control_message(gate_id):
     channel.queue_bind(exchange=GATE_EXCHANGE, queue=QUEUE_NAME, routing_key=routing_key)
 
     def callback(ch, method, properties, body):
-
         try:
             decoded_body = body.decode('utf-8')
 
@@ -74,8 +73,9 @@ def build_transponder_dto(transponder_id, license_plate, gate_id, lot_id, is_ent
     return transponder_dto
 
 
-def send_transponder_data(transponder_dto, queue_name):
-    print(f"{RED}REQUEST OPEN GATE{RED}")
+def send_transponder_data(transponder_dto, queue_name, is_entry):
+    action = "ENTRY" if is_entry else "EXIT"
+    print(f"{RED}{action} REQUEST OPEN GATE{RED}")
     print(f"{GREEN}Gate input Message: {transponder_dto}{NC}")
     credentials = pika.PlainCredentials(RABBITMQ_USER, RABBITMQ_PASS)
     connection = pika.BlockingConnection(pika.ConnectionParameters(
@@ -109,6 +109,7 @@ def main():
     start_consumer_thread("Gate1")
     time.sleep(1)
 
+    # Send ENTRY message
     transponder_data = build_transponder_dto(
         transponder_id="",
         license_plate="AAAAAA",
@@ -116,18 +117,19 @@ def main():
         lot_id=1,
         is_entry=True
     )
-    send_transponder_data(transponder_data, "transponder.queue")
+    send_transponder_data(transponder_data, "transponder.queue", is_entry=True)
 
     time.sleep(2)
 
+    # Send EXIT message
     transponder_data = build_transponder_dto(
         transponder_id="",
-        license_plate="XYZ789",
+        license_plate="AAAAAA",
         gate_id="Gate1",
         lot_id=1,
         is_entry=False
     )
-    send_transponder_data(transponder_data, "transponder.queue")
+    send_transponder_data(transponder_data, "transponder.queue", is_entry=False)
 
     time.sleep(5)
 
