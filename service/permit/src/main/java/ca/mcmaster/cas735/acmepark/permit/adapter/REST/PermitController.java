@@ -27,7 +27,7 @@ public class PermitController {
         permitManager.applyForPermit(permitDTO);
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(Map.of(
-                        "message", "Permit application initiated. Payment processing in progress.",
+                        "message", "Permit application successful!",
                         "licensePlate", permitDTO.getLicensePlate()));
     }
 
@@ -36,7 +36,7 @@ public class PermitController {
         permitManager.renewPermit(renewalDTO);
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(Map.of(
-                        "message", "Permit application initiated. Payment processing in progress.",
+                        "message", "Permit renewal successful!.",
                         "Permit Id",Integer.toString(renewalDTO.getPermitId())));
 //        return new ResponseEntity<>("Permit renewal application initiated. Payment processing in progress.",
 //                HttpStatus.ACCEPTED);
