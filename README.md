@@ -26,20 +26,20 @@ All unit tests will be triggered when building the project with `build.sh`.
 The test folder contains Python test scripts for different functionalities:
 - `student-entry-and-exit.py`: Tests the scenario when a car with a transponder enters the gate.
 ```bash
-python3 student-entry-and-exit.py
+python3 ./test/student-entry-and-exit.py
 ```
 
 - `violation-visitor-entry-and-exit.py`: Tests the scenario when a car with a violation exits the gate.
 ```bash 
-python3 violation-visitor-entry-and-exit.py
+python3 ./test/violation-visitor-entry-and-exit.py
 ```
 - `visitor-entry-and-exit.py`: Tests the scenario when a visitor enters the gate.
 ```bash
-python3 visitor-entry-and-exit.py
+python3 ./test/visitor-entry-and-exit.py
 - ``` 
 - `voucher-visitor-entry-and-exit.py`: Tests the exit of a visitor with a voucher applied.
 ```bash
-python3 voucher-visitor-entry-and-exit.py
+python3 ./test/voucher-visitor-entry-and-exit.py
 ```
 
 
@@ -49,7 +49,7 @@ python3 voucher-visitor-entry-and-exit.py
 The following functionalities can be tested using Postman. Below are the corresponding curl commands for each test case:
 
 ##### Permit: 
--issue permit 
+- Issue permit 
 ```bash
 - curl --location 'http://localhost/permit/api/apply' \
   --header 'Content-Type: application/json' \
@@ -62,7 +62,7 @@ The following functionalities can be tested using Postman. Below are the corresp
   "paymentMethod": "creditCard"
   }'
   ```
-- renew permit 
+- Renew permit 
 ```bash
 - curl --location --request PUT 'http://localhost/permit/api/renew' \
   --header 'Content-Type: application/json' \
@@ -82,7 +82,7 @@ curl --location 'http://localhost/permit/api/valid-permits' \
  ```
 ##### Violation:
 
-- issue a ticket
+- Issue a ticket
 ```bash
 curl --location 'http://localhost/violation/tickets/issue' \
 --header 'Content-Type: application/json' \
@@ -93,7 +93,7 @@ curl --location 'http://localhost/violation/tickets/issue' \
 "lotId": 67890
 }'
 ```
-- list existing tickets
+- List existing tickets
 ```bash
 curl --location 'http://localhost/violation/tickets/lookup?licensePlate=ABC123'
 ```
