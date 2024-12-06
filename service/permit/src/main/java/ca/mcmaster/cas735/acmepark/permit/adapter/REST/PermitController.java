@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api")
 public class PermitController {
@@ -21,26 +23,34 @@ public class PermitController {
     }
 
     @PostMapping("/apply")
-    public ResponseEntity<String> applyForPermit(@RequestBody PermitCreatedDTO permitDTO) throws NotFoundException{
+    public ResponseEntity<Map<String, String>> applyForPermit(@RequestBody PermitCreatedDTO permitDTO) throws NotFoundException {
         permitManager.applyForPermit(permitDTO);
-        return new ResponseEntity<>("Permit application initiated. Payment processing in progress.",
-                HttpStatus.ACCEPTED);
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(Map.of(
+                        "message", "Permit application initiated. Payment processing in progress.",
+                        "licensePlate", permitDTO.getLicensePlate()));
     }
 
     @PutMapping("/renew")
-    public ResponseEntity<String> renewPermit(@RequestBody PermitRenewalDTO renewalDTO) throws NotFoundException {
+    public ResponseEntity<Map<String, String>> renewPermit(@RequestBody PermitRenewalDTO renewalDTO) throws NotFoundException {
         permitManager.renewPermit(renewalDTO);
-        return new ResponseEntity<>("Permit renewal application initiated. Payment processing in progress.",
-                HttpStatus.ACCEPTED);
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(Map.of(
+                        "message", "Permit application initiated. Payment processing in progress.",
+                        "Permit Id",Integer.toString(renewalDTO.getPermitId())));
+//        return new ResponseEntity<>("Permit renewal application initiated. Payment processing in progress.",
+//                HttpStatus.ACCEPTED);
     }
 
     @GetMapping("/valid-permits")
-    public ResponseEntity<String> getValidPermitCount() {
+    public ResponseEntity<Map<String, String>> getValidPermitCount() {
         try {
             int validPermitCount = permitManager.getValidPermitCount();
-            return new ResponseEntity<>("Valid Permit Count: " + validPermitCount, HttpStatus.OK);
+            return ResponseEntity.status(HttpStatus.ACCEPTED)
+                    .body(Map.of("Valid Permit Count:", Integer.toString(validPermitCount)));
+//           return new ResponseEntity<>("Valid Permit Count: " + validPermitCount, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("Error in validPermitCount", HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Error in retrieving valid permit count"));
         }
     }
 }
