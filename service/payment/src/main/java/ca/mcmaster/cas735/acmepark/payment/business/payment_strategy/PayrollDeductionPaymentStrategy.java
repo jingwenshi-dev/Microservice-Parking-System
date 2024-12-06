@@ -13,7 +13,6 @@ public class PayrollDeductionPaymentStrategy implements PaymentStrategy {
     @Override
     public boolean pay(BigDecimal amount) {
         log.info("Processing payroll deduction payment of {}", amount);
-        // Analog payment logic, 100% success rate
         return Math.random() > 0;
     }
 }

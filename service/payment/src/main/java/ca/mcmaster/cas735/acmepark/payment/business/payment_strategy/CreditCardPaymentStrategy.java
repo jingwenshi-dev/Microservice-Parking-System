@@ -13,7 +13,6 @@ public class CreditCardPaymentStrategy implements PaymentStrategy {
     @Override
     public boolean pay(BigDecimal amount) {
         log.info("Processing credit card payment of {}", amount);
-        // Analog payment logic, 90% success rate
-        return Math.random() > 0.1;
+        return Math.random() > 0;
     }
 }
