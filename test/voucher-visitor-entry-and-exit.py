@@ -17,6 +17,7 @@ GATE_EXCHANGE = "gateOpenRequestExchange"
 GATE_ROUTING_KEY_PATTERN = "gate.%s.command"
 QUEUE_NAME = "gateCommandQueue"
 
+
 def receive_gate_control_message(gate_id):
     routing_key = GATE_ROUTING_KEY_PATTERN % gate_id
 
@@ -109,6 +110,7 @@ def main():
     start_consumer_thread("Gate1")
     time.sleep(1)
 
+    # Licence plate number VOURCHER89 has a voucher, which is paid together with payment on the way out of the door
     # Send ENTRY message
     transponder_data = build_transponder_dto(
         transponder_id="",
@@ -135,4 +137,5 @@ def main():
 
 
 if __name__ == "__main__":
+    # Licence plate number VOURCHER89 has a voucher, which is paid together with payment on the way out of the door
     main()
