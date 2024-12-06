@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: payment
+
+  rabbitmq:
+    username: root
+    password: root
+
+  datasource:
+    username: root
+    password: root
+    driverClassName: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: create-drop
+
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:data.sql
+
+logging.level:
+  ca.mcmaster.cas735.tmt.customers:
+    adapter: INFO
+    business: INFO
+
+app:
+  custom:
+    messaging:
+      HTTP:
+        violation: http://violation
+      payment-request-exchange: paymentRequestExchange
+      payment-response-permit-exchange: paymentResultPermitExchange
+      payment-response-visitor-exchange: paymentResultVisitorExchange
+      add-parking-violation-data: addParkingViolationData
+      ticket-delete-queue: ticket.delete.queue
+
+eureka:
+  client:
+    healthcheck:
+      enabled: true
+
+info:
+  application:
+    description: '@project.description@'
+    version:     '@project.version@'

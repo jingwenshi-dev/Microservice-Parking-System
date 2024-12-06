@@ -3,7 +3,41 @@ spring:
     name: permit
 
   rabbitmq:
-    host: rabbitmq
-    port: 5672
     username: root
     password: root
+
+  datasource:
+    username: root
+    password: root
+    driverClassName: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: create-drop
+
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:data.sql
+
+server:
+  port: 9090
+
+app:
+  custom:
+    messaging:
+      gate-to-permit-exchange: gateToPermitExchange
+      permit-to-gate-exchange: toGateResultExchange
+      payment-request-exchange: paymentRequestExchange
+      payment-response-permit-exchange: paymentResultPermitExchange
+
+eureka:
+  client:
+    healthcheck:
+      enabled: true
+
+info:
+  application:
+    description: '@project.description@'
+    version:     '@project.version@'

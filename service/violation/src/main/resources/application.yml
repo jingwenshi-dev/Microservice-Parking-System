@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: violation
+
+  rabbitmq:
+    username: root
+    password: root
+
+  datasource:
+    username: root
+    password: root
+    driverClassName: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: create-drop
+
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:data.sql
+
+eureka:
+  client:
+    healthcheck:
+      enabled: true
+
+info:
+  application:
+    description: '@project.description@'
+    version:     '@project.version@'

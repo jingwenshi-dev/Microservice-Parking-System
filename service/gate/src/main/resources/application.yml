@@ -3,7 +3,45 @@ spring:
     name: gate
 
   rabbitmq:
-    host: rabbitmq
-    port: 5672
     username: root
     password: root
+
+  datasource:
+    username: root
+    password: root
+    driverClassName: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: create-drop
+
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:data.sql
+
+app:
+  custom:
+    messaging:
+      gate:
+        routing-key: gate.%s.command
+        exchange: gateOpenRequestExchange
+      visitor:
+        exchange:
+          request: gateToVisitorExchange
+      permit:
+        exchange:
+          request: gateToPermitExchange # Send a message to permit
+      response:
+        exchange: toGateResultExchange # Accepts messages from monitor and permit
+
+eureka:
+  client:
+    healthcheck:
+      enabled: true
+
+info:
+  application:
+    description: '@project.description@'
+    version:     '@project.version@'
