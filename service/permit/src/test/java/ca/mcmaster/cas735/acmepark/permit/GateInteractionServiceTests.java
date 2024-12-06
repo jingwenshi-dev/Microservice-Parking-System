@@ -1,7 +1,7 @@
 package ca.mcmaster.cas735.acmepark.permit;
 
 import ca.mcmaster.cas735.acmepark.permit.DTO.PermitValidationRequestDTO;
-import ca.mcmaster.cas735.acmepark.permit.DTO.PermitValidationResponseDTO;
+import ca.mcmaster.cas735.acmepark.gate.dto.GateCtrlDTO;
 import ca.mcmaster.cas735.acmepark.permit.business.GateInteractionService;
 import ca.mcmaster.cas735.acmepark.permit.business.entity.Permit;
 import ca.mcmaster.cas735.acmepark.permit.port.PermitDataRepo;
@@ -31,7 +31,7 @@ class GateInteractionServiceTests {
     private PermitValidationResultSender validationResultSender;
 
     @Captor
-    private ArgumentCaptor<PermitValidationResponseDTO> responseCaptor;
+    private ArgumentCaptor<GateCtrlDTO> responseCaptor;
 
     private GateInteractionService gateInteractionService;
     private Permit testPermit;
@@ -59,6 +59,7 @@ class GateInteractionServiceTests {
         requestDTO.setLotId(lotId);
         requestDTO.setTimestamp(timestamp);
         requestDTO.setGateId("GATE_1");
+        requestDTO.setEntry(true);
         return requestDTO;
     }
 
@@ -72,10 +73,11 @@ class GateInteractionServiceTests {
         gateInteractionService.validatePermit(requestDTO);
 
         verify(validationResultSender).sendValidationResult(responseCaptor.capture());
-        PermitValidationResponseDTO response = responseCaptor.getValue();
+        GateCtrlDTO response = responseCaptor.getValue();
         assertTrue(response.getIsValid());
         assertEquals("GATE_1", response.getGateId());
         assertEquals(1L, response.getLotId());
+        assertTrue(response.getIsEntry());
     }
 
     @Test
@@ -89,7 +91,7 @@ class GateInteractionServiceTests {
         gateInteractionService.validatePermit(requestDTO);
 
         verify(validationResultSender).sendValidationResult(responseCaptor.capture());
-        PermitValidationResponseDTO response = responseCaptor.getValue();
+        GateCtrlDTO response = responseCaptor.getValue();
         assertFalse(response.getIsValid());
     }
 
@@ -103,7 +105,7 @@ class GateInteractionServiceTests {
         gateInteractionService.validatePermit(requestDTO);
 
         verify(validationResultSender).sendValidationResult(responseCaptor.capture());
-        PermitValidationResponseDTO response = responseCaptor.getValue();
+        GateCtrlDTO response = responseCaptor.getValue();
         assertFalse(response.getIsValid());
     }
 
@@ -118,7 +120,7 @@ class GateInteractionServiceTests {
         gateInteractionService.validatePermit(requestDTO);
 
         verify(validationResultSender).sendValidationResult(responseCaptor.capture());
-        PermitValidationResponseDTO response = responseCaptor.getValue();
+        GateCtrlDTO response = responseCaptor.getValue();
         assertFalse(response.getIsValid());
     }
 }
