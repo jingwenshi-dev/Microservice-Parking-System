@@ -25,9 +25,9 @@ spring:
 logging:
   level:
     ca.mcmaster.cas735.acmepark.visitor_access:
-      adapter: DEBUG
-      application: DEBUG
-      org.springframework.boot.sql.init: DEBUG
+      adapter: INFO
+      application: INFO
+      org.springframework.boot.sql.init: INFO
 
 
 app:

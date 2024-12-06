@@ -23,8 +23,8 @@ spring:
 
 logging.level:
   ca.mcmaster.cas735.tmt.customers:
-    adapter: DEBUG
-    business: DEBUG
+    adapter: INFO
+    business: INFO
 
 app:
   custom:
