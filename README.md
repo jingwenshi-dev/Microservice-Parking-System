@@ -105,7 +105,7 @@ curl --location 'http://localhost/gate/monitor/lookup?lotId=1' \
 ```
 
 ##### Payment:
-- Apply a voucher 
+- Create a voucher 
 ```bash
 curl --location --request POST 'http://localhost/payment/voucher/create' \
 --header 'Content-Type: application/json' \
@@ -114,4 +114,14 @@ curl --location --request POST 'http://localhost/payment/voucher/create' \
     "validFrom": "2024-12-01T00:00:00",
     "validUntil": "2024-12-31T23:59:59"
 }'
+```
+- Apply a voucher
+```bash
+curl --location 'http://localhost:9092/voucher/apply-voucher' \
+--header 'Content-Type: application/json' \
+--data '{
+    "voucher":"VOUCHER004",
+    "licensePlate":"VOURCHER89"
+}'
+
 ```
